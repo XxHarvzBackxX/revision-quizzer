@@ -24,6 +24,7 @@ export function QuizPlayPage({
   const [pendingPoints, setPendingPoints] = useState(0);
   const [completed, setCompleted] = useState(false);
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
+  const [scorePopup, setScorePopup] = useState('');
   const item = dataset.items[index];
   const progress = Math.round(((index + (completed ? 1 : 0)) / dataset.items.length) * 100);
   const streakLabel = pendingPoints && revealed ? 'Hit!' : score > 0 ? `${score} banked` : 'Warm up';
@@ -32,7 +33,7 @@ export function QuizPlayPage({
     setPendingPoints(points);
     setRevealed(true);
     setEffect(points ? 'correct' : 'wrong');
-    if (points) onToast('success', '+1 point');
+    setScorePopup(points ? '+1' : 'No point');
   }
 
   function revealFlashcard() {
@@ -44,6 +45,7 @@ export function QuizPlayPage({
     const nextScore = score + pendingPoints;
     setScore(nextScore);
     setEffect('');
+    setScorePopup('');
 
     if (index < dataset.items.length - 1) {
       setIndex(index + 1);
@@ -76,6 +78,7 @@ export function QuizPlayPage({
   return (
     <section className={`quiz-stage ${effect ? `effect-${effect}` : ''}`}>
       {effect === 'correct' && <div className="confetti-burst" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>}
+      {scorePopup && <div className={`score-popup ${pendingPoints ? 'gain' : 'miss'}`} key={`${index}-${scorePopup}`}>{scorePopup}</div>}
       <div className="quiz-hud">
         <button className="ghost-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Menu</button>
         <div className="hud-center">
@@ -99,7 +102,7 @@ export function QuizPlayPage({
         onOverride={() => {
           setPendingPoints(1);
           setEffect('correct');
-          onToast('info', 'Manual override marked correct.');
+          setScorePopup('+1');
         }}
         onNext={next}
       />

@@ -4,6 +4,7 @@ export type Toast = {
   id: number;
   kind: ToastKind;
   message: string;
+  createdAt: number;
 };
 
 export type AppRoute =

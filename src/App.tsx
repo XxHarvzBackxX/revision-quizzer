@@ -75,7 +75,7 @@ export function App() {
   }
 
   function notify(kind: ToastKind, message: string) {
-    setToasts((current) => [...current, { id: Date.now() + Math.random(), kind, message }]);
+    setToasts((current) => [...current, { id: Date.now() + Math.random(), kind, message, createdAt: Date.now() }]);
   }
 
   function handleScore(score: ScoreRecord) {
