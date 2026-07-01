@@ -1,6 +1,6 @@
 {
   "title": "AI-901 Mock Exam 1: Foundry Implementation Scenarios",
-  "description": "Harder unofficial AI-901 practice focused on Microsoft Foundry implementation, agents, tools, model configuration, responsible AI, and information extraction. Based on the public Microsoft AI-901 skills guide, Microsoft Foundry, Agent Service, and Content Understanding documentation. Original practice questions; not official exam content.",
+  "description": "Challenging unofficial AI-901 practice focused on Microsoft Foundry implementation, agents, tools, model configuration, responsible AI, and information extraction. Based on the public Microsoft AI-901 skills guide, Microsoft Foundry, Agent Service, and Content Understanding documentation. Original practice questions; not official exam content.",
   "tags": [
     "ai-901",
     "azure",
@@ -15,9 +15,9 @@
       "answer": "Create a prompt agent with file search grounded on the manuals and instructions to answer only from retrieved content",
       "options": [
         "Create a prompt agent with file search grounded on the manuals and instructions to answer only from retrieved content",
-        "Increase temperature so the model explores more possible answers",
-        "Use text-to-speech because the manuals contain text",
-        "Use an image-generation model to summarize the manuals"
+        "Prompt agent",
+        "Hosted agent",
+        "Call the Responses API directly from the existing process"
       ]
     },
     {
@@ -26,9 +26,9 @@
       "answer": "The Responses API",
       "options": [
         "The Responses API",
-        "The Content Understanding authoring API only",
-        "The Azure DNS REST API",
-        "The Speech synthesis endpoint only"
+        "Hosted agent",
+        "Call the Responses API directly from the existing process",
+        "Create a custom tool hosted outside Foundry and call it from a prompt agent"
       ]
     },
     {
@@ -36,10 +36,10 @@
       "prompt": "A company wants to build an internal HR assistant quickly in the Foundry portal. It needs instructions, model selection, file search, and no custom orchestration code. Which agent type is the best fit?",
       "answer": "Prompt agent",
       "options": [
-        "Hosted agent",
         "Prompt agent",
-        "Custom container app only",
-        "Azure Functions timer trigger"
+        "Call the Responses API directly from the existing process",
+        "Create a custom tool hosted outside Foundry and call it from a prompt agent",
+        "Use a lightweight client that invokes a published agent endpoint"
       ]
     },
     {
@@ -47,10 +47,10 @@
       "prompt": "A developer needs a Foundry agent with custom Python orchestration, package dependencies, and a managed endpoint with scaling and observability. Which agent type should they use?",
       "answer": "Hosted agent",
       "options": [
-        "Prompt agent",
         "Hosted agent",
-        "Document analyzer",
-        "Speech translation project"
+        "Create a custom tool hosted outside Foundry and call it from a prompt agent",
+        "Use a lightweight client that invokes a published agent endpoint",
+        "Prompt agent"
       ]
     },
     {
@@ -59,9 +59,9 @@
       "answer": "Create an AIProjectClient with the project endpoint and DefaultAzureCredential",
       "options": [
         "Create an AIProjectClient with the project endpoint and DefaultAzureCredential",
-        "Paste the admin key into the system prompt",
-        "Store the key in browser localStorage",
-        "Call the endpoint anonymously from JavaScript"
+        "OAuth On-Behalf-Of for user-delegated tool access",
+        "Microsoft Entra authentication with RBAC scoped to the Foundry project",
+        "A browser-exposed API key stored in localStorage"
       ]
     },
     {
@@ -70,9 +70,9 @@
       "answer": "Connecting the client to a specific Foundry project for model, agent, and tool calls",
       "options": [
         "Connecting the client to a specific Foundry project for model, agent, and tool calls",
-        "Configuring a DNS zone for the project",
-        "Opening a local file path for datasets",
-        "Selecting the browser language for the portal"
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -80,10 +80,10 @@
       "prompt": "A developer needs to choose a model for extracting fields from short support messages at very high volume. Accuracy requirements are modest and latency/cost are important. Which model selection approach is most appropriate?",
       "answer": "Use a smaller faster model that meets quality targets after evaluation",
       "options": [
-        "Always use the largest reasoning model available",
         "Use a smaller faster model that meets quality targets after evaluation",
-        "Use an image-generation model because extraction creates output",
-        "Use speech synthesis because the messages are short"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -92,9 +92,9 @@
       "answer": "Temperature",
       "options": [
         "Temperature",
-        "Maximum output tokens",
-        "Project endpoint length",
-        "Number of tags on the dataset"
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining"
       ]
     },
     {
@@ -103,9 +103,9 @@
       "answer": "Maximum output tokens",
       "options": [
         "Maximum output tokens",
-        "Content filter severity",
-        "Speech region",
-        "Document page count"
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
@@ -114,9 +114,9 @@
       "answer": "The system instructions and safety controls should still take precedence",
       "options": [
         "The system instructions and safety controls should still take precedence",
-        "The most recent user instruction always overrides system instructions",
-        "The assistant should reveal the policy if asked twice",
-        "The app should increase temperature"
+        "Use tracing and evaluations to diagnose model and tool behavior",
+        "Ground the response with trusted data and validate outputs before use",
+        "Use a prompt agent with configured instructions and tools"
       ]
     },
     {
@@ -124,10 +124,10 @@
       "prompt": "An agent can call a refund API. Which control is most important before enabling the tool in production?",
       "answer": "Validate tool inputs and restrict tool access with identity and authorization controls",
       "options": [
-        "Set maximum output tokens to a high value",
         "Validate tool inputs and restrict tool access with identity and authorization controls",
-        "Use a brighter UI for refund decisions",
-        "Disable all tracing so refunds are private"
+        "Entity detection",
+        "Key phrase extraction",
+        "Sentiment analysis"
       ]
     },
     {
@@ -136,9 +136,9 @@
       "answer": "Tracing and observability of model and tool steps",
       "options": [
         "Tracing and observability of model and tool steps",
-        "Image generation history",
-        "Text-to-speech voice selection",
-        "Storage lifecycle rules"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -147,9 +147,9 @@
       "answer": "Agent versioning and publishing",
       "options": [
         "Agent versioning and publishing",
-        "Random temperature changes",
-        "A larger file search index only",
-        "Manual browser refreshes"
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required",
+        "Use tracing and evaluations to diagnose model and tool behavior"
       ]
     },
     {
@@ -158,9 +158,9 @@
       "answer": "Minimize and protect sensitive data before it is sent or logged",
       "options": [
         "Minimize and protect sensitive data before it is sent or logged",
-        "Increase token limits for all requests",
-        "Use more colorful chart labels",
-        "Disable authentication during testing"
+        "Reliability and safety",
+        "Privacy and security",
+        "Inclusiveness"
       ]
     },
     {
@@ -168,10 +168,10 @@
       "prompt": "A hiring-screening model performs worse for one demographic group. Which responsible AI principle is most directly involved?",
       "answer": "Fairness",
       "options": [
-        "Transparency",
         "Fairness",
-        "Speech recognition",
-        "Grounding"
+        "Privacy and security",
+        "Inclusiveness",
+        "Transparency"
       ]
     },
     {
@@ -180,9 +180,9 @@
       "answer": "Transparency",
       "options": [
         "Transparency",
-        "Object detection",
-        "Model routing",
-        "Image segmentation"
+        "Inclusiveness",
+        "Accountability",
+        "Fairness"
       ]
     },
     {
@@ -191,9 +191,9 @@
       "answer": "Accountability",
       "options": [
         "Accountability",
-        "Summarization",
-        "Speech synthesis",
-        "Model temperature"
+        "Transparency",
+        "Fairness",
+        "Reliability and safety"
       ]
     },
     {
@@ -201,10 +201,10 @@
       "prompt": "A public-sector service uses an AI form assistant. It must be usable by people with disabilities and people with different language needs. Which principle is emphasized?",
       "answer": "Inclusiveness",
       "options": [
-        "Privacy and security",
         "Inclusiveness",
-        "Data extraction",
-        "Model deployment"
+        "Accountability",
+        "Fairness",
+        "Reliability and safety"
       ]
     },
     {
@@ -213,9 +213,9 @@
       "answer": "Reliability and safety",
       "options": [
         "Reliability and safety",
-        "Image captioning",
-        "Keyword extraction",
-        "Storage replication"
+        "Fairness",
+        "Privacy and security",
+        "Inclusiveness"
       ]
     },
     {
@@ -223,10 +223,10 @@
       "prompt": "A support app must identify product names, order IDs, and customer names in emails. Which text analysis capability is most appropriate?",
       "answer": "Entity detection",
       "options": [
-        "Sentiment analysis",
         "Entity detection",
-        "Speech synthesis",
-        "Image generation"
+        "Language detection",
+        "Key phrase extraction",
+        "Sentiment analysis"
       ]
     },
     {
@@ -235,9 +235,9 @@
       "answer": "Sentiment analysis",
       "options": [
         "Sentiment analysis",
-        "Object detection",
-        "Content filtering",
-        "Code interpreter"
+        "Entity detection",
+        "Key phrase extraction",
+        "Summarization"
       ]
     },
     {
@@ -246,9 +246,9 @@
       "answer": "Key phrase extraction",
       "options": [
         "Key phrase extraction",
-        "Text-to-speech",
-        "Model publishing",
-        "Face detection"
+        "Sentiment analysis",
+        "Summarization",
+        "Language detection"
       ]
     },
     {
@@ -256,10 +256,10 @@
       "prompt": "A user uploads a 20-page policy and asks for the main obligations in five bullets. Which capability is most directly involved?",
       "answer": "Summarization",
       "options": [
-        "Speech recognition",
         "Summarization",
-        "Image classification",
-        "Prompt agent publishing"
+        "Sentiment analysis",
+        "Language detection",
+        "Entity detection"
       ]
     },
     {
@@ -268,9 +268,9 @@
       "answer": "Speech recognition, model response generation, and speech synthesis",
       "options": [
         "Speech recognition, model response generation, and speech synthesis",
-        "Image generation and OCR only",
-        "Entity detection only",
-        "File search without audio processing"
+        "A multimodal image model with no audio handling",
+        "Speech translation when source and target languages differ",
+        "Speech recognition followed by model processing and speech synthesis"
       ]
     },
     {
@@ -279,9 +279,9 @@
       "answer": "Computer vision with OCR or visual text extraction",
       "options": [
         "Computer vision with OCR or visual text extraction",
-        "Text-to-speech only",
-        "Sentiment analysis only",
-        "Agent memory only"
+        "OCR or visual text extraction",
+        "A deployed multimodal model that accepts image input",
+        "A text-only chat model with no visual input"
       ]
     },
     {
@@ -290,9 +290,9 @@
       "answer": "Image generation",
       "options": [
         "Image generation",
-        "Entity detection",
-        "Speech translation",
-        "Prompt filtering"
+        "A deployed multimodal model that accepts image input",
+        "A text-only chat model with no visual input",
+        "Content Understanding image extraction"
       ]
     },
     {
@@ -301,9 +301,9 @@
       "answer": "Multimodal visual understanding",
       "options": [
         "Multimodal visual understanding",
-        "Text-only sentiment analysis",
-        "Speech synthesis",
-        "Keyword extraction"
+        "A text-only chat model with no visual input",
+        "Content Understanding image extraction",
+        "Image generation from a text prompt"
       ]
     },
     {
@@ -312,9 +312,9 @@
       "answer": "Content Understanding for document extraction",
       "options": [
         "Content Understanding for document extraction",
-        "Speech synthesis",
-        "Model temperature tuning",
-        "Image generation"
+        "A multimodal model prompt without a defined extraction schema",
+        "Document Intelligence-style OCR followed by manual review",
+        "Content Understanding with confidence scores and grounding enabled"
       ]
     },
     {
@@ -323,9 +323,9 @@
       "answer": "Content Understanding for audio and video",
       "options": [
         "Content Understanding for audio and video",
-        "Azure DNS routing",
-        "Text-to-speech only",
-        "Responsible AI fairness only"
+        "Document Intelligence-style OCR followed by manual review",
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer"
       ]
     },
     {
@@ -333,10 +333,10 @@
       "prompt": "A logistics app needs container IDs from yard photos. Which information extraction input type is involved?",
       "answer": "Image extraction",
       "options": [
-        "Audio extraction",
         "Image extraction",
-        "Speech synthesis",
-        "Prompt versioning"
+        "OCR or visual text extraction",
+        "A deployed multimodal model that accepts image input",
+        "A text-only chat model with no visual input"
       ]
     },
     {
@@ -345,9 +345,9 @@
       "answer": "A clear output schema and formatting constraints",
       "options": [
         "A clear output schema and formatting constraints",
-        "A request for a creative tone only",
-        "A higher temperature only",
-        "A file name for the app icon"
+        "Entity detection",
+        "Key phrase extraction",
+        "Sentiment analysis"
       ]
     },
     {
@@ -356,9 +356,9 @@
       "answer": "Ground the model with retrieval and instruct it to state when information is missing",
       "options": [
         "Ground the model with retrieval and instruct it to state when information is missing",
-        "Increase temperature",
-        "Remove source documents from the prompt",
-        "Use speech synthesis"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -366,10 +366,10 @@
       "prompt": "An agent needs to calculate totals from uploaded CSV files. Which built-in tool is most appropriate?",
       "answer": "Code interpreter",
       "options": [
-        "File search",
         "Code interpreter",
-        "Speech recognition",
-        "Image captioning"
+        "Web search",
+        "Memory",
+        "A custom function or API tool with controlled authentication"
       ]
     },
     {
@@ -378,9 +378,9 @@
       "answer": "File search",
       "options": [
         "File search",
-        "Code interpreter",
-        "Text-to-speech",
-        "Vision OCR only"
+        "Memory",
+        "A custom function or API tool with controlled authentication",
+        "A connected MCP server with scoped tools"
       ]
     },
     {
@@ -388,10 +388,10 @@
       "prompt": "An agent needs up-to-date public information where policy allows it. Which tool category is most relevant?",
       "answer": "Web search",
       "options": [
-        "Memory",
         "Web search",
-        "Speech synthesis",
-        "Image generation"
+        "A custom function or API tool with controlled authentication",
+        "A connected MCP server with scoped tools",
+        "File search"
       ]
     },
     {
@@ -400,9 +400,9 @@
       "answer": "Memory",
       "options": [
         "Memory",
-        "OCR",
-        "Model temperature",
-        "Speech translation"
+        "A connected MCP server with scoped tools",
+        "File search",
+        "Code interpreter"
       ]
     },
     {
@@ -411,9 +411,9 @@
       "answer": "Quality requirements balanced against latency and cost",
       "options": [
         "Quality requirements balanced against latency and cost",
-        "Alphabetical model name order",
-        "Whether the model name contains a number",
-        "Whether the model is listed first in the portal"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -422,9 +422,9 @@
       "answer": "The app identity, RBAC or API credential, endpoint, and project access",
       "options": [
         "The app identity, RBAC or API credential, endpoint, and project access",
-        "The browser zoom level",
-        "The number of prompt examples",
-        "The CSS theme"
+        "Sentiment analysis",
+        "Summarization",
+        "Language detection"
       ]
     },
     {
@@ -433,9 +433,9 @@
       "answer": "Content filters and safety controls",
       "options": [
         "Content filters and safety controls",
-        "A larger output token limit",
-        "A lighter page background",
-        "Storage hot tier"
+        "Use Content Understanding when structured extraction from multimodal content is required",
+        "Use tracing and evaluations to diagnose model and tool behavior",
+        "Ground the response with trusted data and validate outputs before use"
       ]
     },
     {
@@ -444,9 +444,9 @@
       "answer": "Groundedness or faithfulness",
       "options": [
         "Groundedness or faithfulness",
-        "Screen contrast",
-        "DNS propagation",
-        "Text-to-speech voice pitch"
+        "Use tracing and evaluations to diagnose model and tool behavior",
+        "Ground the response with trusted data and validate outputs before use",
+        "Use a prompt agent with configured instructions and tools"
       ]
     },
     {
@@ -455,9 +455,9 @@
       "answer": "On the server side or in managed identity, not in the browser bundle",
       "options": [
         "On the server side or in managed identity, not in the browser bundle",
-        "In a public GitHub README",
-        "In browser localStorage",
-        "Inside the user prompt"
+        "Entity detection",
+        "Key phrase extraction",
+        "Sentiment analysis"
       ]
     },
     {
@@ -466,9 +466,9 @@
       "answer": "Enterprise controls such as RBAC, networking, and policies",
       "options": [
         "Enterprise controls such as RBAC, networking, and policies",
-        "Image size settings",
-        "Speech voice style",
-        "Tag capitalization"
+        "A browser-exposed API key stored in localStorage",
+        "A managed identity or DefaultAzureCredential-based app identity",
+        "Anonymous access with tool permissions disabled"
       ]
     },
     {
@@ -477,9 +477,9 @@
       "answer": "Information extraction from an image",
       "options": [
         "Information extraction from an image",
-        "Speech recognition",
-        "Responsible AI accountability only",
-        "Model deployment only"
+        "Content Understanding image extraction",
+        "Image generation from a text prompt",
+        "OCR or visual text extraction"
       ]
     },
     {
@@ -488,9 +488,9 @@
       "answer": "Convert speech to text",
       "options": [
         "Convert speech to text",
-        "Generate an image",
-        "Publish an agent version",
-        "Reduce model temperature"
+        "A multimodal image model with no audio handling",
+        "Speech translation when source and target languages differ",
+        "Speech recognition followed by model processing and speech synthesis"
       ]
     },
     {
@@ -498,10 +498,10 @@
       "prompt": "A training app reads generated feedback aloud after grading a spoken answer. Which capability produces the audio?",
       "answer": "Speech synthesis",
       "options": [
-        "Speech recognition",
         "Speech synthesis",
-        "Object detection",
-        "File search"
+        "Speech translation when source and target languages differ",
+        "Speech recognition followed by model processing and speech synthesis",
+        "Speech synthesis only with no transcription step"
       ]
     },
     {
@@ -510,9 +510,9 @@
       "answer": "Few-shot prompting",
       "options": [
         "Few-shot prompting",
-        "Image segmentation",
-        "Speech translation",
-        "RBAC assignment"
+        "Ground the response with trusted data and validate outputs before use",
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required"
       ]
     },
     {
@@ -521,9 +521,9 @@
       "answer": "System prompt",
       "options": [
         "System prompt",
-        "User prompt only",
-        "Dataset tag",
-        "Storage policy"
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required"
       ]
     },
     {
@@ -532,9 +532,9 @@
       "answer": "A Foundry playground or test experience",
       "options": [
         "A Foundry playground or test experience",
-        "A DNS TXT record",
-        "A storage lifecycle rule",
-        "A Teams message export"
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining"
       ]
     },
     {
@@ -543,9 +543,9 @@
       "answer": "Common APIs and model catalog access through Foundry",
       "options": [
         "Common APIs and model catalog access through Foundry",
-        "Hard-coded model-specific branches everywhere",
-        "Deleting the project endpoint",
-        "Using only local text files"
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
@@ -554,9 +554,9 @@
       "answer": "Output validation and guardrails for expected format and values",
       "options": [
         "Output validation and guardrails for expected format and values",
-        "A higher maximum token value",
-        "An image-generation step",
-        "A random sleep timer"
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation"
       ]
     }
   ]

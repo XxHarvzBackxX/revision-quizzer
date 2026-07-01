@@ -1,6 +1,6 @@
 {
   "title": "AI-901 Mock Exam 3: End-to-End Scenario Practice",
-  "description": "Harder unofficial AI-901 scenario set covering Foundry SDK/API use, agent architecture, Content Understanding, governance, quiz-app-adjacent implementation details, and responsible AI. Based on the public Microsoft AI-901 skills guide, Microsoft Foundry, Agent Service, and Content Understanding documentation. Original practice questions; not official exam content.",
+  "description": "Challenging unofficial AI-901 scenario set covering Foundry SDK/API use, agent architecture, Content Understanding, governance, quiz-app-adjacent implementation details, and responsible AI. Based on the public Microsoft AI-901 skills guide, Microsoft Foundry, Agent Service, and Content Understanding documentation. Original practice questions; not official exam content.",
   "tags": [
     "ai-901",
     "azure",
@@ -15,9 +15,9 @@
       "answer": "File search and a custom function or API tool",
       "options": [
         "File search and a custom function or API tool",
-        "Image generation and speech synthesis",
-        "Memory and text-to-speech only",
-        "DNS and storage lifecycle"
+        "Prompt agent",
+        "Hosted agent",
+        "Call the Responses API directly from the existing process"
       ]
     },
     {
@@ -26,9 +26,9 @@
       "answer": "Unified management of agents, models, tools, RBAC, networking, and policies",
       "options": [
         "Unified management of agents, models, tools, RBAC, networking, and policies",
-        "Only local file storage",
-        "Removal of SDK access",
-        "Mandatory manual deployment only"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -37,9 +37,9 @@
       "answer": "Create AIProjectClient with endpoint and credential, get the OpenAI client, then call responses.create",
       "options": [
         "Create AIProjectClient with endpoint and credential, get the OpenAI client, then call responses.create",
-        "Create a DNS record, open Notepad, then paste the prompt",
-        "Upload a CSS file, then call speech synthesis",
-        "Create a blob container and skip authentication"
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining"
       ]
     },
     {
@@ -48,9 +48,9 @@
       "answer": "A valid bearer token or supported credential for the Foundry resource/project",
       "options": [
         "A valid bearer token or supported credential for the Foundry resource/project",
-        "A browser cookie from any website",
-        "The user prompt as the only header",
-        "An image file name"
+        "Anonymous access with tool permissions disabled",
+        "OAuth On-Behalf-Of for user-delegated tool access",
+        "Microsoft Entra authentication with RBAC scoped to the Foundry project"
       ]
     },
     {
@@ -59,9 +59,9 @@
       "answer": "Knowledge grounding such as Foundry IQ or connected retrieval tools",
       "options": [
         "Knowledge grounding such as Foundry IQ or connected retrieval tools",
-        "Image generation only",
-        "Speech translation only",
-        "CSS media queries"
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer",
+        "Azure AI Search vector indexing without field extraction"
       ]
     },
     {
@@ -70,9 +70,9 @@
       "answer": "Foundry Agent Service tools",
       "options": [
         "Foundry Agent Service tools",
-        "Azure DNS forwarding",
-        "Static Web Apps routing",
-        "Storage account soft delete"
+        "A connected MCP server with scoped tools",
+        "File search",
+        "Code interpreter"
       ]
     },
     {
@@ -81,9 +81,9 @@
       "answer": "Observability",
       "options": [
         "Observability",
-        "Image captioning",
-        "Prompt temperature",
-        "Speech voice gallery"
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required"
       ]
     },
     {
@@ -92,9 +92,9 @@
       "answer": "A managed portal-authored assistant with instructions and tools but no custom runtime code",
       "options": [
         "A managed portal-authored assistant with instructions and tools but no custom runtime code",
-        "A highly customized containerized LangGraph workflow only",
-        "A DNS failover service",
-        "A storage encryption key rotation job"
+        "Call the Responses API directly from the existing process",
+        "Create a custom tool hosted outside Foundry and call it from a prompt agent",
+        "Use a lightweight client that invokes a published agent endpoint"
       ]
     },
     {
@@ -103,9 +103,9 @@
       "answer": "A code-based agent that needs custom orchestration and dependencies",
       "options": [
         "A code-based agent that needs custom orchestration and dependencies",
-        "A simple managed portal-only assistant",
-        "A static FAQ web page",
-        "A speech voice list"
+        "Create a custom tool hosted outside Foundry and call it from a prompt agent",
+        "Use a lightweight client that invokes a published agent endpoint",
+        "Prompt agent"
       ]
     },
     {
@@ -114,9 +114,9 @@
       "answer": "Code interpreter",
       "options": [
         "Code interpreter",
-        "Text-to-speech",
-        "Image captioning",
-        "Sentiment analysis"
+        "Memory",
+        "A custom function or API tool with controlled authentication",
+        "A connected MCP server with scoped tools"
       ]
     },
     {
@@ -125,9 +125,9 @@
       "answer": "File search",
       "options": [
         "File search",
-        "Speech translation",
-        "Image generation",
-        "Model routing only"
+        "A custom function or API tool with controlled authentication",
+        "A connected MCP server with scoped tools",
+        "Code interpreter"
       ]
     },
     {
@@ -136,9 +136,9 @@
       "answer": "Foundry API and model catalog access",
       "options": [
         "Foundry API and model catalog access",
-        "Azure DNS only",
-        "Manual screen scraping",
-        "A local CSV file"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -147,9 +147,9 @@
       "answer": "Advanced reasoning quality",
       "options": [
         "Advanced reasoning quality",
-        "Lowest latency only",
-        "Text-to-speech voice count",
-        "Image width only"
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining"
       ]
     },
     {
@@ -158,9 +158,9 @@
       "answer": "Small language model suitability",
       "options": [
         "Small language model suitability",
-        "Largest cloud-only reasoning model",
-        "Video extraction only",
-        "Speech translation only"
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
@@ -169,9 +169,9 @@
       "answer": "Identity, RBAC, tool authorization, and retrieval permissions",
       "options": [
         "Identity, RBAC, tool authorization, and retrieval permissions",
-        "Higher maximum tokens",
-        "Image generation safety",
-        "A random answer order"
+        "Language detection",
+        "Entity detection",
+        "Key phrase extraction"
       ]
     },
     {
@@ -180,9 +180,9 @@
       "answer": "Configure retrieval/grounding and prompt the model to include source references",
       "options": [
         "Configure retrieval/grounding and prompt the model to include source references",
-        "Increase temperature",
-        "Remove source documents",
-        "Use only speech synthesis"
+        "Content Understanding with a custom or prebuilt analyzer",
+        "Azure AI Search vector indexing without field extraction",
+        "A multimodal model prompt without a defined extraction schema"
       ]
     },
     {
@@ -191,9 +191,9 @@
       "answer": "Collect text, call a text-capable model or text analysis service, and display extracted insights",
       "options": [
         "Collect text, call a text-capable model or text analysis service, and display extracted insights",
-        "Capture a microphone recording and stop",
-        "Create a DNS record and display it",
-        "Generate an image from every sentence"
+        "Key phrase extraction",
+        "Sentiment analysis",
+        "Summarization"
       ]
     },
     {
@@ -202,9 +202,9 @@
       "answer": "Accept image input, call a vision-capable model or tool, and handle visual results",
       "options": [
         "Accept image input, call a vision-capable model or tool, and handle visual results",
-        "Use only sentiment analysis",
-        "Use only text-to-speech",
-        "Skip model evaluation"
+        "Content Understanding image extraction",
+        "Image generation from a text prompt",
+        "OCR or visual text extraction"
       ]
     },
     {
@@ -213,9 +213,9 @@
       "answer": "Create or use an analyzer, submit content, and consume structured extracted fields",
       "options": [
         "Create or use an analyzer, submit content, and consume structured extracted fields",
-        "Use only image generation",
-        "Use only model temperature",
-        "Use DNS query logs"
+        "Document Intelligence-style OCR followed by manual review",
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer"
       ]
     },
     {
@@ -224,9 +224,9 @@
       "answer": "Flag the field for review or validation instead of blindly accepting it",
       "options": [
         "Flag the field for review or validation instead of blindly accepting it",
-        "Always overwrite it with today’s date",
-        "Delete the document",
-        "Increase speech volume"
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer",
+        "Azure AI Search vector indexing without field extraction"
       ]
     },
     {
@@ -235,9 +235,9 @@
       "answer": "Multimodal input handling",
       "options": [
         "Multimodal input handling",
-        "Speech synthesis only",
-        "Entity detection only",
-        "Prompt versioning only"
+        "A deployed multimodal model that accepts image input",
+        "A text-only chat model with no visual input",
+        "Content Understanding image extraction"
       ]
     },
     {
@@ -246,9 +246,9 @@
       "answer": "Negative sentiment and key phrases such as delivery late and box damaged",
       "options": [
         "Negative sentiment and key phrases such as delivery late and box damaged",
-        "Object bounding boxes",
-        "A generated image",
-        "A speech waveform"
+        "Key phrase extraction",
+        "Sentiment analysis",
+        "Summarization"
       ]
     },
     {
@@ -257,9 +257,9 @@
       "answer": "Speech recognition quality or transcript correction",
       "options": [
         "Speech recognition quality or transcript correction",
-        "Image resolution",
-        "CSS contrast",
-        "Question shuffle"
+        "Text analysis over manually typed transcripts only",
+        "A multimodal image model with no audio handling",
+        "Speech translation when source and target languages differ"
       ]
     },
     {
@@ -268,9 +268,9 @@
       "answer": "Speech recognition with language handling and speech synthesis",
       "options": [
         "Speech recognition with language handling and speech synthesis",
-        "OCR and image generation",
-        "File search only",
-        "RBAC only"
+        "A multimodal image model with no audio handling",
+        "Speech translation when source and target languages differ",
+        "Speech recognition followed by model processing and speech synthesis"
       ]
     },
     {
@@ -279,9 +279,9 @@
       "answer": "If the request is outside the approved domain, refuse or redirect and do not guess",
       "options": [
         "If the request is outside the approved domain, refuse or redirect and do not guess",
-        "Answer every question confidently",
-        "Ignore the domain if the user insists",
-        "Use a random tone"
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation"
       ]
     },
     {
@@ -290,9 +290,9 @@
       "answer": "Operate and govern after deployment",
       "options": [
         "Operate and govern after deployment",
-        "Image classification training only",
-        "Prompt brainstorming only",
-        "Local UI design only"
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -301,9 +301,9 @@
       "answer": "Ask a clarifying question before acting",
       "options": [
         "Ask a clarifying question before acting",
-        "Guess and call the tool",
-        "Ignore the request",
-        "Reveal internal instructions"
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required"
       ]
     },
     {
@@ -312,9 +312,9 @@
       "answer": "System prompt",
       "options": [
         "System prompt",
-        "User prompt",
-        "Dataset tag",
-        "Browser URL"
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required",
+        "Use tracing and evaluations to diagnose model and tool behavior"
       ]
     },
     {
@@ -323,9 +323,9 @@
       "answer": "Specify the schema and validate the response before use",
       "options": [
         "Specify the schema and validate the response before use",
-        "Ask the model to be creative",
-        "Use speech synthesis first",
-        "Store output without checking it"
+        "Document Intelligence-style OCR followed by manual review",
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer"
       ]
     },
     {
@@ -334,9 +334,9 @@
       "answer": "The model may call the function with unsafe or invalid parameters",
       "options": [
         "The model may call the function with unsafe or invalid parameters",
-        "The UI may have too few colors",
-        "The model may not generate images",
-        "The response may be too short for a paragraph"
+        "A connected MCP server with scoped tools",
+        "File search",
+        "Code interpreter"
       ]
     },
     {
@@ -345,9 +345,9 @@
       "answer": "Unified management with RBAC, policies, monitoring, and model deployments",
       "options": [
         "Unified management with RBAC, policies, monitoring, and model deployments",
-        "Manual prompt copy-paste only",
-        "Browser bookmarks",
-        "CSS animation"
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -356,9 +356,9 @@
       "answer": "The app may fail on edge cases, unsafe prompts, or representative user inputs",
       "options": [
         "The app may fail on edge cases, unsafe prompts, or representative user inputs",
-        "The app will always be too expensive",
-        "The model cannot be deployed",
-        "The UI cannot render text"
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost"
       ]
     },
     {
@@ -367,9 +367,9 @@
       "answer": "Misuse, harmful content, copyright/brand policy, and transparency about generated content",
       "options": [
         "Misuse, harmful content, copyright/brand policy, and transparency about generated content",
-        "Speech transcription accuracy only",
-        "DNS zone security only",
-        "CSV delimiter selection"
+        "Content Understanding image extraction",
+        "Image generation from a text prompt",
+        "OCR or visual text extraction"
       ]
     },
     {
@@ -378,9 +378,9 @@
       "answer": "Sentiment analysis plus workflow/tool integration",
       "options": [
         "Sentiment analysis plus workflow/tool integration",
-        "Image generation only",
-        "Text-to-speech only",
-        "Question shuffling"
+        "Summarization",
+        "Language detection",
+        "Entity detection"
       ]
     },
     {
@@ -389,9 +389,9 @@
       "answer": "Lower temperature",
       "options": [
         "Lower temperature",
-        "Higher temperature",
-        "More image pixels",
-        "More tags"
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation"
       ]
     },
     {
@@ -400,9 +400,9 @@
       "answer": "Context limits and retrieval/chunking strategy",
       "options": [
         "Context limits and retrieval/chunking strategy",
-        "Speech voice gender",
-        "Button border radius",
-        "DNS TTL"
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -411,9 +411,9 @@
       "answer": "Source grounding, citations, transparent limitations, and logs for review",
       "options": [
         "Source grounding, citations, transparent limitations, and logs for review",
-        "Higher temperature and no sources",
-        "Image generation and hidden prompts",
-        "Anonymous tool access"
+        "Azure AI Search vector indexing without field extraction",
+        "A multimodal model prompt without a defined extraction schema",
+        "Document Intelligence-style OCR followed by manual review"
       ]
     },
     {
@@ -422,9 +422,9 @@
       "answer": "Clear tool definitions, instructions, and access to both tools",
       "options": [
         "Clear tool definitions, instructions, and access to both tools",
-        "Only a CSS file",
-        "A speech voice",
-        "An image prompt"
+        "Use a larger reasoning model for complex multi-step tasks",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining"
       ]
     },
     {
@@ -433,9 +433,9 @@
       "answer": "Prompt injection through untrusted content",
       "options": [
         "Prompt injection through untrusted content",
-        "Object detection drift",
-        "Speech synthesis latency",
-        "Question order bias"
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
@@ -444,9 +444,9 @@
       "answer": "Treat retrieved content as untrusted data and keep system instructions authoritative",
       "options": [
         "Treat retrieved content as untrusted data and keep system instructions authoritative",
-        "Let document text override system instructions",
-        "Execute all commands in documents",
-        "Ignore all retrieved content"
+        "Use tracing and evaluations to diagnose model and tool behavior",
+        "Ground the response with trusted data and validate outputs before use",
+        "Use a prompt agent with configured instructions and tools"
       ]
     },
     {
@@ -455,9 +455,9 @@
       "answer": "Classification accuracy or error analysis by category",
       "options": [
         "Classification accuracy or error analysis by category",
-        "Image brightness",
-        "Speech volume",
-        "Number of CSS files"
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -466,53 +466,53 @@
       "answer": "Store submissions as pending and filter public gallery to approved items",
       "options": [
         "Store submissions as pending and filter public gallery to approved items",
-        "Delete submissions immediately",
-        "Display pending items publicly with no review",
-        "Require every user to be an admin"
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required"
       ]
     },
     {
       "type": "multiple-choice",
-      "prompt": "A dataset upload includes multiple-choice items where the correct answer is always first. What should the quiz UI do?",
-      "answer": "Shuffle answer options at runtime while preserving the correct answer mapping",
+      "prompt": "A Foundry agent is given retrieval results where the first result is often irrelevant because of index ranking. The app still needs answer choices to be presented without positional bias. What should the developer do?",
+      "answer": "Randomize presentation order while preserving the mapping between each option and its underlying value",
       "options": [
-        "Shuffle answer options at runtime while preserving the correct answer mapping",
-        "Always show the first answer",
-        "Remove the correct answer",
-        "Disable multiple choice"
+        "Randomize presentation order while preserving the mapping between each option and its underlying value",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required",
+        "Use tracing and evaluations to diagnose model and tool behavior"
       ]
     },
     {
       "type": "multiple-choice",
-      "prompt": "A user accidentally clicks the wrong option in a multiple-choice quiz. Which interaction reduces this risk?",
-      "answer": "Select an option first, then require explicit confirmation",
+      "prompt": "An agent can call an order-cancellation tool. The model can identify the likely order, but users sometimes phrase requests ambiguously. Which UX pattern best reduces unintended tool execution?",
+      "answer": "Require explicit user confirmation before executing the cancellation tool",
       "options": [
-        "Select an option first, then require explicit confirmation",
-        "Score immediately on hover",
-        "Hide the selected option",
-        "Skip feedback"
+        "Require explicit user confirmation before executing the cancellation tool",
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
       "type": "multiple-choice",
-      "prompt": "A flashcard asks a user to recall an answer. What is the fair scoring flow?",
-      "answer": "Reveal the answer, then let the user self-report whether they got it",
+      "prompt": "A training app uses an AI tutor to ask open recall questions. The model cannot reliably determine whether a short learner response is sufficient without rubric context. Which scoring design is most appropriate?",
+      "answer": "Show the expected answer or rubric and let the learner confirm or request review",
       "options": [
-        "Reveal the answer, then let the user self-report whether they got it",
-        "Award a point immediately on reveal",
-        "Never show the answer",
-        "Always mark it wrong"
+        "Show the expected answer or rubric and let the learner confirm or request review",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation"
       ]
     },
     {
       "type": "multiple-choice",
-      "prompt": "A team wants randomized question order only for datasets that request it. Where should this preference be stored?",
-      "answer": "As a dataset-level configuration such as shuffleQuestions",
+      "prompt": "A Foundry client app supports per-dataset runtime behavior such as whether review items should be randomized. Where should this preference be modeled?",
+      "answer": "As dataset metadata that the client reads before starting a round",
       "options": [
-        "As a dataset-level configuration such as shuffleQuestions",
-        "Only in the browser theme",
-        "Only in the route path",
-        "Only in the user score"
+        "As dataset metadata that the client reads before starting a round",
+        "Lower temperature and constrain maximum output tokens",
+        "Use a smaller low-latency model after evaluation",
+        "Use a larger reasoning model for complex multi-step tasks"
       ]
     },
     {
@@ -521,9 +521,9 @@
       "answer": "The dataset was submitted and will appear after admin approval",
       "options": [
         "The dataset was submitted and will appear after admin approval",
-        "The dataset was deleted",
-        "The dataset is already public",
-        "The upload key is the admin password"
+        "Use a prompt agent with configured instructions and tools",
+        "Use a hosted agent when custom orchestration code is required",
+        "Use Content Understanding when structured extraction from multimodal content is required"
       ]
     },
     {
@@ -532,9 +532,9 @@
       "answer": "Server-side environment variables or managed identity",
       "options": [
         "Server-side environment variables or managed identity",
-        "The React bundle",
-        "The uploaded dataset JSON",
-        "The public gallery card"
+        "Sentiment analysis",
+        "Summarization",
+        "Language detection"
       ]
     },
     {
@@ -543,9 +543,9 @@
       "answer": "Deploy a model, call it from a lightweight app, create an agent, and use Foundry Tools",
       "options": [
         "Deploy a model, call it from a lightweight app, create an agent, and use Foundry Tools",
-        "Memorize only old AI-900 percentages",
-        "Study only virtual networks",
-        "Ignore SDK and REST concepts"
+        "Change the model deployment and re-test quality, latency, and cost",
+        "Use grounding instead of relying only on model pretraining",
+        "Lower temperature and constrain maximum output tokens"
       ]
     },
     {
@@ -554,9 +554,9 @@
       "answer": "Use Content Understanding for extraction and ground the agent on the structured output",
       "options": [
         "Use Content Understanding for extraction and ground the agent on the structured output",
-        "Use text-to-speech only",
-        "Use image generation only",
-        "Skip extraction and ask the model to guess"
+        "Content Understanding with confidence scores and grounding enabled",
+        "Content Understanding with a custom or prebuilt analyzer",
+        "Azure AI Search vector indexing without field extraction"
       ]
     }
   ]
