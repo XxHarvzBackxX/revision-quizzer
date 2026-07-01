@@ -91,9 +91,6 @@ export function App() {
   function notify(kind: ToastKind, message: string) {
     const id = Date.now() + Math.random();
     setToasts((current) => [...current, { id, kind, message }]);
-    window.setTimeout(() => {
-      setToasts((current) => current.filter((toast) => toast.id !== id));
-    }, 5200);
   }
 
   function handleScore(score: ScoreRecord) {
