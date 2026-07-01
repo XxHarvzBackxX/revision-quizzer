@@ -258,19 +258,6 @@ h1 {
   background: #0f766e;
 }
 
-.notice {
-  border-radius: 8px;
-  margin: 0 auto 18px;
-  max-width: 1120px;
-  padding: 14px 16px;
-}
-
-.notice.error {
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-  color: #9f1239;
-}
-
 .empty-state {
   align-items: center;
   border: 1px dashed #cbd5e1;
@@ -336,6 +323,65 @@ textarea {
 .preview-box {
   display: grid;
   gap: 16px;
+}
+
+.validation-list {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  color: #9a3412;
+  padding: 14px 16px;
+}
+
+.validation-list p:last-child {
+  margin-bottom: 0;
+}
+
+.toast-region {
+  display: grid;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 32px));
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 420px;
+  z-index: 20;
+}
+
+.toast {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-left: 6px solid #06b6d4;
+  border-radius: 8px;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+  color: #172033;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.toast.success {
+  border-left-color: #22c55e;
+}
+
+.toast.error {
+  border-left-color: #f43f5e;
+}
+
+.toast.info {
+  border-left-color: #06b6d4;
+}
+
+.toast button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: #64748b;
+  display: inline-flex;
+  justify-content: center;
+  padding: 4px;
 }
 
 .quiz-layout {
@@ -506,5 +552,12 @@ textarea {
 
   .option-grid {
     grid-template-columns: 1fr;
+  }
+
+  .toast-region {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    width: auto;
   }
 }

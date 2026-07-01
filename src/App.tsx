@@ -19,6 +19,12 @@ type UploadState = {
   dataset: DatasetInput | null;
   errors: string[];
 };
+type ToastKind = 'success' | 'error' | 'info';
+type Toast = {
+  id: number;
+  kind: ToastKind;
+  message: string;
+};
 
 const sampleDataset = JSON.stringify(
   {
@@ -46,7 +52,7 @@ export function App() {
   const [activeDataset, setActiveDataset] = useState<PublicDataset | null>(null);
   const [scores, setScores] = useState<ScoreRecord[]>(() => getScores());
   const [isLoading, setIsLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
   useEffect(() => {
     void loadGallery();
@@ -61,11 +67,10 @@ export function App() {
 
   async function loadGallery() {
     setIsLoading(true);
-    setMessage('');
     try {
       setDatasets(await fetchDatasets());
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Could not load datasets.');
+      notify('error', error instanceof Error ? error.message : 'Could not load datasets.');
     } finally {
       setIsLoading(false);
     }
@@ -73,15 +78,22 @@ export function App() {
 
   async function startDataset(id: string) {
     setIsLoading(true);
-    setMessage('');
     try {
       setActiveDataset(await fetchDataset(id));
       setView('quiz');
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Could not load dataset.');
+      notify('error', error instanceof Error ? error.message : 'Could not load dataset.');
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function notify(kind: ToastKind, message: string) {
+    const id = Date.now() + Math.random();
+    setToasts((current) => [...current, { id, kind, message }]);
+    window.setTimeout(() => {
+      setToasts((current) => current.filter((toast) => toast.id !== id));
+    }, 5200);
   }
 
   function handleScore(score: ScoreRecord) {
@@ -128,7 +140,7 @@ export function App() {
         </div>
       </section>
 
-      {message && <div className="notice error">{message}</div>}
+      <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {view === 'gallery' && (
         <Gallery
@@ -138,16 +150,19 @@ export function App() {
           onRefresh={loadGallery}
           onStart={startDataset}
           onUpload={() => setView('upload')}
+          onToast={notify}
         />
       )}
 
       {view === 'upload' && (
         <UploadPanel
+          onToast={notify}
           onUploaded={(dataset) => {
             const { items: _items, ...summary } = dataset;
             setDatasets((current) => [summary, ...current]);
             setActiveDataset(dataset);
             setView('quiz');
+            notify('success', `"${dataset.title}" is live in the public gallery.`);
           }}
         />
       )}
@@ -165,7 +180,8 @@ function Gallery({
   scores,
   onRefresh,
   onStart,
-  onUpload
+  onUpload,
+  onToast
 }: {
   datasets: DatasetSummary[];
   isLoading: boolean;
@@ -173,6 +189,7 @@ function Gallery({
   onRefresh: () => void;
   onStart: (id: string) => void;
   onUpload: () => void;
+  onToast: (kind: ToastKind, message: string) => void;
 }) {
   return (
     <section className="content-grid">
@@ -211,7 +228,7 @@ function Gallery({
                   <footer>
                     <small>{dataset.itemCount} questions {lastScore ? `| last ${lastScore.score}/${lastScore.total}` : ''}</small>
                     <div className="card-actions">
-                      <button className="ghost-button" onClick={() => copyShareLink(dataset.slug)}>
+                      <button className="ghost-button" onClick={() => copyShareLink(dataset.slug, onToast)}>
                         <Copy size={15} /> Share
                       </button>
                       <button className="primary-button" onClick={() => onStart(dataset.slug)}>Start</button>
@@ -227,10 +244,15 @@ function Gallery({
   );
 }
 
-function UploadPanel({ onUploaded }: { onUploaded: (dataset: PublicDataset) => void }) {
+function UploadPanel({
+  onUploaded,
+  onToast
+}: {
+  onUploaded: (dataset: PublicDataset) => void;
+  onToast: (kind: ToastKind, message: string) => void;
+}) {
   const [state, setState] = useState<UploadState>({ raw: sampleDataset, key: '', dataset: null, errors: [] });
   const [isUploading, setIsUploading] = useState(false);
-  const [notice, setNotice] = useState('');
 
   const parsed = useMemo(() => parseDataset(state.raw), [state.raw]);
 
@@ -247,11 +269,10 @@ function UploadPanel({ onUploaded }: { onUploaded: (dataset: PublicDataset) => v
   async function submit() {
     if (!state.dataset) return;
     setIsUploading(true);
-    setNotice('');
     try {
       onUploaded(await uploadDataset(state.dataset, state.key));
     } catch (error) {
-      setNotice(error instanceof Error ? error.message : 'Upload failed.');
+      onToast('error', error instanceof Error ? error.message : 'Upload failed.');
     } finally {
       setIsUploading(false);
     }
@@ -287,7 +308,7 @@ function UploadPanel({ onUploaded }: { onUploaded: (dataset: PublicDataset) => v
       <div className="panel">
         <h2>Preview</h2>
         {state.errors.length > 0 ? (
-          <div className="notice error">
+          <div className="validation-list" role="status">
             {state.errors.map((error) => <p key={error}>{error}</p>)}
           </div>
         ) : state.dataset ? (
@@ -304,7 +325,6 @@ function UploadPanel({ onUploaded }: { onUploaded: (dataset: PublicDataset) => v
             </button>
           </div>
         ) : null}
-        {notice && <div className="notice error">{notice}</div>}
       </div>
     </section>
   );
@@ -505,7 +525,33 @@ function parseDataset(raw: string): { dataset: DatasetInput | null; errors: stri
   }
 }
 
-function copyShareLink(slug: string) {
+function ToastHost({
+  toasts,
+  onDismiss
+}: {
+  toasts: Toast[];
+  onDismiss: (id: number) => void;
+}) {
+  return (
+    <div className="toast-region" aria-live="polite" aria-label="Notifications">
+      {toasts.map((toast) => (
+        <div className={`toast ${toast.kind}`} key={toast.id}>
+          <span>{toast.message}</span>
+          <button onClick={() => onDismiss(toast.id)} aria-label="Dismiss notification">
+            <X size={16} />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+async function copyShareLink(slug: string, onToast: (kind: ToastKind, message: string) => void) {
   const url = `${window.location.origin}/quiz/${slug}`;
-  void navigator.clipboard?.writeText(url);
+  try {
+    await navigator.clipboard?.writeText(url);
+    onToast('success', 'Share link copied.');
+  } catch {
+    onToast('error', 'Could not copy the share link.');
+  }
 }
