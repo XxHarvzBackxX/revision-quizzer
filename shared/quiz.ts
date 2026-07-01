@@ -25,6 +25,7 @@ export type DatasetInput = {
   title: string;
   description?: string;
   tags?: string[];
+  shuffleQuestions?: boolean;
   items: QuizItem[];
 };
 
@@ -69,6 +70,7 @@ export function validateDataset(input: unknown): ValidationResult {
   const title = normalizeText(input.title);
   const description = normalizeOptionalText(input.description);
   const tags = normalizeTags(input.tags, errors);
+  const shuffleQuestions = Boolean(input.shuffleQuestions);
   const items = Array.isArray(input.items) ? input.items : [];
 
   if (!title) {
@@ -101,6 +103,7 @@ export function validateDataset(input: unknown): ValidationResult {
       title,
       description,
       tags,
+      shuffleQuestions,
       items: validItems
     }
   };

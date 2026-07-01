@@ -32,17 +32,16 @@ export function UploadPanel({
 }) {
   const [uploadMode, setUploadMode] = useState<'friendly' | 'json'>('friendly');
   const [state, setState] = useState<UploadState>({ raw: sampleDataset, dataset: null, errors: [] });
-  const [friendlyTitle, setFriendlyTitle] = useState('Biology Basics');
-  const [friendlyDescription, setFriendlyDescription] = useState('A tiny starter set for testing Quiz Arcade.');
-  const [friendlyTags, setFriendlyTags] = useState('biology, starter');
+  const [friendlyTitle, setFriendlyTitle] = useState('');
+  const [friendlyDescription, setFriendlyDescription] = useState('');
+  const [friendlyTags, setFriendlyTags] = useState('');
+  const [friendlyShuffle, setFriendlyShuffle] = useState(false);
   const [friendlyItems, setFriendlyItems] = useState<FriendlyItem[]>([
-    { type: 'multiple-choice', prompt: 'Which organelle releases energy?', answer: 'Mitochondria', options: ['Nucleus', 'Mitochondria', 'Ribosome', 'Cell wall'] },
-    { type: 'flashcard', prompt: 'What does the nucleus do?', answer: "Controls the cell's activities", options: ['', '', '', ''] },
-    { type: 'free-write', prompt: 'What process do plants use to make glucose?', answer: 'Photosynthesis', options: ['', '', '', ''] }
+    { type: 'multiple-choice', prompt: '', answer: '', options: ['', '', '', ''] }
   ]);
   const [uploadKey, setUploadKey] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const friendlyDataset = useMemo(() => createFriendlyDataset(friendlyTitle, friendlyDescription, friendlyTags, friendlyItems), [friendlyTitle, friendlyDescription, friendlyTags, friendlyItems]);
+  const friendlyDataset = useMemo(() => createFriendlyDataset(friendlyTitle, friendlyDescription, friendlyTags, friendlyShuffle, friendlyItems), [friendlyTitle, friendlyDescription, friendlyTags, friendlyShuffle, friendlyItems]);
   const parsed = useMemo(() => uploadMode === 'json' ? parseDataset(state.raw) : validateFriendlyDataset(friendlyDataset), [friendlyDataset, state.raw, uploadMode]);
 
   useEffect(() => {
@@ -110,6 +109,10 @@ export function UploadPanel({
             <label className="field">
               <span>Tags</span>
               <input value={friendlyTags} onChange={(event) => setFriendlyTags(event.target.value)} placeholder="biology, gcse, cells" />
+            </label>
+            <label className="toggle-row friendly-toggle">
+              <input type="checkbox" checked={friendlyShuffle} onChange={(event) => setFriendlyShuffle(event.target.checked)} />
+              <span>Shuffle question order each round</span>
             </label>
             <div className="friendly-items">
               {friendlyItems.map((item, index) => (
@@ -185,11 +188,12 @@ export function UploadPanel({
   );
 }
 
-function createFriendlyDataset(title: string, description: string, tags: string, items: FriendlyItem[]): DatasetInput {
+function createFriendlyDataset(title: string, description: string, tags: string, shuffleQuestions: boolean, items: FriendlyItem[]): DatasetInput {
   return {
     title,
     description,
     tags: tags.split(',').map((tag) => tag.trim()).filter(Boolean),
+    shuffleQuestions,
     items: items.map((item) => {
       if (item.type === 'multiple-choice') {
         return {

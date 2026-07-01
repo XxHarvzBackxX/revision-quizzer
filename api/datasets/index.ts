@@ -96,6 +96,7 @@ function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, inclu
     title: data.title,
     description: data.description ?? '',
     tags: data.tags ?? [],
+    shuffleQuestions: Boolean(data.shuffleQuestions),
     itemCount: data.itemCount ?? data.items?.length ?? 0,
     createdAt,
     status: data.status ?? 'approved'

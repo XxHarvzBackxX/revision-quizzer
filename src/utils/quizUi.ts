@@ -7,6 +7,7 @@ export const sampleDataset = JSON.stringify(
     title: 'Biology Basics',
     description: 'A tiny starter set for testing Quiz Arcade.',
     tags: ['biology', 'starter'],
+    shuffleQuestions: false,
     items: [
       { type: 'flashcard', prompt: 'What does the nucleus do?', answer: "Controls the cell's activities" },
       { type: 'free-write', prompt: 'What process do plants use to make glucose?', answer: 'Photosynthesis' },

@@ -1,5 +1,5 @@
 import { Check, RotateCcw, Sparkles, Trophy, X, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { PublicDataset, QuizItem } from '../../shared/quiz';
 import { answerSimilarity, isFreeWritePass } from '../../shared/quiz';
 import type { ScoreRecord } from '../storage';
@@ -25,8 +25,9 @@ export function QuizPlayPage({
   const [completed, setCompleted] = useState(false);
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
   const [scorePopup, setScorePopup] = useState('');
-  const item = dataset.items[index];
-  const progress = Math.round(((index + (completed ? 1 : 0)) / dataset.items.length) * 100);
+  const items = useMemo(() => dataset.shuffleQuestions ? shuffleItems(dataset.items) : dataset.items, [dataset.id]);
+  const item = items[index];
+  const progress = Math.round(((index + (completed ? 1 : 0)) / items.length) * 100);
   const streakLabel = pendingPoints && revealed ? 'Hit!' : score > 0 ? `${score} banked` : 'Warm up';
 
   function check(points: number) {
@@ -47,7 +48,7 @@ export function QuizPlayPage({
     setEffect('');
     setScorePopup('');
 
-    if (index < dataset.items.length - 1) {
+    if (index < items.length - 1) {
       setIndex(index + 1);
       setSelected('');
       setTyped('');
@@ -57,7 +58,7 @@ export function QuizPlayPage({
     }
 
     setCompleted(true);
-    onScore({ datasetId: dataset.id, title: dataset.title, score: nextScore, total: dataset.items.length, completedAt: new Date().toISOString() });
+    onScore({ datasetId: dataset.id, title: dataset.title, score: nextScore, total: items.length, completedAt: new Date().toISOString() });
   }
 
   function restart() {
@@ -83,7 +84,7 @@ export function QuizPlayPage({
         <button className="ghost-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Menu</button>
         <div className="hud-center">
           <strong>{dataset.title}</strong>
-          <span>{index + 1} of {dataset.items.length}</span>
+          <span>{index + 1} of {items.length}</span>
         </div>
         <div className="score-chip"><Zap size={16} /> {score + (revealed ? pendingPoints : 0)} pts</div>
       </div>
@@ -221,4 +222,14 @@ function ResultPanel({ dataset, score, onBack, onRestart }: { dataset: PublicDat
       </div>
     </section>
   );
+}
+
+function shuffleItems(items: QuizItem[]): QuizItem[] {
+  const shuffled = [...items];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
 }

@@ -201,6 +201,7 @@ function AdminDatasetManager({
       title: selected.title,
       description: selected.description,
       tags: selected.tags,
+      shuffleQuestions: Boolean(selected.shuffleQuestions),
       items: selected.items
     }, null, 2));
     setStatus(selected.status ?? 'approved');

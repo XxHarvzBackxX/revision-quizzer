@@ -501,6 +501,16 @@ p {
   width: auto;
 }
 
+.friendly-toggle {
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 8px;
+  color: #155e75;
+  font-weight: 800;
+  margin-bottom: 4px;
+  padding: 12px;
+}
+
 .admin-key-field {
   align-items: center;
   display: flex;
@@ -687,9 +697,57 @@ textarea {
 }
 
 .marquee-panel {
+  color: #172033;
   overflow: hidden;
   padding: clamp(24px, 5vw, 46px);
   position: relative;
+}
+
+.dataset-card .ghost-button,
+.feature-panel .ghost-button,
+.friendly-builder .ghost-button,
+.login-panel .ghost-button,
+.manager-editor .ghost-button,
+.marquee-panel .ghost-button,
+.quiz-card .ghost-button,
+.upload-editor .ghost-button,
+.upload-preview .ghost-button {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #172033;
+}
+
+.dataset-card .ghost-button:hover,
+.feature-panel .ghost-button:hover,
+.friendly-builder .ghost-button:hover,
+.login-panel .ghost-button:hover,
+.manager-editor .ghost-button:hover,
+.marquee-panel .ghost-button:hover,
+.quiz-card .ghost-button:hover,
+.upload-editor .ghost-button:hover,
+.upload-preview .ghost-button:hover {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.upload-editor .segmented-control,
+.upload-preview .segmented-control,
+.manager-editor .segmented-control {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.upload-editor .segmented-control button,
+.upload-preview .segmented-control button,
+.manager-editor .segmented-control button {
+  color: #334155;
+}
+
+.upload-editor .segmented-control button.active,
+.upload-preview .segmented-control button.active,
+.manager-editor .segmented-control button.active {
+  background: #111827;
+  color: #ffffff;
 }
 
 .marquee-panel::after {
@@ -703,7 +761,7 @@ textarea {
 }
 
 .quiz-menu-stats {
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .last-score-card {

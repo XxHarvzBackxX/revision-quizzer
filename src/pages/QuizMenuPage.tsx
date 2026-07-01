@@ -36,6 +36,7 @@ export function QuizMenuPage({
       </div>
       <div className="quiz-menu-stats">
         <StatTile label="Questions" value={dataset.itemCount.toString()} />
+        <StatTile label="Shuffle" value={dataset.shuffleQuestions ? 'On' : 'Off'} />
         <StatTile label="Multiple choice" value={(counts['multiple-choice'] ?? 0).toString()} />
         <StatTile label="Free write" value={(counts['free-write'] ?? 0).toString()} />
         <StatTile label="Flashcards" value={(counts.flashcard ?? 0).toString()} />
