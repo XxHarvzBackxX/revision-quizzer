@@ -1,4 +1,4 @@
-import type { AdminConfig, DatasetInput, DatasetSummary, PublicDataset } from '../shared/quiz';
+import type { AdminConfig, DatasetInput, DatasetSummary, PublicConfig, PublicDataset } from '../shared/quiz';
 
 export async function fetchDatasets(): Promise<DatasetSummary[]> {
   const response = await fetch('/api/datasets');
@@ -9,6 +9,17 @@ export async function fetchDatasets(): Promise<DatasetSummary[]> {
   }
 
   return payload.datasets;
+}
+
+export async function fetchPublicConfig(): Promise<PublicConfig> {
+  const response = await fetch('/api/config');
+  const payload = await response.json();
+
+  if (!response.ok) {
+    throw new Error(payload.error ?? 'Could not load app config.');
+  }
+
+  return payload.config;
 }
 
 export async function fetchDataset(id: string): Promise<PublicDataset> {

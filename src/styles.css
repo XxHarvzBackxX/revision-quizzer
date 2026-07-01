@@ -57,6 +57,12 @@ p {
     #0f172a;
 }
 
+.view-upload {
+  background:
+    linear-gradient(135deg, #0f766e, #0891b2 48%, #f59e0b),
+    #0f766e;
+}
+
 .view-admin {
   background:
     linear-gradient(140deg, #111827, #3f1d2b 52%, #0f766e),
@@ -360,6 +366,7 @@ p {
 }
 
 .gallery-page,
+.public-upload-page,
 .admin-page {
   padding: 56px 0;
 }
@@ -466,6 +473,24 @@ p {
   padding: 12px;
 }
 
+.upload-intro {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+  color: #172033;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+}
+
+.upload-intro span {
+  color: #64748b;
+}
+
 .toggle-row {
   align-items: center;
   display: flex;
@@ -476,11 +501,72 @@ p {
   width: auto;
 }
 
+.admin-key-field {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-width: min(320px, 100%);
+}
+
+.admin-key-field span {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.open-upload-note {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  color: #14532d;
+  font-weight: 800;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+}
+
 .upload-layout,
 .manager-layout {
   display: grid;
   gap: 18px;
   grid-template-columns: minmax(0, 1.2fr) minmax(310px, 0.8fr);
+}
+
+.upload-mode-control {
+  margin-bottom: 16px;
+}
+
+.friendly-builder,
+.friendly-items {
+  display: grid;
+  gap: 14px;
+}
+
+.friendly-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.friendly-item-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.icon-button.dark {
+  color: #172033;
+}
+
+.option-editor-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.builder-add {
+  color: #172033;
+  justify-self: start;
 }
 
 .upload-editor,

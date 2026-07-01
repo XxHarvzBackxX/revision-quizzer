@@ -41,14 +41,13 @@ async function listDatasets(response: VercelResponse) {
 }
 
 async function createDataset(request: VercelRequest, response: VercelResponse) {
-  const expectedKey = process.env.UPLOAD_KEY;
-  if (!expectedKey) {
-    sendJson(response, 500, { error: 'UPLOAD_KEY is not configured.' });
-    return;
-  }
+  const database = getDatabase();
+  const configDoc = await database.collection('config').doc('app').get();
+  const config = configDoc.data() ?? {};
+  const expectedKey = String(config.uploadKey ?? process.env.UPLOAD_KEY ?? '').trim();
 
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const hasUploadKey = getUploadKey(request) === expectedKey;
+  const hasUploadKey = expectedKey.length === 0 || getUploadKey(request) === expectedKey;
   const hasAdminPassword = Boolean(adminPassword && getAdminPassword(request) === adminPassword);
 
   if (!hasUploadKey && !hasAdminPassword) {
@@ -64,11 +63,9 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
     return;
   }
 
-  const database = getDatabase();
   const document = database.collection(COLLECTION).doc();
   const slug = createSlug(result.value.title, document.id);
-  const configDoc = await database.collection('config').doc('app').get();
-  const moderationEnabled = Boolean(configDoc.data()?.moderationEnabled);
+  const moderationEnabled = Boolean(config.moderationEnabled);
   const status = hasAdminPassword || !moderationEnabled ? 'approved' : 'pending';
 
   const dataset = {

@@ -24,7 +24,10 @@ export default async function handler(request: VercelRequest, response: VercelRe
       const moderationEnabled = typeof body === 'object' && body !== null && 'moderationEnabled' in body
         ? Boolean(body.moderationEnabled)
         : false;
-      const config = { moderationEnabled };
+      const uploadKey = typeof body === 'object' && body !== null && 'uploadKey' in body
+        ? String(body.uploadKey).trim()
+        : '';
+      const config = { moderationEnabled, uploadKey };
       await getDatabase().collection(CONFIG_COLLECTION).doc(CONFIG_DOC).set(config, { merge: true });
       sendJson(response, 200, { config });
       return;
@@ -40,5 +43,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
 async function getConfig(): Promise<AdminConfig> {
   const doc = await getDatabase().collection(CONFIG_COLLECTION).doc(CONFIG_DOC).get();
-  return { moderationEnabled: Boolean(doc.data()?.moderationEnabled) };
+  return {
+    moderationEnabled: Boolean(doc.data()?.moderationEnabled),
+    uploadKey: String(doc.data()?.uploadKey ?? process.env.UPLOAD_KEY ?? '')
+  };
 }

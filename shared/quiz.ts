@@ -40,6 +40,11 @@ export type DatasetSummary = Omit<PublicDataset, 'items'>;
 
 export type AdminConfig = {
   moderationEnabled: boolean;
+  uploadKey: string;
+};
+
+export type PublicConfig = {
+  uploadKeyRequired: boolean;
 };
 
 export type ValidationResult =
