@@ -168,13 +168,23 @@ function QuizCard({
             const isPicked = selected === option;
             const className = revealed && isCorrect ? 'option correct' : revealed && isPicked ? 'option wrong' : 'option';
             return (
-              <button className={className} disabled={revealed} key={option} onClick={() => { onSelect(option); onCheck(isCorrect ? 1 : 0); }}>
+              <button className={isPicked && !revealed ? `${className} selected` : className} disabled={revealed} key={option} onClick={() => onSelect(option)}>
                 {revealed && isCorrect ? <Check size={17} /> : revealed && isPicked ? <X size={17} /> : null}
                 {option}
               </button>
             );
           })}
-          {revealed && <button className="primary-button next-button" onClick={onNext}>Next</button>}
+          {revealed ? (
+            <button className="primary-button next-button" onClick={onNext}>Next</button>
+          ) : (
+            <button
+              className="primary-button next-button"
+              disabled={!selected}
+              onClick={() => onCheck(selected === item.answer ? 1 : 0)}
+            >
+              Confirm answer
+            </button>
+          )}
         </div>
       )}
       {item.type === 'free-write' && (

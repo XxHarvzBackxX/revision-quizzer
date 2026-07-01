@@ -856,6 +856,12 @@ textarea {
   transform: translateY(-1px);
 }
 
+.option.selected {
+  background: #e0f2fe;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.18);
+}
+
 .option.correct {
   background: #dcfce7;
   border-color: #22c55e;
