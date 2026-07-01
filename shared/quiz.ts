@@ -33,9 +33,14 @@ export type PublicDataset = DatasetInput & {
   slug: string;
   itemCount: number;
   createdAt: string;
+  status?: 'approved' | 'pending';
 };
 
 export type DatasetSummary = Omit<PublicDataset, 'items'>;
+
+export type AdminConfig = {
+  moderationEnabled: boolean;
+};
 
 export type ValidationResult =
   | { ok: true; value: DatasetInput }

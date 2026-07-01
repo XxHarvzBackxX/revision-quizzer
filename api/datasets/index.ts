@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Timestamp } from 'firebase-admin/firestore';
 import { createSlug, type DatasetSummary, type PublicDataset, validateDataset } from '../../shared/quiz.js';
 import { getDatabase } from '../_firebase.js';
-import { getUploadKey, readJsonBody, sendJson } from '../_http.js';
+import { getAdminPassword, getUploadKey, readJsonBody, sendJson } from '../_http.js';
 
 const COLLECTION = 'datasets';
 
@@ -30,10 +30,13 @@ async function listDatasets(response: VercelResponse) {
   const snapshot = await getDatabase()
     .collection(COLLECTION)
     .orderBy('createdAt', 'desc')
-    .limit(50)
+    .limit(100)
     .get();
 
-  const datasets: DatasetSummary[] = snapshot.docs.map((doc) => toPublicDataset(doc.id, doc.data(), false));
+  const datasets: DatasetSummary[] = snapshot.docs
+    .map((doc) => toPublicDataset(doc.id, doc.data(), false))
+    .filter((dataset) => dataset.status !== 'pending')
+    .slice(0, 50);
   sendJson(response, 200, { datasets });
 }
 
@@ -44,7 +47,11 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
     return;
   }
 
-  if (getUploadKey(request) !== expectedKey) {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const hasUploadKey = getUploadKey(request) === expectedKey;
+  const hasAdminPassword = Boolean(adminPassword && getAdminPassword(request) === adminPassword);
+
+  if (!hasUploadKey && !hasAdminPassword) {
     sendJson(response, 401, { error: 'Invalid upload key.' });
     return;
   }
@@ -60,10 +67,14 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
   const database = getDatabase();
   const document = database.collection(COLLECTION).doc();
   const slug = createSlug(result.value.title, document.id);
+  const configDoc = await database.collection('config').doc('app').get();
+  const moderationEnabled = Boolean(configDoc.data()?.moderationEnabled);
+  const status = hasAdminPassword || !moderationEnabled ? 'approved' : 'pending';
 
   const dataset = {
     ...result.value,
     slug,
+    status,
     itemCount: result.value.items.length,
     createdAt: Timestamp.now()
   };
@@ -89,7 +100,8 @@ function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, inclu
     description: data.description ?? '',
     tags: data.tags ?? [],
     itemCount: data.itemCount ?? data.items?.length ?? 0,
-    createdAt
+    createdAt,
+    status: data.status ?? 'approved'
   };
 
   return includeItems ? { ...base, items: data.items ?? [] } : base;

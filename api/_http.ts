@@ -14,6 +14,15 @@ export function getUploadKey(request: VercelRequest): string {
   return header ?? '';
 }
 
+export function getAdminPassword(request: VercelRequest): string {
+  const header = request.headers['x-admin-password'];
+  if (Array.isArray(header)) {
+    return header[0] ?? '';
+  }
+
+  return header ?? '';
+}
+
 export async function readJsonBody(request: VercelRequest): Promise<unknown> {
   if (typeof request.body === 'object' && request.body !== null) {
     return request.body;
