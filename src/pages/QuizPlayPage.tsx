@@ -5,6 +5,10 @@ import { answerSimilarity, isFreeWritePass } from '../../shared/quiz';
 import type { ScoreRecord } from '../storage';
 import type { Navigate, ToastKind } from '../types';
 
+type PlayItem = QuizItem & {
+  displayOptions?: string[];
+};
+
 export function QuizPlayPage({
   dataset,
   navigate,
@@ -25,7 +29,8 @@ export function QuizPlayPage({
   const [completed, setCompleted] = useState(false);
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
   const [scorePopup, setScorePopup] = useState('');
-  const items = useMemo(() => dataset.shuffleQuestions ? shuffleItems(dataset.items) : dataset.items, [dataset.id]);
+  const [roundSeed, setRoundSeed] = useState(0);
+  const items = useMemo(() => createRoundItems(dataset.items, Boolean(dataset.shuffleQuestions)), [dataset.id, roundSeed]);
   const item = items[index];
   const progress = Math.round(((index + (completed ? 1 : 0)) / items.length) * 100);
   const streakLabel = pendingPoints && revealed ? 'Hit!' : score > 0 ? `${score} banked` : 'Warm up';
@@ -70,6 +75,7 @@ export function QuizPlayPage({
     setPendingPoints(0);
     setCompleted(false);
     setEffect('');
+    setRoundSeed((seed) => seed + 1);
   }
 
   if (completed) {
@@ -92,7 +98,6 @@ export function QuizPlayPage({
       <div className="streak-ribbon">{streakLabel}</div>
       <QuizCard
         item={item}
-        itemKey={`${dataset.id}-${index}`}
         selected={selected}
         typed={typed}
         revealed={revealed}
@@ -114,7 +119,6 @@ export function QuizPlayPage({
 
 function QuizCard({
   item,
-  itemKey,
   selected,
   typed,
   revealed,
@@ -126,8 +130,7 @@ function QuizCard({
   onOverride,
   onNext
 }: {
-  item: QuizItem;
-  itemKey: string;
+  item: PlayItem;
   selected: string;
   typed: string;
   revealed: boolean;
@@ -140,10 +143,7 @@ function QuizCard({
   onNext: () => void;
 }) {
   const similarity = item.type === 'free-write' ? answerSimilarity(typed, item.answer) : 0;
-  const shuffledOptions = useMemo(
-    () => item.type === 'multiple-choice' ? shuffleOptions(item) : [],
-    [itemKey]
-  );
+  const options = item.type === 'multiple-choice' ? item.displayOptions ?? item.options : [];
 
   return (
     <article className="quiz-card">
@@ -171,7 +171,7 @@ function QuizCard({
       )}
       {item.type === 'multiple-choice' && (
         <div className="option-grid">
-          {shuffledOptions.map((option) => {
+          {options.map((option) => {
             const isCorrect = option === item.answer;
             const isPicked = selected === option;
             const className = revealed && isCorrect ? 'option correct' : revealed && isPicked ? 'option wrong' : 'option';
@@ -215,8 +215,18 @@ function QuizCard({
   );
 }
 
-function shuffleOptions(item: MultipleChoiceItem): string[] {
-  return shuffleItems(item.options);
+function createRoundItems(items: QuizItem[], shuffleQuestions: boolean): PlayItem[] {
+  const roundItems = shuffleQuestions ? shuffleItems(items) : [...items];
+  return roundItems.map((item) => {
+    if (item.type !== 'multiple-choice') {
+      return item;
+    }
+
+    return {
+      ...item,
+      displayOptions: shuffleItems(item.options)
+    } satisfies MultipleChoiceItem & { displayOptions: string[] };
+  });
 }
 
 function ResultPanel({ dataset, score, onBack, onRestart }: { dataset: PublicDataset; score: number; onBack: () => void; onRestart: () => void }) {
