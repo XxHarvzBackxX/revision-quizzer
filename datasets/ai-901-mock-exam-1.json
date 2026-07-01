@@ -1,57 +1,563 @@
 {
-  "title": "AI-901 Mock Exam 1: Foundations and Foundry Basics",
-  "description": "Unofficial AI-901 revision set based on the Microsoft Learn AI-901 skills guide, Microsoft Foundry, Agent Service, and Foundry Tools documentation.",
-  "tags": ["ai-901", "azure", "foundry", "mock-exam"],
+  "title": "AI-901 Mock Exam 1: Foundry Implementation Scenarios",
+  "description": "Harder unofficial AI-901 practice focused on Microsoft Foundry implementation, agents, tools, model configuration, responsible AI, and information extraction. Based on the public Microsoft AI-901 skills guide, Microsoft Foundry, Agent Service, and Content Understanding documentation. Original practice questions; not official exam content.",
+  "tags": [
+    "ai-901",
+    "azure",
+    "foundry",
+    "mock-exam"
+  ],
+  "shuffleQuestions": true,
   "items": [
-    {"type":"multiple-choice","prompt":"A hiring model performs less accurately for candidates from one demographic group. Which responsible AI principle is most directly involved?","answer":"Fairness","options":["Fairness","Transparency","Accountability","Privacy and security"]},
-    {"type":"multiple-choice","prompt":"A team wants users to understand why an AI system returned a recommendation. Which responsible AI principle is the closest match?","answer":"Transparency","options":["Reliability and safety","Transparency","Inclusiveness","Fairness"]},
-    {"type":"multiple-choice","prompt":"A bank must be able to identify who approved, deployed, and monitors an AI model. Which responsible AI principle does this support?","answer":"Accountability","options":["Accountability","Inclusiveness","Fairness","Computer vision"]},
-    {"type":"multiple-choice","prompt":"Which scenario best illustrates privacy and security considerations in an AI solution?","answer":"Redacting personal data before sending documents to a model","options":["Redacting personal data before sending documents to a model","Making the UI colorful","Increasing the number of training epochs","Choosing a larger display monitor"]},
-    {"type":"multiple-choice","prompt":"Which responsible AI consideration is most related to ensuring people with disabilities can use an AI-powered application?","answer":"Inclusiveness","options":["Inclusiveness","Entity detection","Model routing","Speech synthesis"]},
-    {"type":"multiple-choice","prompt":"In generative AI, what is the main role of a model?","answer":"Generate outputs from learned patterns in training data and prompts","options":["Generate outputs from learned patterns in training data and prompts","Store billing records for Azure subscriptions","Encrypt files in a storage account","Replace all application code"]},
-    {"type":"multiple-choice","prompt":"Which model capability is most important for answering questions about both an uploaded image and accompanying text?","answer":"Multimodal understanding","options":["Multimodal understanding","Speech synthesis only","Anomaly detection only","Keyword extraction only"]},
-    {"type":"multiple-choice","prompt":"A developer needs fast, low-cost responses for simple chat completions. Which model selection factor matters most?","answer":"Latency and cost compared with required quality","options":["Latency and cost compared with required quality","The color of the model card","Whether the app uses tabs","The number of Azure regions listed on a map"]},
-    {"type":"multiple-choice","prompt":"What is a model deployment in Foundry used for?","answer":"Making a selected model available to applications through an endpoint or project interface","options":["Making a selected model available to applications through an endpoint or project interface","Deleting all prompts after testing","Creating a Microsoft account","Converting JSON to CSV"]},
-    {"type":"multiple-choice","prompt":"Which configuration parameter commonly controls randomness in model responses?","answer":"Temperature","options":["Temperature","Subnet mask","Image DPI","Storage tier"]},
-    {"type":"multiple-choice","prompt":"Which setting is commonly used to limit how much text a generative model can return?","answer":"Maximum output tokens","options":["Maximum output tokens","VM disk size","Blob container name","DNS TTL"]},
-    {"type":"multiple-choice","prompt":"A chatbot must follow a company tone, avoid medical advice, and ask clarifying questions. Where should these persistent rules usually go?","answer":"System instructions","options":["System instructions","The user's browser cache","A random answer option","A firewall rule name"]},
-    {"type":"multiple-choice","prompt":"Which prompt type usually contains the user's immediate request?","answer":"User prompt","options":["User prompt","System prompt","Model deployment","Content filter"]},
-    {"type":"multiple-choice","prompt":"A support bot needs current product policy from internal documents. Which pattern is most appropriate?","answer":"Ground the model with a retrieval or file search tool","options":["Ground the model with a retrieval or file search tool","Increase temperature to maximum","Remove all context","Use speech synthesis only"]},
-    {"type":"multiple-choice","prompt":"Which workload detects people, objects, or text inside images?","answer":"Computer vision","options":["Computer vision","Speech synthesis","Text summarization","Accountability"]},
-    {"type":"multiple-choice","prompt":"Which workload converts spoken audio into text?","answer":"Speech recognition","options":["Speech recognition","Speech synthesis","Image generation","Entity detection"]},
-    {"type":"multiple-choice","prompt":"Which workload converts text into spoken audio?","answer":"Speech synthesis","options":["Speech synthesis","Speech recognition","Object detection","Key phrase extraction"]},
-    {"type":"multiple-choice","prompt":"Which NLP capability identifies people, places, dates, and organizations in text?","answer":"Entity detection","options":["Entity detection","Image segmentation","Speech synthesis","Token budgeting"]},
-    {"type":"multiple-choice","prompt":"Which NLP capability estimates whether text expresses a positive, neutral, or negative opinion?","answer":"Sentiment analysis","options":["Sentiment analysis","Object detection","Face grouping","Model deployment"]},
-    {"type":"multiple-choice","prompt":"Which NLP capability produces a shorter version of a longer article while preserving key points?","answer":"Summarization","options":["Summarization","Speech recognition","Image classification","Tool authentication"]},
-    {"type":"multiple-choice","prompt":"Which NLP capability extracts important words or phrases from text?","answer":"Key phrase extraction","options":["Key phrase extraction","Bounding box detection","Vector scaling","Voice selection"]},
-    {"type":"multiple-choice","prompt":"A company wants to generate product images from text prompts. Which workload is this?","answer":"Image generation","options":["Image generation","Entity detection","Speech translation","Form extraction"]},
-    {"type":"multiple-choice","prompt":"A system reads invoices and returns vendor name, total, due date, and line items. Which workload fits best?","answer":"Information extraction","options":["Information extraction","Speech synthesis","Fairness evaluation","Prompt routing"]},
-    {"type":"multiple-choice","prompt":"Which input type can Azure Content Understanding process for extraction scenarios?","answer":"Documents, images, audio, and video","options":["Documents, images, audio, and video","Only relational database rows","Only handwritten Python files","Only passwords"]},
-    {"type":"multiple-choice","prompt":"You need a single Azure environment where developers can choose models, create agents, attach tools, test prompts, monitor traces, and manage access controls. Which service should you use?","answer":"Microsoft Foundry","options":["Microsoft Foundry","Azure DNS","Azure Static Web Apps","Microsoft Entra Verified ID"]},
-    {"type":"multiple-choice","prompt":"In Foundry, what do projects help organize?","answer":"AI resources, model work, agents, tools, and application assets for a solution","options":["AI resources, model work, agents, tools, and application assets for a solution","Only desktop wallpapers","Only DNS records","Only spreadsheet formulas"]},
-    {"type":"multiple-choice","prompt":"Which identity approach is commonly recommended for production Azure SDK access instead of hard-coded secrets?","answer":"Microsoft Entra authentication such as DefaultAzureCredential","options":["Microsoft Entra authentication such as DefaultAzureCredential","Plain-text passwords in source code","Screenshots of API keys","Anonymous administrator access"]},
-    {"type":"multiple-choice","prompt":"A Python application must call a model deployed in a Foundry project by using Microsoft Entra authentication instead of a hard-coded key. Which approach should the developer use?","answer":"Create a Foundry project client with the project endpoint and DefaultAzureCredential","options":["Create a Foundry project client with the project endpoint and DefaultAzureCredential","Store the model endpoint in a public JavaScript file","Send the user's password in every prompt","Use anonymous access to the project endpoint"]},
-    {"type":"multiple-choice","prompt":"What is the format of a Foundry project endpoint generally used for SDK calls?","answer":"A URL for the Foundry resource and project","options":["A URL for the Foundry resource and project","A local file path only","A Windows registry key","A random GUID without a host"]},
-    {"type":"multiple-choice","prompt":"Which Foundry feature helps developers inspect decisions, tool calls, and performance of AI apps?","answer":"Tracing, monitoring, and observability","options":["Tracing, monitoring, and observability","Changing the app icon","Disabling logging everywhere","Using only larger fonts"]},
-    {"type":"multiple-choice","prompt":"What is an AI agent in Foundry terms?","answer":"An AI app that uses a model, instructions, and tools to reason and act over one or more steps","options":["An AI app that uses a model, instructions, and tools to reason and act over one or more steps","A static image saved in storage","A billing invoice","A database index only"]},
-    {"type":"multiple-choice","prompt":"Which three components are core to an agent?","answer":"Model, instructions, and tools","options":["Model, instructions, and tools","Mouse, keyboard, and monitor","Region, invoice, and tag","HTML, CSS, and favicon"]},
-    {"type":"multiple-choice","prompt":"A prompt agent in Foundry is best described as what?","answer":"A configuration-driven managed agent authored in the portal or through APIs","options":["A configuration-driven managed agent authored in the portal or through APIs","A hand-built laptop","An unmanaged VM image only","A spreadsheet macro"]},
-    {"type":"multiple-choice","prompt":"A hosted agent is best for which situation?","answer":"You need custom code or framework-based orchestration packaged to run in Foundry","options":["You need custom code or framework-based orchestration packaged to run in Foundry","You only need a single static prompt","You want no code and no container","You need to edit a JSON file offline only"]},
-    {"type":"multiple-choice","prompt":"Which API is described as a single entry point for Foundry agents and model/tool access?","answer":"Responses API","options":["Responses API","Clipboard API","Graphical BIOS API","Printer API"]},
-    {"type":"multiple-choice","prompt":"Which built-in tool category can help an agent search provided files?","answer":"File search","options":["File search","Screen brightness","Keyboard repeat","Disk defragmentation"]},
-    {"type":"multiple-choice","prompt":"Which built-in tool category lets an agent run code for calculations or data tasks?","answer":"Code interpreter","options":["Code interpreter","Image wallpaper","Font picker","Audio mute"]},
-    {"type":"multiple-choice","prompt":"Which capability lets agents retain and recall relevant context across interactions?","answer":"Memory","options":["Memory","DNS","Screen capture","Blob hot tier"]},
-    {"type":"multiple-choice","prompt":"Why would a developer attach tools to an agent?","answer":"To let the agent access data or take actions beyond text generation","options":["To let the agent access data or take actions beyond text generation","To make all answers random","To remove the model from the app","To avoid authentication always"]},
-    {"type":"multiple-choice","prompt":"Which Foundry concept helps teams swap models without rewriting all agent code?","answer":"Using model catalog and common APIs around deployments or model access","options":["Using model catalog and common APIs around deployments or model access","Embedding the model name in every CSS class","Deleting the project endpoint","Using only handwritten notes"]},
-    {"type":"multiple-choice","prompt":"A model gives unsafe instructions. Which platform feature can help reduce harmful outputs?","answer":"Content filters and safety controls","options":["Content filters and safety controls","Increasing output length","Removing all instructions","Turning off monitoring"]},
-    {"type":"multiple-choice","prompt":"Which action should you take before sending sensitive documents to an AI service?","answer":"Confirm privacy requirements and remove or protect unnecessary sensitive data","options":["Confirm privacy requirements and remove or protect unnecessary sensitive data","Publish them publicly first","Ignore data classification","Increase temperature"]},
-    {"type":"multiple-choice","prompt":"A user asks a model to ignore all previous rules. Which instruction layer should still govern model behavior?","answer":"System instructions","options":["System instructions","The last user sentence only","A CSS file","The browser title"]},
-    {"type":"multiple-choice","prompt":"Which prompt is better for reliable answers?","answer":"A specific prompt with context, task, constraints, and desired output format","options":["A specific prompt with context, task, constraints, and desired output format","A vague one-word prompt","A prompt with contradictory goals","A prompt that hides the task"]},
-    {"type":"multiple-choice","prompt":"What does grounding help reduce in generative AI applications?","answer":"Unsupported or hallucinated answers","options":["Unsupported or hallucinated answers","Network bandwidth always","All compute costs to zero","The need for any testing"]},
-    {"type":"multiple-choice","prompt":"Which evaluation checks whether outputs are factually supported by provided sources?","answer":"Groundedness or faithfulness evaluation","options":["Groundedness or faithfulness evaluation","Screen resolution testing","Keyboard layout testing","DNS propagation"]},
-    {"type":"multiple-choice","prompt":"Which scenario is agentic AI rather than simple text completion?","answer":"A system plans steps, calls a calendar API, checks constraints, and schedules a meeting","options":["A system plans steps, calls a calendar API, checks constraints, and schedules a meeting","A model returns one paragraph from one prompt","A static FAQ page loads","A user manually copies text between tabs"]},
-    {"type":"multiple-choice","prompt":"Why should AI apps include monitoring after deployment?","answer":"To observe quality, safety, usage, latency, and failures over time","options":["To observe quality, safety, usage, latency, and failures over time","To guarantee no future updates are needed","To make prompts invisible","To avoid all user feedback"]},
-    {"type":"multiple-choice","prompt":"A developer is building a chatbot that must answer questions from product manuals and show when an answer is not present in the manuals. Which design should the developer choose?","answer":"Use retrieval or file search to ground responses in the manuals and instruct the model to say when information is missing","options":["Use retrieval or file search to ground responses in the manuals and instruct the model to say when information is missing","Increase temperature so the model produces more varied answers","Remove system instructions so the model is unconstrained","Use speech synthesis without providing the manuals"]},
-    {"type":"multiple-choice","prompt":"A company deploys an AI assistant that can call a refund API. What should be configured to reduce the risk of unauthorized refunds?","answer":"Tool access controls, clear instructions, validation, and monitoring for refund actions","options":["Tool access controls, clear instructions, validation, and monitoring for refund actions","A higher maximum output token limit","A more colorful chat interface","A prompt that tells the model to trust every request"]}
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer is building a customer-support assistant in Microsoft Foundry. The assistant must answer only from uploaded product manuals and must say when the manuals do not contain the answer. Which design should the developer choose?",
+      "answer": "Create a prompt agent with file search grounded on the manuals and instructions to answer only from retrieved content",
+      "options": [
+        "Create a prompt agent with file search grounded on the manuals and instructions to answer only from retrieved content",
+        "Increase temperature so the model explores more possible answers",
+        "Use text-to-speech because the manuals contain text",
+        "Use an image-generation model to summarize the manuals"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team has an existing LangGraph agent running in AKS. They want to keep the orchestration code but use Foundry models and built-in tools through a single endpoint. What should they call from their existing process?",
+      "answer": "The Responses API",
+      "options": [
+        "The Responses API",
+        "The Content Understanding authoring API only",
+        "The Azure DNS REST API",
+        "The Speech synthesis endpoint only"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company wants to build an internal HR assistant quickly in the Foundry portal. It needs instructions, model selection, file search, and no custom orchestration code. Which agent type is the best fit?",
+      "answer": "Prompt agent",
+      "options": [
+        "Hosted agent",
+        "Prompt agent",
+        "Custom container app only",
+        "Azure Functions timer trigger"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer needs a Foundry agent with custom Python orchestration, package dependencies, and a managed endpoint with scaling and observability. Which agent type should they use?",
+      "answer": "Hosted agent",
+      "options": [
+        "Prompt agent",
+        "Hosted agent",
+        "Document analyzer",
+        "Speech translation project"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A Python app must authenticate to a Foundry project endpoint without storing an API key in source control. Which code pattern is most appropriate?",
+      "answer": "Create an AIProjectClient with the project endpoint and DefaultAzureCredential",
+      "options": [
+        "Create an AIProjectClient with the project endpoint and DefaultAzureCredential",
+        "Paste the admin key into the system prompt",
+        "Store the key in browser localStorage",
+        "Call the endpoint anonymously from JavaScript"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A project endpoint is shown as https://contoso.ai.azure.com/api/projects/support. What is this endpoint used for in a Foundry SDK client?",
+      "answer": "Connecting the client to a specific Foundry project for model, agent, and tool calls",
+      "options": [
+        "Connecting the client to a specific Foundry project for model, agent, and tool calls",
+        "Configuring a DNS zone for the project",
+        "Opening a local file path for datasets",
+        "Selecting the browser language for the portal"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer needs to choose a model for extracting fields from short support messages at very high volume. Accuracy requirements are modest and latency/cost are important. Which model selection approach is most appropriate?",
+      "answer": "Use a smaller faster model that meets quality targets after evaluation",
+      "options": [
+        "Always use the largest reasoning model available",
+        "Use a smaller faster model that meets quality targets after evaluation",
+        "Use an image-generation model because extraction creates output",
+        "Use speech synthesis because the messages are short"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A compliance bot must produce deterministic policy summaries in a fixed format. Which model setting should generally be reduced?",
+      "answer": "Temperature",
+      "options": [
+        "Temperature",
+        "Maximum output tokens",
+        "Project endpoint length",
+        "Number of tags on the dataset"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A chat app sometimes returns long answers that overflow the mobile UI. Which model parameter should the developer configure?",
+      "answer": "Maximum output tokens",
+      "options": [
+        "Maximum output tokens",
+        "Content filter severity",
+        "Speech region",
+        "Document page count"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A system prompt tells an assistant not to reveal internal policy. A user asks it to ignore all previous instructions and disclose the policy. What should govern the response?",
+      "answer": "The system instructions and safety controls should still take precedence",
+      "options": [
+        "The system instructions and safety controls should still take precedence",
+        "The most recent user instruction always overrides system instructions",
+        "The assistant should reveal the policy if asked twice",
+        "The app should increase temperature"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An agent can call a refund API. Which control is most important before enabling the tool in production?",
+      "answer": "Validate tool inputs and restrict tool access with identity and authorization controls",
+      "options": [
+        "Set maximum output tokens to a high value",
+        "Validate tool inputs and restrict tool access with identity and authorization controls",
+        "Use a brighter UI for refund decisions",
+        "Disable all tracing so refunds are private"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An operations team needs to debug why an agent called a database tool before answering. Which Foundry capability is most useful?",
+      "answer": "Tracing and observability of model and tool steps",
+      "options": [
+        "Tracing and observability of model and tool steps",
+        "Image generation history",
+        "Text-to-speech voice selection",
+        "Storage lifecycle rules"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company wants stable releases of an agent so client apps do not unexpectedly change behavior when developers test new instructions. What should they use?",
+      "answer": "Agent versioning and publishing",
+      "options": [
+        "Agent versioning and publishing",
+        "Random temperature changes",
+        "A larger file search index only",
+        "Manual browser refreshes"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An app sends customer records to a model. Which responsible AI practice best addresses privacy and security?",
+      "answer": "Minimize and protect sensitive data before it is sent or logged",
+      "options": [
+        "Minimize and protect sensitive data before it is sent or logged",
+        "Increase token limits for all requests",
+        "Use more colorful chart labels",
+        "Disable authentication during testing"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A hiring-screening model performs worse for one demographic group. Which responsible AI principle is most directly involved?",
+      "answer": "Fairness",
+      "options": [
+        "Transparency",
+        "Fairness",
+        "Speech recognition",
+        "Grounding"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A loan assistant must let users understand when AI is involved and what data influenced a recommendation. Which principle is emphasized?",
+      "answer": "Transparency",
+      "options": [
+        "Transparency",
+        "Object detection",
+        "Model routing",
+        "Image segmentation"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An AI system needs assigned owners, review processes, and escalation paths for harmful outcomes. Which principle is emphasized?",
+      "answer": "Accountability",
+      "options": [
+        "Accountability",
+        "Summarization",
+        "Speech synthesis",
+        "Model temperature"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A public-sector service uses an AI form assistant. It must be usable by people with disabilities and people with different language needs. Which principle is emphasized?",
+      "answer": "Inclusiveness",
+      "options": [
+        "Privacy and security",
+        "Inclusiveness",
+        "Data extraction",
+        "Model deployment"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A safety team tests a medical-advice assistant with risky prompts before release and monitors failures after release. Which principle is emphasized?",
+      "answer": "Reliability and safety",
+      "options": [
+        "Reliability and safety",
+        "Image captioning",
+        "Keyword extraction",
+        "Storage replication"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A support app must identify product names, order IDs, and customer names in emails. Which text analysis capability is most appropriate?",
+      "answer": "Entity detection",
+      "options": [
+        "Sentiment analysis",
+        "Entity detection",
+        "Speech synthesis",
+        "Image generation"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A dashboard needs to show whether social-media comments are positive, neutral, or negative. Which capability is most appropriate?",
+      "answer": "Sentiment analysis",
+      "options": [
+        "Sentiment analysis",
+        "Object detection",
+        "Content filtering",
+        "Code interpreter"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A researcher needs the main themes from thousands of short survey responses. Which capability is most useful?",
+      "answer": "Key phrase extraction",
+      "options": [
+        "Key phrase extraction",
+        "Text-to-speech",
+        "Model publishing",
+        "Face detection"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A user uploads a 20-page policy and asks for the main obligations in five bullets. Which capability is most directly involved?",
+      "answer": "Summarization",
+      "options": [
+        "Speech recognition",
+        "Summarization",
+        "Image classification",
+        "Prompt agent publishing"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A kiosk must accept spoken questions and return spoken answers. Which pipeline is most appropriate?",
+      "answer": "Speech recognition, model response generation, and speech synthesis",
+      "options": [
+        "Speech recognition, model response generation, and speech synthesis",
+        "Image generation and OCR only",
+        "Entity detection only",
+        "File search without audio processing"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A warehouse app needs to detect whether a package label is visible in a photo and read the label text. Which workload combination is most appropriate?",
+      "answer": "Computer vision with OCR or visual text extraction",
+      "options": [
+        "Computer vision with OCR or visual text extraction",
+        "Text-to-speech only",
+        "Sentiment analysis only",
+        "Agent memory only"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A marketing team wants to create product-background concepts from a text prompt. Which capability should they use?",
+      "answer": "Image generation",
+      "options": [
+        "Image generation",
+        "Entity detection",
+        "Speech translation",
+        "Prompt filtering"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An app receives a photo of a circuit board and a text prompt asking what component appears damaged. Which model capability is required?",
+      "answer": "Multimodal visual understanding",
+      "options": [
+        "Multimodal visual understanding",
+        "Text-only sentiment analysis",
+        "Speech synthesis",
+        "Keyword extraction"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A mortgage processor needs vendor name, total amount, due date, and line items from uploaded invoices. Which Foundry Tools capability is most relevant?",
+      "answer": "Content Understanding for document extraction",
+      "options": [
+        "Content Understanding for document extraction",
+        "Speech synthesis",
+        "Model temperature tuning",
+        "Image generation"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A media archive needs speaker names, key topics, and timestamps from long videos. Which capability is most relevant?",
+      "answer": "Content Understanding for audio and video",
+      "options": [
+        "Content Understanding for audio and video",
+        "Azure DNS routing",
+        "Text-to-speech only",
+        "Responsible AI fairness only"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A logistics app needs container IDs from yard photos. Which information extraction input type is involved?",
+      "answer": "Image extraction",
+      "options": [
+        "Audio extraction",
+        "Image extraction",
+        "Speech synthesis",
+        "Prompt versioning"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer wants a model to return strict JSON with fields \"summary\", \"sentiment\", and \"actions\". What should the prompt include?",
+      "answer": "A clear output schema and formatting constraints",
+      "options": [
+        "A clear output schema and formatting constraints",
+        "A request for a creative tone only",
+        "A higher temperature only",
+        "A file name for the app icon"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A model returns unsupported details when retrieved documents are incomplete. Which change best reduces this risk?",
+      "answer": "Ground the model with retrieval and instruct it to state when information is missing",
+      "options": [
+        "Ground the model with retrieval and instruct it to state when information is missing",
+        "Increase temperature",
+        "Remove source documents from the prompt",
+        "Use speech synthesis"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An agent needs to calculate totals from uploaded CSV files. Which built-in tool is most appropriate?",
+      "answer": "Code interpreter",
+      "options": [
+        "File search",
+        "Code interpreter",
+        "Speech recognition",
+        "Image captioning"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An agent needs to answer from uploaded PDF policy files. Which built-in tool is most appropriate?",
+      "answer": "File search",
+      "options": [
+        "File search",
+        "Code interpreter",
+        "Text-to-speech",
+        "Vision OCR only"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An agent needs up-to-date public information where policy allows it. Which tool category is most relevant?",
+      "answer": "Web search",
+      "options": [
+        "Memory",
+        "Web search",
+        "Speech synthesis",
+        "Image generation"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An agent should remember relevant user preferences across interactions without requiring the user to repeat them every time. Which capability is most relevant?",
+      "answer": "Memory",
+      "options": [
+        "Memory",
+        "OCR",
+        "Model temperature",
+        "Speech translation"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer sees that two models can answer the prompt, but one is much slower. Which factor should guide the deployment choice?",
+      "answer": "Quality requirements balanced against latency and cost",
+      "options": [
+        "Quality requirements balanced against latency and cost",
+        "Alphabetical model name order",
+        "Whether the model name contains a number",
+        "Whether the model is listed first in the portal"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A model deployment works in the portal but the app receives authorization failures. What should the developer check first?",
+      "answer": "The app identity, RBAC or API credential, endpoint, and project access",
+      "options": [
+        "The app identity, RBAC or API credential, endpoint, and project access",
+        "The browser zoom level",
+        "The number of prompt examples",
+        "The CSS theme"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A customer-facing assistant must block unsafe instructions and detect harmful user requests. Which platform capability helps?",
+      "answer": "Content filters and safety controls",
+      "options": [
+        "Content filters and safety controls",
+        "A larger output token limit",
+        "A lighter page background",
+        "Storage hot tier"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team wants to evaluate if responses are supported by retrieved documents. Which evaluation dimension is most relevant?",
+      "answer": "Groundedness or faithfulness",
+      "options": [
+        "Groundedness or faithfulness",
+        "Screen contrast",
+        "DNS propagation",
+        "Text-to-speech voice pitch"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer has to build a minimal TypeScript web client that calls a Foundry agent endpoint. Where should secrets or privileged credentials be kept?",
+      "answer": "On the server side or in managed identity, not in the browser bundle",
+      "options": [
+        "On the server side or in managed identity, not in the browser bundle",
+        "In a public GitHub README",
+        "In browser localStorage",
+        "Inside the user prompt"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A project has strict network isolation requirements. Which Foundry platform area should the team review?",
+      "answer": "Enterprise controls such as RBAC, networking, and policies",
+      "options": [
+        "Enterprise controls such as RBAC, networking, and policies",
+        "Image size settings",
+        "Speech voice style",
+        "Tag capitalization"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A user uploads a receipt photo and wants merchant, date, tax, total, and payment method extracted. Which workload is this?",
+      "answer": "Information extraction from an image",
+      "options": [
+        "Information extraction from an image",
+        "Speech recognition",
+        "Responsible AI accountability only",
+        "Model deployment only"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A call-center analytics app needs transcripts before it can summarize calls. Which first step is required?",
+      "answer": "Convert speech to text",
+      "options": [
+        "Convert speech to text",
+        "Generate an image",
+        "Publish an agent version",
+        "Reduce model temperature"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A training app reads generated feedback aloud after grading a spoken answer. Which capability produces the audio?",
+      "answer": "Speech synthesis",
+      "options": [
+        "Speech recognition",
+        "Speech synthesis",
+        "Object detection",
+        "File search"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A prompt includes examples of two customer tickets and exactly formatted desired responses. What prompting technique is being used?",
+      "answer": "Few-shot prompting",
+      "options": [
+        "Few-shot prompting",
+        "Image segmentation",
+        "Speech translation",
+        "RBAC assignment"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A prompt says: \"You are a support assistant. Answer in exactly three bullets. Do not mention internal policies.\" What type of instruction is this best suited for?",
+      "answer": "System prompt",
+      "options": [
+        "System prompt",
+        "User prompt only",
+        "Dataset tag",
+        "Storage policy"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer wants to compare responses from different model deployments before changing production. What should they use first?",
+      "answer": "A Foundry playground or test experience",
+      "options": [
+        "A Foundry playground or test experience",
+        "A DNS TXT record",
+        "A storage lifecycle rule",
+        "A Teams message export"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team needs to swap from one Foundry model to another without rewriting agent orchestration. Which platform capability helps?",
+      "answer": "Common APIs and model catalog access through Foundry",
+      "options": [
+        "Common APIs and model catalog access through Foundry",
+        "Hard-coded model-specific branches everywhere",
+        "Deleting the project endpoint",
+        "Using only local text files"
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An app returns model output directly into a database update operation. What should the developer add before executing the update?",
+      "answer": "Output validation and guardrails for expected format and values",
+      "options": [
+        "Output validation and guardrails for expected format and values",
+        "A higher maximum token value",
+        "An image-generation step",
+        "A random sleep timer"
+      ]
+    }
   ]
 }

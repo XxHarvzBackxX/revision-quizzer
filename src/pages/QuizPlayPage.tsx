@@ -1,6 +1,6 @@
 import { Check, RotateCcw, Sparkles, Trophy, X, Zap } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { PublicDataset, QuizItem } from '../../shared/quiz';
+import type { MultipleChoiceItem, PublicDataset, QuizItem } from '../../shared/quiz';
 import { answerSimilarity, isFreeWritePass } from '../../shared/quiz';
 import type { ScoreRecord } from '../storage';
 import type { Navigate, ToastKind } from '../types';
@@ -92,6 +92,7 @@ export function QuizPlayPage({
       <div className="streak-ribbon">{streakLabel}</div>
       <QuizCard
         item={item}
+        itemKey={`${dataset.id}-${index}`}
         selected={selected}
         typed={typed}
         revealed={revealed}
@@ -113,6 +114,7 @@ export function QuizPlayPage({
 
 function QuizCard({
   item,
+  itemKey,
   selected,
   typed,
   revealed,
@@ -125,6 +127,7 @@ function QuizCard({
   onNext
 }: {
   item: QuizItem;
+  itemKey: string;
   selected: string;
   typed: string;
   revealed: boolean;
@@ -137,6 +140,10 @@ function QuizCard({
   onNext: () => void;
 }) {
   const similarity = item.type === 'free-write' ? answerSimilarity(typed, item.answer) : 0;
+  const shuffledOptions = useMemo(
+    () => item.type === 'multiple-choice' ? shuffleOptions(item) : [],
+    [itemKey]
+  );
 
   return (
     <article className="quiz-card">
@@ -164,7 +171,7 @@ function QuizCard({
       )}
       {item.type === 'multiple-choice' && (
         <div className="option-grid">
-          {item.options.map((option) => {
+          {shuffledOptions.map((option) => {
             const isCorrect = option === item.answer;
             const isPicked = selected === option;
             const className = revealed && isCorrect ? 'option correct' : revealed && isPicked ? 'option wrong' : 'option';
@@ -208,6 +215,10 @@ function QuizCard({
   );
 }
 
+function shuffleOptions(item: MultipleChoiceItem): string[] {
+  return shuffleItems(item.options);
+}
+
 function ResultPanel({ dataset, score, onBack, onRestart }: { dataset: PublicDataset; score: number; onBack: () => void; onRestart: () => void }) {
   const percent = Math.round((score / dataset.items.length) * 100);
   return (
@@ -224,7 +235,7 @@ function ResultPanel({ dataset, score, onBack, onRestart }: { dataset: PublicDat
   );
 }
 
-function shuffleItems(items: QuizItem[]): QuizItem[] {
+function shuffleItems<T>(items: T[]): T[] {
   const shuffled = [...items];
   for (let index = shuffled.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
