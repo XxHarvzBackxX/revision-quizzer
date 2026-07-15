@@ -18,6 +18,7 @@ import { StudyHubPage } from './pages/StudyHubPage';
 import { StudyDrillSetupPage } from './pages/StudyDrillSetupPage';
 import { StudyDrillPlayPage } from './pages/StudyDrillPlayPage';
 import { StudyDrillResultPage } from './pages/StudyDrillResultPage';
+import { StudyIndexPage } from './pages/StudyIndexPage';
 import { parseRoute, routeClass } from './routing';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
@@ -162,6 +163,8 @@ export function App() {
       {route.name === 'wiki-course' && <RevisionCoursePage examCode={route.examCode} navigate={navigate} />}
 
       {route.name === 'wiki-page' && <RevisionReaderPage examCode={route.examCode} pageSlug={route.pageSlug} navigate={navigate} onToast={notify} />}
+
+      {route.name === 'study-index' && <StudyIndexPage datasets={datasets} attempts={attempts} navigate={navigate} />}
 
       {route.name === 'study-hub' && <StudyHubPage examCode={route.examCode} datasets={datasets} attempts={attempts} navigate={navigate} />}
 

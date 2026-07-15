@@ -5,6 +5,7 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
   if (pathname === '/upload') return { name: 'upload', path: pathname };
   if (pathname === '/admin') return { name: 'admin', path: pathname };
   if (pathname === '/wiki' || pathname === '/wiki/') return { name: 'wiki', path: '/wiki' };
+  if (pathname === '/study' || pathname === '/study/') return { name: 'study-index', path: '/study' };
 
   const studyResultMatch = pathname.match(/^\/study\/([^/]+)\/drill\/results\/([^/]+)\/?$/);
   if (studyResultMatch?.[1] && studyResultMatch[2]) {
@@ -61,7 +62,7 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
 export function routeClass(route: AppRoute): string {
   if (route.name === 'study-drill-play') return 'quiz-play practice-mode study-drill-mode';
   if (route.name === 'study-drill-result') return 'quiz-result study-drill-result';
-  if (route.name === 'study-hub' || route.name === 'study-drill-setup') return route.name;
+  if (route.name === 'study-index' || route.name === 'study-hub' || route.name === 'study-drill-setup') return route.name;
   if (route.name === 'quiz-practice') return 'quiz-play practice-mode';
   if (route.name === 'quiz-exam') return 'quiz-play exam-mode';
   if (route.name === 'quiz-result') return 'quiz-result';
