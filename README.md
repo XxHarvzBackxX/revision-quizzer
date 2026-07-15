@@ -4,6 +4,8 @@ Quiz Arcade is an unofficial certification-preparation app. It includes curated 
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are stored locally under `quiz-arcade:revision:v1` and can be exported or imported as JSON.
 
+The top-bar appearance picker provides light, light-contrast, dark, dark-contrast, dark-purple, and light-mint themes. The selected palette is stored locally under `quiz-arcade:theme:v1` and applies across exams, RevisionWiki, uploads, and admin views.
+
 ## Development
 
 ```powershell

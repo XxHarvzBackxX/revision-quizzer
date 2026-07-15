@@ -6,7 +6,7 @@ import { AnnotationPanel } from '../revision/components/AnnotationPanel';
 import { RevisionBlockView } from '../revision/components/RevisionBlockView';
 import { RevisionSearch } from '../revision/components/RevisionSearch';
 import { getRevisionCourse, getRevisionPage } from '../revision/registry';
-import { deleteRevisionHighlight, revisionPageKey, setLastVisited, toggleReviewedPage, upsertRevisionHighlight, useRevisionState } from '../revision/storage';
+import { deleteRevisionHighlight, revisionPageKey, setLastVisited, toggleReviewedPage, toggleRevisionChecklistItem, upsertRevisionHighlight, useRevisionState } from '../revision/storage';
 import type { RevisionHighlightColor } from '../revision/types';
 
 type PendingSelection = { blockId: string; segmentId: string; quote: string; prefix: string; suffix: string; start: number; end: number; top: number; left: number };
@@ -25,6 +25,11 @@ export function RevisionReaderPage({ examCode, pageSlug, navigate, onToast }: { 
   const pageHighlights = useMemo(() => page ? state.highlights
     .filter((highlight) => highlight.courseCode === course?.examCode && highlight.pageId === page.id)
     .map((highlight) => resolveHighlight(highlight, page)) : [], [state.highlights, page, course?.examCode]);
+  const checkedItems = useMemo(() => {
+    if (!course || !page) return new Set<string>();
+    const prefix = `${course.examCode}/${page.id}/`;
+    return new Set(Object.keys(state.checkedItems).filter((key) => key.startsWith(prefix)).map((key) => key.slice(prefix.length)));
+  }, [state.checkedItems, course, page]);
 
   useEffect(() => {
     if (!course || !page) return;
@@ -131,7 +136,7 @@ export function RevisionReaderPage({ examCode, pageSlug, navigate, onToast }: { 
           <section className="blueprint-checklist"><span>Blueprint checklist</span><ul>{page.blueprintPoints.map((point) => <li key={point}><Check size={15} /> {point}</li>)}</ul></section>
 
           <div className="revision-blocks">
-            {page.blocks.map((block) => <RevisionBlockView block={block} highlights={pageHighlights.filter((highlight) => highlight.blockId === block.id)} onHighlight={addBlockHighlight} onNote={openBlockNote} onDelete={deleteRevisionHighlight} key={block.id} />)}
+            {page.blocks.map((block) => <RevisionBlockView block={block} highlights={pageHighlights.filter((highlight) => highlight.blockId === block.id)} checkedItems={checkedItems} onToggleChecklist={(blockId, itemId) => toggleRevisionChecklistItem(course.examCode, page.id, blockId, itemId)} onHighlight={addBlockHighlight} onNote={openBlockNote} onDelete={deleteRevisionHighlight} key={block.id} />)}
           </div>
 
           <section className="revision-sources"><span className="section-kicker">Official references</span><h2>Continue in Microsoft Learn</h2><p>This guide is an original exam-focused companion. Use the official material for product detail, hands-on exercises, and updates.</p>{page.sourceIds.map((id) => course.sources.find((source) => source.id === id)).filter(Boolean).map((source) => <a href={source!.url} target="_blank" rel="noreferrer" key={source!.id}>{source!.title} <ExternalLink size={15} /></a>)}</section>

@@ -3,12 +3,14 @@ import { useState } from 'react';
 import type { ResolvedRevisionHighlight } from '../annotations';
 import type { RevisionBlock, RevisionHighlightColor } from '../types';
 
-export function RevisionBlockView({ block, highlights, onHighlight, onNote, onDelete }: {
+export function RevisionBlockView({ block, highlights, onHighlight, onNote, onDelete, checkedItems, onToggleChecklist }: {
   block: RevisionBlock;
   highlights: ResolvedRevisionHighlight[];
   onHighlight: (blockId: string, color: RevisionHighlightColor) => void;
   onNote: (blockId: string) => void;
   onDelete: (id: string) => void;
+  checkedItems?: Set<string>;
+  onToggleChecklist?: (blockId: string, itemId: string) => void;
 }) {
   const blockHighlight = highlights.find((highlight) => highlight.kind === 'block' && !highlight.detached);
   const segmentHighlights = highlights.filter((highlight) => highlight.kind === 'text' && !highlight.detached);
@@ -28,7 +30,11 @@ export function RevisionBlockView({ block, highlights, onHighlight, onNote, onDe
         {block.bullets && <ul>{block.bullets.map((item, index) => <SelectableText as="li" blockId={block.id} segmentId={`b${index}`} text={item} highlights={segmentHighlights} key={`b${index}`} />)}</ul>}
       </>}
       {block.type === 'callout' && <div className={`revision-callout ${block.tone}`}>{block.paragraphs.map((paragraph, index) => <SelectableText as="p" blockId={block.id} segmentId={`p${index}`} text={paragraph} highlights={segmentHighlights} key={`p${index}`} />)}</div>}
-      {block.type === 'checklist' && <ul className="revision-checklist">{block.items.map((item, index) => <SelectableText as="li" blockId={block.id} segmentId={`i${index}`} text={item} highlights={segmentHighlights} key={`i${index}`} />)}</ul>}
+      {block.type === 'checklist' && <ul className="revision-checklist">{block.items.map((item, index) => {
+        const itemId = `i${index}`;
+        const checked = checkedItems?.has(`${block.id}/${itemId}`) ?? false;
+        return <li className={checked ? 'checked' : ''} key={itemId}><label><input type="checkbox" checked={checked} onChange={() => onToggleChecklist?.(block.id, itemId)} /><span className="revision-checkbox" aria-hidden="true" /> <SelectableText as="span" blockId={block.id} segmentId={itemId} text={item} highlights={segmentHighlights} /></label></li>;
+      })}</ul>}
       {block.type === 'comparison' && <div className="revision-table-wrap"><table><thead><tr>{block.columns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{block.rows.map((row, index) => <tr key={index}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>)}</tbody></table></div>}
       {block.type === 'flow' && <div className="revision-flow">{block.steps.map((step, index) => <div key={step.title}><span>{index + 1}</span><div><strong>{step.title}</strong><p>{step.text}</p></div></div>)}</div>}
       {block.type === 'quick-check' && <div className="quick-check-list">{block.items.map((item) => <QuickCheck question={item.question} answer={item.answer} key={item.question} />)}</div>}
@@ -37,7 +43,7 @@ export function RevisionBlockView({ block, highlights, onHighlight, onNote, onDe
 }
 
 function SelectableText({ as, blockId, segmentId, text, highlights }: {
-  as: 'p' | 'li';
+  as: 'p' | 'li' | 'span';
   blockId: string;
   segmentId: string;
   text: string;
@@ -58,7 +64,9 @@ function SelectableText({ as, blockId, segmentId, text, highlights }: {
   }
   if (cursor < text.length) children.push(text.slice(cursor));
   const props = { 'data-wiki-text': 'true', 'data-block-id': blockId, 'data-segment-id': segmentId, children: children.length ? children : text };
-  return as === 'li' ? <li {...props} /> : <p {...props} />;
+  if (as === 'li') return <li {...props} />;
+  if (as === 'span') return <span {...props} />;
+  return <p {...props} />;
 }
 
 function QuickCheck({ question, answer }: { question: string; answer: string }) {

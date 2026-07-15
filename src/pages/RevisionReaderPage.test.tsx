@@ -29,4 +29,14 @@ describe('RevisionReaderPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Mark reviewed' }));
     expect(screen.getByRole('button', { name: 'Reviewed' })).toBeInTheDocument();
   });
+
+  it('makes revision checklist items clickable and persistent', async () => {
+    render(<RevisionReaderPage examCode="AI-901" pageSlug="responsible-ai" navigate={vi.fn()} onToast={vi.fn()} />);
+    const item = screen.getByRole('checkbox', { name: 'Recall all six principles without prompts' });
+    expect(item).not.toBeChecked();
+    await userEvent.click(item);
+    expect(item).toBeChecked();
+    const state = JSON.parse(localStorage.getItem('quiz-arcade:revision:v1') ?? '{}');
+    expect(state.checkedItems['AI-901/responsible-ai/responsible-ai-checklist/i0']).toBeTruthy();
+  });
 });

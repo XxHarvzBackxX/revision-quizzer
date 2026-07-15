@@ -5,7 +5,7 @@ export const REVISION_STORAGE_KEY = 'quiz-arcade:revision:v1';
 const REVISION_EVENT = 'quiz-arcade:revision-changed';
 
 export function emptyRevisionState(): RevisionStateV1 {
-  return { version: 1, reviewedPages: {}, highlights: [], lastVisited: {}, preferences: { searchScope: 'course' } };
+  return { version: 1, reviewedPages: {}, checkedItems: {}, highlights: [], lastVisited: {}, preferences: { searchScope: 'course' } };
 }
 
 export function getRevisionState(): RevisionStateV1 {
@@ -34,6 +34,15 @@ export function toggleReviewedPage(courseCode: string, pageId: string): Revision
   if (reviewedPages[key]) delete reviewedPages[key];
   else reviewedPages[key] = new Date().toISOString();
   return saveRevisionState({ ...state, reviewedPages });
+}
+
+export function toggleRevisionChecklistItem(courseCode: string, pageId: string, blockId: string, itemId: string): RevisionStateV1 {
+  const state = getRevisionState();
+  const key = revisionChecklistKey(courseCode, pageId, blockId, itemId);
+  const checkedItems = { ...state.checkedItems };
+  if (checkedItems[key]) delete checkedItems[key];
+  else checkedItems[key] = new Date().toISOString();
+  return saveRevisionState({ ...state, checkedItems });
 }
 
 export function setLastVisited(courseCode: string, pageId: string, blockId?: string): RevisionStateV1 {
@@ -109,6 +118,7 @@ export function mergeRevisionStates(local: RevisionStateV1, incoming: RevisionSt
   return {
     version: 1,
     reviewedPages: mergeTimestampRecords(local.reviewedPages, incoming.reviewedPages),
+    checkedItems: mergeTimestampRecords(local.checkedItems, incoming.checkedItems),
     highlights: Array.from(byId.values()).sort((left, right) => right.updatedAt.localeCompare(left.updatedAt)).slice(0, 1000),
     lastVisited: mergeLastVisited(local.lastVisited, incoming.lastVisited),
     preferences: local.preferences
@@ -117,6 +127,10 @@ export function mergeRevisionStates(local: RevisionStateV1, incoming: RevisionSt
 
 export function revisionPageKey(courseCode: string, pageId: string): string {
   return `${courseCode.toUpperCase()}/${pageId}`;
+}
+
+export function revisionChecklistKey(courseCode: string, pageId: string, blockId: string, itemId: string): string {
+  return `${courseCode.toUpperCase()}/${pageId}/${blockId}/${itemId}`;
 }
 
 export function useRevisionState(): RevisionStateV1 {
@@ -139,13 +153,14 @@ export function useRevisionState(): RevisionStateV1 {
 function normalizeRevisionState(value: unknown): RevisionStateV1 | null {
   if (!isRecord(value) || value.version !== 1) return null;
   const reviewedPages = stringRecord(value.reviewedPages);
+  const checkedItems = stringRecord(value.checkedItems);
   const lastVisited = isRecord(value.lastVisited) ? Object.fromEntries(Object.entries(value.lastVisited).flatMap(([key, visit]) => {
     if (!isRecord(visit) || typeof visit.pageId !== 'string' || typeof visit.visitedAt !== 'string') return [];
     return [[key.toUpperCase(), { pageId: visit.pageId, ...(typeof visit.blockId === 'string' ? { blockId: visit.blockId } : {}), visitedAt: visit.visitedAt }]];
   })) : {};
   const highlights = Array.isArray(value.highlights) ? value.highlights.flatMap((entry) => normalizeHighlight(entry) ?? []) : [];
   const scope = isRecord(value.preferences) && value.preferences.searchScope === 'all' ? 'all' : 'course';
-  return { version: 1, reviewedPages, highlights: highlights.slice(0, 1000), lastVisited, preferences: { searchScope: scope } };
+  return { version: 1, reviewedPages, checkedItems, highlights: highlights.slice(0, 1000), lastVisited, preferences: { searchScope: scope } };
 }
 
 function normalizeHighlight(value: unknown): RevisionHighlight | null {

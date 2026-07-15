@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { RevisionHighlight } from './types';
 import {
   emptyRevisionState, exportRevisionState, getRevisionState, importRevisionState, mergeRevisionStates,
-  revisionPageKey, toggleReviewedPage, upsertRevisionHighlight
+  revisionPageKey, toggleReviewedPage, toggleRevisionChecklistItem, upsertRevisionHighlight
 } from './storage';
 
 function highlight(id: string, updatedAt = '2026-07-15T10:00:00.000Z'): RevisionHighlight {
@@ -23,6 +23,13 @@ describe('RevisionWiki client storage', () => {
   it('stores highlights and trims small notes to the documented limit', () => {
     upsertRevisionHighlight({ ...highlight('one'), note: 'x'.repeat(700) });
     expect(getRevisionState().highlights[0].note).toHaveLength(500);
+  });
+
+  it('stores revision checklist state with the rest of the portable data', () => {
+    toggleRevisionChecklistItem('AI-901', 'responsible-ai', 'responsible-ai-checklist', 'i0');
+    const state = getRevisionState();
+    expect(state.checkedItems['AI-901/responsible-ai/responsible-ai-checklist/i0']).toBeTruthy();
+    expect(JSON.parse(exportRevisionState()).data.checkedItems).toEqual(state.checkedItems);
   });
 
   it('round-trips a versioned export and rejects unsupported data', () => {

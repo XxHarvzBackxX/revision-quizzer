@@ -110,6 +110,7 @@ export type RevisionHighlight = {
 export type RevisionStateV1 = {
   version: 1;
   reviewedPages: Record<string, string>;
+  checkedItems: Record<string, string>;
   highlights: RevisionHighlight[];
   lastVisited: Record<string, { pageId: string; blockId?: string; visitedAt: string }>;
   preferences: { searchScope: 'course' | 'all' };
