@@ -1,5 +1,7 @@
 export type QuizMode = 'exam' | 'practice';
 
+export type StudyConfidence = 'sure' | 'unsure' | 'guess';
+
 export type AttemptAnswer = {
   questionIndex: number;
   questionId?: string;
@@ -8,6 +10,10 @@ export type AttemptAnswer = {
   flagged: boolean;
   domainId?: string;
   objectiveId?: string;
+  confidence?: StudyConfidence;
+  sourceDatasetId?: string;
+  sourceDatasetSlug?: string;
+  sourceQuestionId?: string;
 };
 
 export type DomainResult = {
@@ -33,6 +39,8 @@ export type AttemptRecord = {
   expired?: boolean;
   answers: AttemptAnswer[];
   domains: DomainResult[];
+  examCode?: string;
+  studyDrill?: boolean;
 };
 
 export type ActiveExamSession = {
@@ -43,6 +51,8 @@ export type ActiveExamSession = {
   itemOrder: number[];
   optionOrders: Record<string, string[]>;
   answers: Record<string, string[]>;
+  confidence?: Record<string, StudyConfidence>;
+  activityRecorded?: number[];
   flags: number[];
   currentIndex: number;
   startedAt: string;

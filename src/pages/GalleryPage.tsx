@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpenCheck, BookOpenText, Clock3, Copy, FileJson, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, BookOpenText, Clock3, Copy, FileJson, Gamepad2, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
@@ -61,7 +61,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
                 <p>{dataset.description || 'A community revision set.'}</p>
                 <div className="tag-row">{(dataset.tags ?? []).slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
                 <div className="library-card-meta"><span><Clock3 size={16} /> {dataset.durationMinutes ? `${dataset.durationMinutes} min` : 'Untimed'}</span><span>{dataset.itemCount} questions</span>{latest && <span className="latest-result">Last {latest.percentage}%</span>}</div>
-                <footer><span className="library-card-secondary"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={15} /> Share</button>{revisionPath && <button className="icon-text-button" onClick={() => navigate(revisionPath)}><BookOpenText size={15} /> Revise</button>}</span><button className="primary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Open <ArrowRight size={17} /></button></footer>
+                <footer><span className="library-card-secondary"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={15} /> Share</button>{revisionPath && <button className="icon-text-button" onClick={() => navigate(revisionPath)}><BookOpenText size={15} /> Revise</button>}{dataset.examCode && <button className="icon-text-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={15} /> Study plan</button>}</span><button className="primary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Open <ArrowRight size={17} /></button></footer>
               </article>
             );
           })}

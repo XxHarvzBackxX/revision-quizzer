@@ -14,6 +14,10 @@ import { ResultPage } from './pages/ResultPage';
 import { RevisionCoursePage } from './pages/RevisionCoursePage';
 import { RevisionReaderPage } from './pages/RevisionReaderPage';
 import { RevisionWikiIndexPage } from './pages/RevisionWikiIndexPage';
+import { StudyHubPage } from './pages/StudyHubPage';
+import { StudyDrillSetupPage } from './pages/StudyDrillSetupPage';
+import { StudyDrillPlayPage } from './pages/StudyDrillPlayPage';
+import { StudyDrillResultPage } from './pages/StudyDrillResultPage';
 import { parseRoute, routeClass } from './routing';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
@@ -24,6 +28,8 @@ export function App() {
   const [activeDataset, setActiveDataset] = useState<PublicDataset | null>(null);
   const [attempts, setAttempts] = useState<AttemptRecord[]>(() => getAttempts());
   const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true });
+  const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
+  const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -41,6 +47,25 @@ export function App() {
       void loadActiveDataset(route.slug);
     }
   }, [route.path]);
+
+  useEffect(() => {
+    if (route.name !== 'study-hub' && route.name !== 'study-drill-setup' && route.name !== 'study-drill-play' && route.name !== 'study-drill-result') return;
+    const matching = datasets.filter((dataset) => dataset.curated && dataset.id.startsWith('builtin-') && dataset.examCode?.toLowerCase() === route.examCode.toLowerCase());
+    if (!matching.length) {
+      setStudyDatasets([]);
+      return;
+    }
+    let cancelled = false;
+    setStudyDatasetsLoading(true);
+    void Promise.all(matching.map((dataset) => fetchDataset(dataset.slug))).then((loaded) => {
+      if (!cancelled) setStudyDatasets(loaded);
+    }).catch((error) => {
+      if (!cancelled) notify('error', error instanceof Error ? error.message : 'Could not load certification questions.');
+    }).finally(() => {
+      if (!cancelled) setStudyDatasetsLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [route.path, datasets]);
 
   function navigate(path: string) {
     window.history.pushState({}, '', path);
@@ -99,7 +124,7 @@ export function App() {
 
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
-      {route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && <Topbar route={route} navigate={navigate} />}
+      {route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && route.name !== 'study-drill-play' && <Topbar route={route} navigate={navigate} />}
       <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {route.name === 'home' && <HomePage datasets={datasets} attempts={attempts} activeSessions={getActiveExamSessions()} isLoading={isLoading} navigate={navigate} />}
@@ -137,6 +162,14 @@ export function App() {
       {route.name === 'wiki-course' && <RevisionCoursePage examCode={route.examCode} navigate={navigate} />}
 
       {route.name === 'wiki-page' && <RevisionReaderPage examCode={route.examCode} pageSlug={route.pageSlug} navigate={navigate} onToast={notify} />}
+
+      {route.name === 'study-hub' && <StudyHubPage examCode={route.examCode} datasets={datasets} attempts={attempts} navigate={navigate} />}
+
+      {route.name === 'study-drill-setup' && <StudyDrillSetupPage examCode={route.examCode} datasets={studyDatasets} allDatasetSummaries={datasets} attempts={attempts} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} onToast={notify} />}
+
+      {route.name === 'study-drill-play' && <StudyDrillPlayPage examCode={route.examCode} datasets={studyDatasets} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} onAttempt={handleAttempt} />}
+
+      {route.name === 'study-drill-result' && <StudyDrillResultPage examCode={route.examCode} datasets={studyDatasets} attempt={attempts.find((attempt) => attempt.id === route.attemptId)} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} />}
 
       {route.name === 'quiz-menu' && activeDataset && (
         <QuizMenuPage

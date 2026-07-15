@@ -27,6 +27,8 @@ export function createExamSession(dataset: PublicDataset, now = new Date()): Act
     itemOrder,
     optionOrders,
     answers: {},
+    confidence: {},
+    activityRecorded: [],
     flags: [],
     currentIndex: 0,
     startedAt: now.toISOString(),
@@ -69,7 +71,11 @@ export function buildAttempt({
       correct: item ? isResponseCorrect(item, response) : false,
       flagged: session.flags.includes(questionIndex),
       domainId: item?.domainId,
-      objectiveId: item?.objectiveId
+      objectiveId: item?.objectiveId,
+      confidence: session.confidence?.[String(questionIndex)],
+      sourceDatasetId: item?.sourceDatasetId,
+      sourceDatasetSlug: item?.sourceDatasetSlug,
+      sourceQuestionId: item?.sourceQuestionId
     };
   });
   const score = answers.filter((answer) => answer.correct).length;
@@ -93,7 +99,8 @@ export function buildAttempt({
     durationSeconds: Math.max(0, Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000)),
     expired,
     answers,
-    domains: calculateDomainResults(answers)
+    domains: calculateDomainResults(answers),
+    examCode: dataset.examCode
   };
 }
 

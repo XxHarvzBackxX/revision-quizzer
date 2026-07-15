@@ -1,14 +1,19 @@
-import { AlertCircle, ArrowRight, BookOpenText, Check, ChevronDown, Clock3, ExternalLink, Flag, RotateCcw, Target, Trophy, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, BookOpenText, Check, ChevronDown, Clock3, ExternalLink, Flag, Flame, Gamepad2, RotateCcw, Star, Target, Trophy, X } from 'lucide-react';
 import { useState } from 'react';
 import type { PublicDataset } from '../../shared/quiz';
 import { getCorrectAnswers } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
 import { getCoursePath, revisionPathForObjective } from '../revision/registry';
+import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
+import { beginStudyDrill } from '../study/storage';
+import { retryConfigFromAttempt } from '../study/pool';
+import { studyStreak, studyTotals, useStudyState } from '../study/storage';
 
-export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate }) {
+export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate; studyExamCode?: string }) {
   const [filter, setFilter] = useState<'all' | 'incorrect' | 'flagged'>('all');
   const [expanded, setExpanded] = useState<number[]>([]);
+  const study = useStudyState();
 
   if (!attempt) {
     return (
@@ -29,6 +34,12 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
   const coursePath = getCoursePath(dataset.examCode);
 
   function retryMissed() {
+    if (studyExamCode) {
+      const config = retryConfigFromAttempt(studyExamCode, attempt!);
+      if (config) beginStudyDrill(config);
+      navigate(`/study/${studyExamCode.toLowerCase()}/drill/play`);
+      return;
+    }
     try {
       sessionStorage.setItem(`quiz-arcade:retry:${dataset.id}`, JSON.stringify(missedIndexes));
     } catch {
@@ -45,10 +56,12 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
           <span className="result-kicker"><Trophy size={17} /> {attempt.mode === 'exam' ? 'Mock exam complete' : 'Practice complete'}</span>
           <h1>{metTarget ? 'Strong work.' : 'You have a clear next step.'}</h1>
           <p>{attempt.score} of {attempt.total} correct on {dataset.title}. This is an unofficial readiness estimate, not Microsoft’s scaled certification score.</p>
+          <div className="result-study-reward"><span><Flame size={15} /> {studyStreak(study).current}-day streak</span><span><Star size={15} /> Level {studyTotals(study).level}</span></div>
           <div className="result-actions">
             {missedIndexes.length > 0 && <button className="primary-button" onClick={retryMissed}><RotateCcw size={17} /> Practice {missedIndexes.length} missed</button>}
-            <button className="secondary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Exam overview <ArrowRight size={17} /></button>
+            <button className="secondary-button" onClick={() => navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}>{studyExamCode ? 'Study plan' : 'Exam overview'} <ArrowRight size={17} /></button>
             {coursePath && <button className="secondary-button" onClick={() => navigate(coursePath)}><BookOpenText size={17} /> Open RevisionWiki</button>}
+            {!studyExamCode && dataset.examCode && <button className="secondary-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={17} /> Smart study plan</button>}
           </div>
         </div>
       </div>
@@ -95,7 +108,7 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
         </div>
         <div className="review-list">
           {visibleAnswers.map((answer) => {
-            const item = dataset.items[answer.questionIndex];
+            const item = resolveAttemptItem(dataset, answer);
             if (!item) return null;
             const isOpen = expanded.includes(answer.questionIndex);
             const revisionPath = revisionPathForObjective(dataset.examCode, item.objectiveId);
@@ -110,11 +123,12 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
                 {isOpen && (
                   <div className="review-detail">
                     <div className="answer-comparison">
-                      <div><span>Your answer</span><strong>{answer.response.filter(Boolean).join(', ') || 'No answer'}</strong></div>
+                      <div><span>Your answer{answer.confidence ? ` · ${humanize(answer.confidence)}` : ''}</span><strong>{answer.response.filter(Boolean).join(', ') || 'No answer'}</strong></div>
                       <div><span>Correct answer</span><strong>{getCorrectAnswers(item).join(', ')}</strong></div>
                     </div>
                     <h3>Explanation</h3>
                     <p>{item.explanation || 'No extended explanation was supplied for this community question.'}</p>
+                    <QuestionStudyTools dataset={dataset} item={item} questionIndex={answer.questionIndex} />
                     <div className="review-meta">{item.objectiveId && <span>{humanize(item.objectiveId)}</span>}{item.difficulty && <span>{humanize(item.difficulty)}</span>}</div>
                     {revisionPath && <button className="review-revision-link" onClick={() => navigate(revisionPath)}><BookOpenText size={14} /> Revise this objective</button>}
                     {(item.references ?? []).map((reference) => <a href={reference.url} target="_blank" rel="noreferrer" key={reference.url}>{reference.title} <ExternalLink size={14} /></a>)}
@@ -142,4 +156,12 @@ function formatDuration(seconds: number): string {
 
 function humanize(value: string): string {
   return value.replace(/-/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function resolveAttemptItem(dataset: PublicDataset, answer: AttemptRecord['answers'][number]) {
+  return dataset.items.find((item) => (
+    answer.sourceDatasetId
+      ? item.sourceDatasetId === answer.sourceDatasetId && item.sourceQuestionId === (answer.sourceQuestionId ?? answer.questionId)
+      : item.id === answer.questionId
+  )) ?? dataset.items[answer.questionIndex];
 }

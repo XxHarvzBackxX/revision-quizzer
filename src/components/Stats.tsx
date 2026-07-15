@@ -18,7 +18,7 @@ export function RecentAttempts({ attempts, navigate }: { attempts: AttemptRecord
       ) : (
         <div className="attempt-list">
           {attempts.slice(0, 5).map((attempt) => (
-            <button className="attempt-row" key={attempt.id} onClick={() => attempt.slug && navigate(`/quiz/${attempt.slug}/results/${attempt.id}`)} disabled={!attempt.slug}>
+            <button className="attempt-row" key={attempt.id} onClick={() => attempt.studyDrill && attempt.examCode ? navigate(`/study/${attempt.examCode.toLowerCase()}/drill/results/${attempt.id}`) : attempt.slug && navigate(`/quiz/${attempt.slug}/results/${attempt.id}`)} disabled={!attempt.slug && !attempt.studyDrill}>
               <span><strong>{attempt.title}</strong><small>{attempt.mode} · {formatDate(attempt.completedAt)}</small></span>
               <span className={attempt.percentage >= attempt.readinessTarget ? 'attempt-score pass' : 'attempt-score'}>{attempt.percentage}%</span>
             </button>

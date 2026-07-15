@@ -16,6 +16,10 @@ export type BaseQuizItem = {
   difficulty?: Difficulty;
   explanation?: string;
   references?: QuestionReference[];
+  /** Runtime provenance used when a certification drill combines multiple papers. */
+  sourceDatasetId?: string;
+  sourceDatasetSlug?: string;
+  sourceQuestionId?: string;
 };
 
 export type FlashcardItem = BaseQuizItem & {

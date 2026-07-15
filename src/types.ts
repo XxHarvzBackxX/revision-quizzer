@@ -15,6 +15,10 @@ export type AppRoute =
   | { name: 'wiki'; path: '/wiki' }
   | { name: 'wiki-course'; path: string; examCode: string }
   | { name: 'wiki-page'; path: string; examCode: string; pageSlug: string }
+  | { name: 'study-hub'; path: string; examCode: string }
+  | { name: 'study-drill-setup'; path: string; examCode: string }
+  | { name: 'study-drill-play'; path: string; examCode: string }
+  | { name: 'study-drill-result'; path: string; examCode: string; attemptId: string }
   | { name: 'quiz-menu'; path: string; slug: string }
   | { name: 'quiz-practice'; path: string; slug: string }
   | { name: 'quiz-exam'; path: string; slug: string }
