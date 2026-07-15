@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpenCheck, BookOpenText, BrainCircuit, Clock3, Highlighter, Play, Sparkles, Target } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, BookOpenText, BrainCircuit, Clock3, Gamepad2, Highlighter, Play, Sparkles, Target } from 'lucide-react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { RecentAttempts } from '../components/Stats';
 import type { ActiveExamSession, AttemptRecord } from '../storage';
@@ -22,7 +22,7 @@ export function HomePage({
   const revisionState = useRevisionState();
   const curated = datasets.filter((dataset) => dataset.curated);
   const featured = (curated.length ? curated : datasets).slice(0, 6);
-  const resumable = activeSessions.find((session) => new Date(session.expiresAt).getTime() > Date.now());
+  const resumable = activeSessions.find((session) => datasets.some((dataset) => dataset.id === session.datasetId) && new Date(session.expiresAt).getTime() > Date.now());
   const resumeDataset = resumable && datasets.find((dataset) => dataset.id === resumable.datasetId);
   const examAttempts = attempts.filter((attempt) => attempt.mode === 'exam');
   const best = examAttempts.reduce((current, attempt) => Math.max(current, attempt.percentage), 0);
@@ -74,7 +74,7 @@ export function HomePage({
                   <h3>{dataset.title.replace(/^[A-Z]{2,4}-\d{3} Mock Exam \d+:?\s*/i, '') || dataset.title}</h3>
                   <p>{dataset.description}</p>
                   <div className="exam-card-facts"><span><Clock3 size={16} /> {dataset.durationMinutes ?? 45} min</span><span><BrainCircuit size={16} /> {dataset.itemCount} questions</span></div>
-                  <div className="exam-card-footer"><span>{latest ? `Last result ${latest.percentage}%` : 'Not attempted yet'}</span><button className="round-arrow" onClick={() => navigate(`/quiz/${dataset.slug}`)} aria-label={`Open ${dataset.title}`}><ArrowRight size={19} /></button></div>
+                  <div className="exam-card-footer"><span>{latest ? `Last result ${latest.percentage}%` : 'Not attempted yet'}</span><span className="exam-card-links">{dataset.examCode && <button className="icon-text-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={15} /> Study plan</button>}<button className="round-arrow" onClick={() => navigate(`/quiz/${dataset.slug}`)} aria-label={`Open ${dataset.title}`}><ArrowRight size={19} /></button></span></div>
                 </article>
               );
             })}

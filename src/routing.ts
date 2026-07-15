@@ -6,6 +6,20 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
   if (pathname === '/admin') return { name: 'admin', path: pathname };
   if (pathname === '/wiki' || pathname === '/wiki/') return { name: 'wiki', path: '/wiki' };
 
+  const studyResultMatch = pathname.match(/^\/study\/([^/]+)\/drill\/results\/([^/]+)\/?$/);
+  if (studyResultMatch?.[1] && studyResultMatch[2]) {
+    return { name: 'study-drill-result', path: pathname, examCode: decodeURIComponent(studyResultMatch[1]), attemptId: decodeURIComponent(studyResultMatch[2]) };
+  }
+
+  const studyPlayMatch = pathname.match(/^\/study\/([^/]+)\/drill\/play\/?$/);
+  if (studyPlayMatch?.[1]) return { name: 'study-drill-play', path: pathname, examCode: decodeURIComponent(studyPlayMatch[1]) };
+
+  const studySetupMatch = pathname.match(/^\/study\/([^/]+)\/drill\/?$/);
+  if (studySetupMatch?.[1]) return { name: 'study-drill-setup', path: pathname, examCode: decodeURIComponent(studySetupMatch[1]) };
+
+  const studyHubMatch = pathname.match(/^\/study\/([^/]+)\/?$/);
+  if (studyHubMatch?.[1]) return { name: 'study-hub', path: pathname, examCode: decodeURIComponent(studyHubMatch[1]) };
+
   const wikiPageMatch = pathname.match(/^\/wiki\/([^/]+)\/([^/]+)\/?$/);
   if (wikiPageMatch?.[1] && wikiPageMatch[2]) {
     return { name: 'wiki-page', path: pathname, examCode: decodeURIComponent(wikiPageMatch[1]), pageSlug: decodeURIComponent(wikiPageMatch[2]) };
@@ -45,6 +59,9 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
 }
 
 export function routeClass(route: AppRoute): string {
+  if (route.name === 'study-drill-play') return 'quiz-play practice-mode study-drill-mode';
+  if (route.name === 'study-drill-result') return 'quiz-result study-drill-result';
+  if (route.name === 'study-hub' || route.name === 'study-drill-setup') return route.name;
   if (route.name === 'quiz-practice') return 'quiz-play practice-mode';
   if (route.name === 'quiz-exam') return 'quiz-play exam-mode';
   if (route.name === 'quiz-result') return 'quiz-result';

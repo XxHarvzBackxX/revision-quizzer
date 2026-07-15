@@ -11,6 +11,10 @@ import {
 } from '../storage';
 import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, formatRemainingTime, getOrderedQuestions } from '../utils/exam';
+import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
+import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
+import { recordExamActivity, useStudyState } from '../study/storage';
+import type { StudyConfidence } from '../storage';
 
 export function ExamPage({
   dataset,
@@ -26,6 +30,7 @@ export function ExamPage({
   const [showNavigator, setShowNavigator] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
   const submitted = useRef(false);
+  const study = useStudyState();
   const questions = useMemo(() => getOrderedQuestions(dataset, session), [dataset, session.itemOrder, session.optionOrders]);
   const current = questions[session.currentIndex] ?? questions[0];
   const remaining = Math.max(0, Math.ceil((new Date(session.expiresAt).getTime() - now) / 1000));
@@ -74,10 +79,16 @@ export function ExamPage({
     }));
   }
 
+  function updateConfidence(confidence: StudyConfidence) {
+    if (!current) return;
+    setSession((existing) => ({ ...existing, confidence: { ...existing.confidence, [String(current.originalIndex)]: confidence } }));
+  }
+
   function finish(expired = false) {
     if (submitted.current) return;
     submitted.current = true;
     const attempt = buildAttempt({ dataset, mode: 'exam', session, expired });
+    recordExamActivity(attempt.answers);
     clearActiveExamSession(dataset.id);
     onAttempt(attempt);
     navigate(`/quiz/${dataset.slug}/results/${attempt.id}`);
@@ -135,6 +146,8 @@ export function ExamPage({
               {current.item.domainId && <span>{domainTitle(dataset, current.item.domainId)}</span>}
             </div>
             <h1>{current.item.prompt}</h1>
+            <QuestionStudyTools dataset={dataset} item={current.item} questionIndex={current.originalIndex} />
+            {study.settings.showExamConfidence && <StudyConfidencePicker value={session.confidence?.[String(current.originalIndex)]} onChange={updateConfidence} />}
             {isObjectiveItem(current.item) && (
               <div className="exam-options">
                 {current.options.map((option, optionIndex) => (

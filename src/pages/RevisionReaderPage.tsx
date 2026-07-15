@@ -7,6 +7,7 @@ import { RevisionBlockView } from '../revision/components/RevisionBlockView';
 import { RevisionSearch } from '../revision/components/RevisionSearch';
 import { getRevisionCourse, getRevisionPage } from '../revision/registry';
 import { deleteRevisionHighlight, revisionPageKey, setLastVisited, toggleReviewedPage, toggleRevisionChecklistItem, upsertRevisionHighlight, useRevisionState } from '../revision/storage';
+import { recordGuideReviewed } from '../study/storage';
 import type { RevisionHighlightColor } from '../revision/types';
 
 type PendingSelection = { blockId: string; segmentId: string; quote: string; prefix: string; suffix: string; start: number; end: number; top: number; left: number };
@@ -130,7 +131,7 @@ export function RevisionReaderPage({ examCode, pageSlug, navigate, onToast }: { 
             <div className="revision-breadcrumb"><button onClick={() => navigate('/wiki')}>RevisionWiki</button><span>/</span><button onClick={() => navigate(`/wiki/${course.examCode.toLowerCase()}`)}>{course.examCode}</button></div>
             <span className="revision-objective">Objective {pageIndex + 1} of {course.pages.length}</span>
             <h1>{page.title}</h1><p>{page.summary}</p>
-            <div className="revision-article-meta"><span><Clock3 size={15} /> {page.estimatedMinutes} minute read</span><span>Verified {course.lastReviewed}</span><button className={reviewed ? 'reviewed' : ''} onClick={() => toggleReviewedPage(course.examCode, page.id)}>{reviewed ? <CheckCircle2 size={16} /> : <span />} {reviewed ? 'Reviewed' : 'Mark reviewed'}</button></div>
+            <div className="revision-article-meta"><span><Clock3 size={15} /> {page.estimatedMinutes} minute read</span><span>Verified {course.lastReviewed}</span><button className={reviewed ? 'reviewed' : ''} onClick={() => { toggleReviewedPage(course.examCode, page.id); if (!reviewed) recordGuideReviewed(course.examCode, page.id); }}>{reviewed ? <CheckCircle2 size={16} /> : <span />} {reviewed ? 'Reviewed' : 'Mark reviewed'}</button></div>
           </header>
 
           <section className="blueprint-checklist"><span>Blueprint checklist</span><ul>{page.blueprintPoints.map((point) => <li key={point}><Check size={15} /> {point}</li>)}</ul></section>
