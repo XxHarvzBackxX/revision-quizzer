@@ -1,0 +1,36 @@
+name: Sync dev after release
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-dev-with-master
+  cancel-in-progress: false
+
+jobs:
+  sync-dev:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'dev'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out dev
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Fast-forward dev to master
+        run: |
+          git fetch origin master
+          git merge --ff-only origin/master
+          git push origin dev
