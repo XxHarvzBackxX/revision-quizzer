@@ -1512,7 +1512,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .mode-icon.revision { background:#e7f8f2; color:#147a5d; }.mode-summary > svg { color:#a097df; margin-left:auto; }
 
 /* Course map */
-.revision-course-page { margin:0 auto; max-width:1160px; min-width:0; padding:48px 24px 95px; }.revision-course-hero { align-items:center; background:linear-gradient(130deg,#fff 0%,#f6f4ff 60%,#e9f8f3); border:1px solid var(--line); border-radius:18px; display:grid; gap:46px; grid-template-columns:minmax(0,1fr) 190px; overflow:hidden; padding:48px; position:relative; }.revision-course-hero > div:first-child { min-width:0; }.revision-course-hero::before { background:var(--course-accent); content:''; inset:0 auto 0 0; width:6px; }.revision-course-hero h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(2.9rem,5vw,4.6rem); letter-spacing:-.05em; line-height:1; margin:17px 0; }.revision-course-hero p { color:var(--muted); line-height:1.68; max-width:720px; }.revision-hero-actions { align-items:center; display:flex; gap:15px; margin-top:25px; min-width:0; }.revision-hero-actions .revision-search { max-width:320px; }
+.revision-course-page { margin:0 auto; max-width:1160px; min-width:0; padding:48px 24px 95px; }.revision-course-hero { align-items:center; background:linear-gradient(130deg,#fff 0%,#f6f4ff 60%,#e9f8f3); border:1px solid var(--line); border-radius:18px; display:grid; gap:46px; grid-template-columns:minmax(0,1fr) 190px; overflow:hidden; padding:48px; position:relative; }.revision-course-hero > div:first-child { min-width:0; }.revision-course-hero::before { background:var(--course-accent); content:''; inset:0 auto 0 0; pointer-events:none; position:absolute; width:6px; }.revision-course-hero h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(2.9rem,5vw,4.6rem); letter-spacing:-.05em; line-height:1; margin:17px 0; }.revision-course-hero p { color:var(--muted); line-height:1.68; max-width:720px; }.revision-hero-actions { align-items:center; display:flex; gap:15px; margin-top:25px; min-width:0; }.revision-hero-actions .revision-search { max-width:320px; }
 .revision-progress-orb { align-items:center; align-self:center; background:conic-gradient(var(--course-accent) var(--progress),#e4e7ec 0); border-radius:50%; display:flex; flex:none; height:168px; justify-content:center; justify-self:center; overflow:hidden; padding:10px; width:168px; }.revision-progress-orb > div { align-items:center; background:white; border-radius:50%; display:flex; flex-direction:column; height:100%; justify-content:center; min-height:0; text-align:center; width:100%; }.revision-progress-orb strong { font-size:2.25rem; letter-spacing:-.05em; line-height:1; }.revision-progress-orb span { color:var(--muted); font-size:.64rem; margin-top:5px; max-width:92px; }
 .revision-course-facts { background:white; border:1px solid var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:28px; margin:18px 0 48px; padding:17px 22px; }.revision-course-facts span { align-items:center; color:#646e80; display:flex; font-size:.76rem; gap:7px; }.revision-domain-list { display:grid; gap:40px; }.revision-domain > header { align-items:end; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; margin-bottom:16px; padding:0 3px 16px; }.revision-domain > header span { color:var(--course-accent); font-size:.69rem; font-weight:850; letter-spacing:.07em; text-transform:uppercase; }.revision-domain > header h2 { font-family:Georgia,"Times New Roman",serif; font-size:1.9rem; margin:5px 0 0; }.revision-domain > header > strong { color:#8a92a0; font-size:.85rem; }
 .revision-page-cards { display:grid; gap:11px; }.revision-page-cards article { align-items:stretch; background:white; border:1px solid var(--line); border-radius:12px; display:grid; grid-template-columns:57px 1fr; overflow:hidden; }.revision-page-cards article:hover { border-color:color-mix(in srgb,var(--course-accent),white 45%); box-shadow:0 8px 24px rgba(28,35,55,.06); }.review-page-toggle { background:#f2f3f5; border:0; border-right:1px solid var(--line); color:#737c8d; font-weight:850; }.revision-page-cards article.reviewed .review-page-toggle { background:#e7f8f2; color:#147a5d; }.revision-page-link { background:white; border:0; color:var(--ink); display:grid; gap:6px; padding:18px 21px; text-align:left; }.revision-page-link > span { color:var(--course-accent); font-size:.65rem; font-weight:800; text-transform:uppercase; }.revision-page-link h3 { font-size:1.08rem; margin:0; }.revision-page-link p { color:var(--muted); font-size:.79rem; line-height:1.5; margin:0; }.revision-page-link small { align-items:center; color:#6a5bd3; display:flex; font-weight:800; gap:4px; justify-self:end; }.wiki-not-found { align-items:center; display:flex; flex-direction:column; min-height:calc(100vh - 82px); padding:100px 24px; text-align:center; }.wiki-not-found p { color:var(--muted); max-width:620px; }
@@ -1548,3 +1548,83 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .revision-article { padding:35px 20px 65px; }.revision-article-header h1 { font-size:2.75rem; }.revision-article-header > p { font-size:1.02rem; }.revision-article-meta { align-items:flex-start; flex-direction:column; gap:8px; }.revision-article-meta button { margin:4px 0 0; }.revision-block.block-highlight { margin-left:-10px; margin-right:-10px; padding:13px 10px; }.revision-block-tools { opacity:1; position:static; transform:none; margin-bottom:9px; }.revision-block-tools button span { display:none; }.revision-table-wrap { margin-right:-20px; }.revision-page-footer button strong { display:none; }.annotation-panel { padding:24px 20px 70px; }.selection-toolbar { bottom:12px; left:12px!important; top:auto!important; width:calc(100vw - 24px); }
   .library-card-secondary .icon-text-button { font-size:0; padding:0 7px; }.library-card-secondary .icon-text-button svg { margin:0; }
 }
+
+/* RevisionWiki semantic foregrounds — kept last so themes cannot leak light-palette text colours. */
+:root[data-theme] {
+  --wiki-text-primary:var(--theme-ink);
+  --wiki-text-secondary:var(--theme-muted);
+  --wiki-text-accent:var(--theme-accent);
+  --wiki-text-inverse:#ffffff;
+  --wiki-text-inverse-muted:#d8deea;
+  --wiki-success-text:color-mix(in srgb,#087f5b 68%,var(--theme-ink));
+  --wiki-success-bg:color-mix(in srgb,#45c99b 18%,var(--theme-paper));
+}
+:root[data-theme] :is(.revision-course-card,.revision-course-page,.revision-reader-page) { --course-text-accent:var(--course-accent); }
+:root[data-theme^="dark"] :is(.revision-course-card,.revision-course-page,.revision-reader-page) { --course-text-accent:color-mix(in srgb,var(--course-accent),white 44%); }
+
+:root[data-theme] :is(
+  .revision-index-page,.revision-index-content,.revision-course-card,.revision-data-card,.revision-course-page,
+  .revision-course-hero,.revision-page-link,.revision-reader-page,.revision-reader-nav,.revision-article,
+  .revision-block,.revision-block h2,.revision-table-wrap td,.revision-flow strong,.revision-checklist label,
+  .revision-sources,.revision-page-footer,.annotation-panel,.annotation-card,.annotation-card blockquote,.block-note-composer
+) { color:var(--wiki-text-primary); }
+
+:root[data-theme] :is(
+  .revision-section-heading p,.revision-course-top,.revision-course-metrics,.revision-course-card footer>span,
+  .revision-data-card p,.revision-data-actions label,.revision-course-facts span,.revision-domain>header>strong,
+  .review-page-toggle,.revision-course-back,.revision-nav-progress,.revision-reader-nav nav strong,
+  .revision-on-this-page>strong,.revision-reader-nav nav button,.revision-on-this-page button,.revision-breadcrumb,
+  .revision-article-header>p,.revision-article-meta,.revision-article-meta button,.revision-flow p,
+  .revision-table-wrap th,.revision-sources p,.revision-page-footer>button,.revision-page-footer button small,
+  .annotation-heading small,.annotation-tabs button,.annotation-empty,.annotation-card-top,.annotation-card-top button,
+  .annotation-card-footer>button,.block-note-composer>div:first-child small,.block-note-composer>div:first-child button,
+  .revision-block-tools button,.revision-search,.revision-search-scope button
+) { color:var(--wiki-text-secondary); }
+
+:root[data-theme] :is(
+  .revision-eyebrow,.revision-search-results span,.revision-search-scope button.active,
+  .blueprint-checklist>span,.blueprint-checklist li svg,.revision-block-tools button:hover,.revision-sources a
+) { color:var(--wiki-text-accent); }
+:root[data-theme] :is(
+  .revision-course-top span:first-child,.revision-course-card footer button,.revision-domain>header span,
+  .revision-page-link>span,.revision-page-link small,.revision-reader-nav nav button.active,
+  .revision-reader-nav nav button:hover,.revision-objective
+) { color:var(--course-text-accent); }
+
+:root[data-theme] .revision-index-hero { color:var(--wiki-text-inverse); }
+:root[data-theme] .revision-index-hero :is(.revision-eyebrow,.revision-index-search>p,.revision-index-hero>div>p) { color:var(--wiki-text-inverse-muted)!important; }
+:root[data-theme] .revision-index-hero h1 em { color:#9ff0d2; }
+:root[data-theme] .revision-index-search .revision-search { color:var(--wiki-text-secondary); }
+
+:root[data-theme] .revision-reader-nav nav button.active,
+:root[data-theme] .revision-reader-nav nav button:hover,
+:root[data-theme] .annotation-tabs button.active,
+:root[data-theme] .revision-block-tools button,
+:root[data-theme] .revision-nav-close { background:var(--theme-paper); border-color:var(--theme-line); }
+:root[data-theme] .annotation-tabs button.active { color:var(--wiki-text-primary); }
+:root[data-theme] .revision-nav-progress>div,.revision-course-progress { background:var(--theme-line); }
+:root[data-theme] .revision-on-this-page,.revision-sources,.revision-page-footer,.revision-article-meta { border-color:var(--theme-line); }
+:root[data-theme] .revision-table-wrap { border-color:var(--theme-line); }
+:root[data-theme] .revision-table-wrap th { background:var(--theme-soft); }
+:root[data-theme] .revision-table-wrap td { border-color:var(--theme-line); }
+:root[data-theme] .revision-table-wrap tr:nth-child(even) td { background:var(--theme-softer); }
+:root[data-theme] .revision-flow>div,.revision-checklist li { background:var(--theme-soft); border-color:var(--theme-line); }
+
+:root[data-theme] .revision-article-meta button.reviewed,
+:root[data-theme] .revision-page-cards article.reviewed .review-page-toggle,
+:root[data-theme] .revision-checklist li.checked { background:var(--wiki-success-bg); border-color:var(--wiki-success-text); color:var(--wiki-success-text); }
+:root[data-theme] .revision-checklist li.checked [data-wiki-text] { color:var(--wiki-success-text); }
+:root[data-theme] .revision-checklist li.checked .revision-checkbox { background:var(--wiki-success-text); border-color:var(--wiki-success-text); }
+
+:root[data-theme] .blueprint-checklist { background:var(--theme-accent-soft); border-color:color-mix(in srgb,var(--theme-accent),var(--theme-line) 55%); }
+:root[data-theme] .blueprint-checklist li { color:var(--wiki-text-primary); }
+:root[data-theme] .revision-block.block-highlight,
+:root[data-theme] .annotation-card { color:var(--wiki-text-primary); }
+:root[data-theme^="dark"] .revision-block.block-highlight,
+:root[data-theme^="dark"] .annotation-card { color:#ffffff; }
+:root[data-theme^="dark"] .annotation-card :is(.annotation-card-top,.annotation-card-top button,.annotation-card-footer>button,blockquote) { color:#f2f4f8; }
+:root[data-theme] .annotation-card textarea { color:var(--wiki-text-primary); }
+:root[data-theme^="dark"] .annotation-card textarea { color:#ffffff; }
+:root[data-theme] .quick-check { color:#ffffff; }
+:root[data-theme] .quick-check span { color:#e5eaf3; }
+:root[data-theme] .quick-check.open span { color:#a8f1d7; }
