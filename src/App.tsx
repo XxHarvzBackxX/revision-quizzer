@@ -11,6 +11,9 @@ import { ExamPage } from './pages/ExamPage';
 import { QuizMenuPage } from './pages/QuizMenuPage';
 import { QuizPlayPage } from './pages/QuizPlayPage';
 import { ResultPage } from './pages/ResultPage';
+import { RevisionCoursePage } from './pages/RevisionCoursePage';
+import { RevisionReaderPage } from './pages/RevisionReaderPage';
+import { RevisionWikiIndexPage } from './pages/RevisionWikiIndexPage';
 import { parseRoute, routeClass } from './routing';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
@@ -41,7 +44,8 @@ export function App() {
 
   function navigate(path: string) {
     window.history.pushState({}, '', path);
-    setRoute(parseRoute(path));
+    setRoute(parseRoute(new URL(path, window.location.origin).pathname));
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   async function loadGallery(showToast = true) {
@@ -127,6 +131,12 @@ export function App() {
       )}
 
       {route.name === 'admin' && <AdminPage onToast={notify} onUploaded={handleApprovedUpload} />}
+
+      {route.name === 'wiki' && <RevisionWikiIndexPage navigate={navigate} onToast={notify} />}
+
+      {route.name === 'wiki-course' && <RevisionCoursePage examCode={route.examCode} navigate={navigate} />}
+
+      {route.name === 'wiki-page' && <RevisionReaderPage examCode={route.examCode} pageSlug={route.pageSlug} navigate={navigate} onToast={notify} />}
 
       {route.name === 'quiz-menu' && activeDataset && (
         <QuizMenuPage

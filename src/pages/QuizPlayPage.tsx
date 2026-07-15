@@ -1,10 +1,11 @@
-import { Check, ChevronLeft, ChevronRight, ExternalLink, Flag, Lightbulb, Sparkles, X, Zap } from 'lucide-react';
+import { BookOpenText, Check, ChevronLeft, ChevronRight, ExternalLink, Flag, Lightbulb, Sparkles, X, Zap } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { PublicDataset, QuizItem } from '../../shared/quiz';
 import { answerSimilarity, getCorrectAnswers, isFreeWritePass, isObjectiveItem, isResponseCorrect } from '../../shared/quiz';
 import type { ActiveExamSession, AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, getOrderedQuestions } from '../utils/exam';
+import { revisionPathForObjective } from '../revision/registry';
 
 export function QuizPlayPage({
   dataset,
@@ -70,6 +71,7 @@ export function QuizPlayPage({
   if (!current) return null;
   const correct = revealed && isResponseCorrect(current.item, selected);
   const similarity = current.item.type === 'free-write' ? answerSimilarity(typed, current.item.answer) : 0;
+  const revisionPath = revisionPathForObjective(dataset.examCode, current.item.objectiveId);
 
   return (
     <section className={`practice-shell effect-${effect}`}>
@@ -144,6 +146,7 @@ export function QuizPlayPage({
             <div className="feedback-heading">{correct ? <Check size={21} /> : <Lightbulb size={21} />}<strong>{correct ? 'Correct' : 'Good attempt'}</strong></div>
             <p>{current.item.explanation || `The expected answer is ${getCorrectAnswers(current.item).join(' and ')}.`}</p>
             {current.item.objectiveId && <small>Objective: {humanize(current.item.objectiveId)}</small>}
+            {revisionPath && <button className="feedback-revision-link" onClick={() => navigate(revisionPath)}><BookOpenText size={14} /> Revise this topic</button>}
             {(current.item.references ?? []).map((reference) => (
               <a href={reference.url} target="_blank" rel="noreferrer" key={reference.url}>{reference.title} <ExternalLink size={14} /></a>
             ))}

@@ -1,9 +1,10 @@
-import { AlertCircle, ArrowRight, Check, ChevronDown, Clock3, ExternalLink, Flag, RotateCcw, Target, Trophy, X } from 'lucide-react';
+import { AlertCircle, ArrowRight, BookOpenText, Check, ChevronDown, Clock3, ExternalLink, Flag, RotateCcw, Target, Trophy, X } from 'lucide-react';
 import { useState } from 'react';
 import type { PublicDataset } from '../../shared/quiz';
 import { getCorrectAnswers } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
+import { getCoursePath, revisionPathForObjective } from '../revision/registry';
 
 export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate }) {
   const [filter, setFilter] = useState<'all' | 'incorrect' | 'flagged'>('all');
@@ -25,6 +26,7 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
     filter === 'all' || (filter === 'incorrect' && !answer.correct) || (filter === 'flagged' && answer.flagged)
   ));
   const missedIndexes = attempt.answers.filter((answer) => !answer.correct).map((answer) => answer.questionIndex);
+  const coursePath = getCoursePath(dataset.examCode);
 
   function retryMissed() {
     try {
@@ -46,6 +48,7 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
           <div className="result-actions">
             {missedIndexes.length > 0 && <button className="primary-button" onClick={retryMissed}><RotateCcw size={17} /> Practice {missedIndexes.length} missed</button>}
             <button className="secondary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Exam overview <ArrowRight size={17} /></button>
+            {coursePath && <button className="secondary-button" onClick={() => navigate(coursePath)}><BookOpenText size={17} /> Open RevisionWiki</button>}
           </div>
         </div>
       </div>
@@ -63,9 +66,17 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
           <div className="domain-result-list">
             {attempt.domains.map((domain) => {
               const percent = domain.total ? Math.round((domain.correct / domain.total) * 100) : 0;
+              const objectiveScores = attempt.answers.filter((answer) => answer.domainId === domain.domainId && answer.objectiveId).reduce<Record<string, { correct: number; total: number }>>((scores, answer) => {
+                const id = answer.objectiveId as string;
+                const current = scores[id] ?? { correct: 0, total: 0 };
+                scores[id] = { correct: current.correct + (answer.correct ? 1 : 0), total: current.total + 1 };
+                return scores;
+              }, {});
+              const weakestObjective = Object.entries(objectiveScores).sort((left, right) => (left[1].correct / left[1].total) - (right[1].correct / right[1].total))[0]?.[0];
+              const revisionPath = revisionPathForObjective(dataset.examCode, weakestObjective);
               return (
                 <div className="domain-result" key={domain.domainId}>
-                  <div><strong>{dataset.domains?.find((item) => item.id === domain.domainId)?.title ?? humanize(domain.domainId)}</strong><span>{domain.correct}/{domain.total} correct</span></div>
+                  <div><strong>{dataset.domains?.find((item) => item.id === domain.domainId)?.title ?? humanize(domain.domainId)}</strong><span>{domain.correct}/{domain.total} correct</span>{revisionPath && <button className="domain-revision-link" onClick={() => navigate(revisionPath)}>Revise weakest topic <ArrowRight size={13} /></button>}</div>
                   <div className="domain-bar"><span style={{ width: `${percent}%` }} /></div>
                   <strong>{percent}%</strong>
                 </div>
@@ -87,6 +98,7 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
             const item = dataset.items[answer.questionIndex];
             if (!item) return null;
             const isOpen = expanded.includes(answer.questionIndex);
+            const revisionPath = revisionPathForObjective(dataset.examCode, item.objectiveId);
             return (
               <article className="review-item" key={item.id ?? answer.questionIndex}>
                 <button className="review-item-heading" onClick={() => setExpanded((current) => current.includes(answer.questionIndex) ? current.filter((index) => index !== answer.questionIndex) : [...current, answer.questionIndex])}>
@@ -104,6 +116,7 @@ export function ResultPage({ dataset, attempt, navigate }: { dataset: PublicData
                     <h3>Explanation</h3>
                     <p>{item.explanation || 'No extended explanation was supplied for this community question.'}</p>
                     <div className="review-meta">{item.objectiveId && <span>{humanize(item.objectiveId)}</span>}{item.difficulty && <span>{humanize(item.difficulty)}</span>}</div>
+                    {revisionPath && <button className="review-revision-link" onClick={() => navigate(revisionPath)}><BookOpenText size={14} /> Revise this objective</button>}
                     {(item.references ?? []).map((reference) => <a href={reference.url} target="_blank" rel="noreferrer" key={reference.url}>{reference.title} <ExternalLink size={14} /></a>)}
                   </div>
                 )}

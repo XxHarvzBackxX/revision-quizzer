@@ -1,9 +1,10 @@
-import { ArrowRight, BookOpenCheck, Clock3, Copy, FileJson, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, BookOpenText, Clock3, Copy, FileJson, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import type { Navigate, ToastKind } from '../types';
 import { copyShareLink } from '../utils/quizUi';
+import { getCoursePath } from '../revision/registry';
 
 export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate, onToast }: {
   datasets: DatasetSummary[];
@@ -52,6 +53,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
         <div className="library-grid">
           {visible.map((dataset, index) => {
             const latest = attempts.find((attempt) => attempt.datasetId === dataset.id);
+            const revisionPath = getCoursePath(dataset.examCode);
             return (
               <article className={`library-card ${dataset.curated ? 'curated' : ''}`} key={dataset.id}>
                 <div className="library-card-top"><span>{dataset.curated ? `${dataset.examCode} · Mock paper ${paperNumber(dataset.title, index)}` : 'Community quiz'}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
@@ -59,7 +61,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
                 <p>{dataset.description || 'A community revision set.'}</p>
                 <div className="tag-row">{(dataset.tags ?? []).slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
                 <div className="library-card-meta"><span><Clock3 size={16} /> {dataset.durationMinutes ? `${dataset.durationMinutes} min` : 'Untimed'}</span><span>{dataset.itemCount} questions</span>{latest && <span className="latest-result">Last {latest.percentage}%</span>}</div>
-                <footer><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={15} /> Share</button><button className="primary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Open <ArrowRight size={17} /></button></footer>
+                <footer><span className="library-card-secondary"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={15} /> Share</button>{revisionPath && <button className="icon-text-button" onClick={() => navigate(revisionPath)}><BookOpenText size={15} /> Revise</button>}</span><button className="primary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Open <ArrowRight size={17} /></button></footer>
               </article>
             );
           })}

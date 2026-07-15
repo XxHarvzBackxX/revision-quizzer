@@ -12,6 +12,9 @@ export type AppRoute =
   | { name: 'gallery'; path: '/gallery' }
   | { name: 'upload'; path: '/upload' }
   | { name: 'admin'; path: '/admin' }
+  | { name: 'wiki'; path: '/wiki' }
+  | { name: 'wiki-course'; path: string; examCode: string }
+  | { name: 'wiki-page'; path: string; examCode: string; pageSlug: string }
   | { name: 'quiz-menu'; path: string; slug: string }
   | { name: 'quiz-practice'; path: string; slug: string }
   | { name: 'quiz-exam'; path: string; slug: string }

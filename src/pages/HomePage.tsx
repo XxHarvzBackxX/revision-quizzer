@@ -1,8 +1,10 @@
-import { ArrowRight, BookOpenCheck, BrainCircuit, Clock3, Play, Sparkles, Target } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, BookOpenText, BrainCircuit, Clock3, Highlighter, Play, Sparkles, Target } from 'lucide-react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { RecentAttempts } from '../components/Stats';
 import type { ActiveExamSession, AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
+import { revisionCourses } from '../revision/registry';
+import { revisionPageKey, useRevisionState } from '../revision/storage';
 
 export function HomePage({
   datasets,
@@ -17,6 +19,7 @@ export function HomePage({
   isLoading: boolean;
   navigate: Navigate;
 }) {
+  const revisionState = useRevisionState();
   const curated = datasets.filter((dataset) => dataset.curated);
   const featured = (curated.length ? curated : datasets).slice(0, 6);
   const resumable = activeSessions.find((session) => new Date(session.expiresAt).getTime() > Date.now());
@@ -39,6 +42,7 @@ export function HomePage({
               <button className="primary-button large" onClick={() => navigate('/gallery')}><Play size={18} /> Choose a mock exam</button>
             )}
             <button className="secondary-button large" onClick={() => navigate('/gallery')}>Browse the library <ArrowRight size={18} /></button>
+            <button className="secondary-button large" onClick={() => navigate('/wiki')}><BookOpenText size={18} /> Open RevisionWiki</button>
           </div>
           <p className="hero-disclaimer">Unofficial original practice questions, aligned to the published skills outline shown on each certification.</p>
         </div>
@@ -83,6 +87,7 @@ export function HomePage({
             <div className="panel-heading"><div><span className="section-kicker">Two study modes</span><h2>Match the session to your goal</h2></div><BrainCircuit size={25} /></div>
             <div className="mode-summary"><span className="mode-icon serious"><Target size={20} /></span><div><strong>Serious mock exam</strong><p>45 minutes, no hints, flagging and answer review.</p></div></div>
             <div className="mode-summary"><span className="mode-icon fun"><Sparkles size={20} /></span><div><strong>Guided practice</strong><p>Instant feedback, explanations, sources and a little more energy.</p></div></div>
+            <div className="mode-summary"><span className="mode-icon revision"><BookOpenText size={20} /></span><div><strong>RevisionWiki</strong><p>{revisionCourses.reduce((sum, course) => sum + course.pages.filter((page) => revisionState.reviewedPages[revisionPageKey(course.examCode, page.id)]).length, 0)} of {revisionCourses.reduce((sum, course) => sum + course.pages.length, 0)} guides reviewed · {revisionState.highlights.length} personal notes.</p><button className="text-button" onClick={() => navigate('/wiki')}>Continue revision <ArrowRight size={15} /></button></div><Highlighter size={18} /></div>
           </div>
         </div>
       </section>

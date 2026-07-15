@@ -1,8 +1,9 @@
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock3, Copy, Flag, Play, Sparkles, Target } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, BookOpenText, CheckCircle2, Clock3, Copy, Flag, Play, Sparkles, Target } from 'lucide-react';
 import type { PublicDataset } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import type { Navigate, ToastKind } from '../types';
 import { copyShareLink } from '../utils/quizUi';
+import { getCoursePath } from '../revision/registry';
 
 export function QuizMenuPage({ dataset, attempts, canResume, navigate, onToast }: {
   dataset: PublicDataset;
@@ -14,6 +15,7 @@ export function QuizMenuPage({ dataset, attempts, canResume, navigate, onToast }
   const datasetAttempts = attempts.filter((attempt) => attempt.datasetId === dataset.id);
   const latest = datasetAttempts[0];
   const examReady = dataset.kind === 'exam' || dataset.curated;
+  const revisionPath = getCoursePath(dataset.examCode);
 
   return (
     <section className="exam-overview-page">
@@ -24,7 +26,7 @@ export function QuizMenuPage({ dataset, attempts, canResume, navigate, onToast }
           <h1>{dataset.title}</h1>
           <p>{dataset.description || 'A community revision set.'}</p>
           <div className="overview-facts"><span><BookOpen size={18} /><strong>{dataset.itemCount}</strong> questions</span><span><Clock3 size={18} /><strong>{dataset.durationMinutes ?? 'No'}</strong> {dataset.durationMinutes ? 'minutes' : 'timer'}</span><span><Target size={18} /><strong>{dataset.readinessTarget ?? 70}%</strong> practice target</span></div>
-          <div className="overview-actions"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={16} /> Copy share link</button></div>
+          <div className="overview-actions"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={16} /> Copy share link</button>{revisionPath && <button className="icon-text-button" onClick={() => navigate(revisionPath)}><BookOpenText size={16} /> Open RevisionWiki</button>}</div>
         </div>
         <div className="overview-progress-card">
           <span>Your progress</span>
