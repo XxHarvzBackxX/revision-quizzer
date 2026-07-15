@@ -202,6 +202,13 @@ function AdminDatasetManager({
       description: selected.description,
       tags: selected.tags,
       shuffleQuestions: Boolean(selected.shuffleQuestions),
+      kind: selected.kind,
+      curated: selected.curated,
+      examCode: selected.examCode,
+      blueprintVersion: selected.blueprintVersion,
+      durationMinutes: selected.durationMinutes,
+      readinessTarget: selected.readinessTarget,
+      domains: selected.domains,
       items: selected.items
     }, null, 2));
     setStatus(selected.status ?? 'approved');

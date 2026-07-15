@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { answerSimilarity, isFreeWritePass, validateDataset } from './quiz';
+import { answerSimilarity, isFreeWritePass, isResponseCorrect, validateDataset } from './quiz';
 
 describe('validateDataset', () => {
   it('accepts the three supported item types', () => {
@@ -42,6 +42,34 @@ describe('validateDataset', () => {
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.errors).toContain('Item 1 options must include the answer.');
+    }
+  });
+
+  it('accepts multi-select questions and requires every answer', () => {
+    const item = {
+      type: 'multi-select' as const,
+      prompt: 'Choose two',
+      answers: ['One', 'Two'],
+      options: ['One', 'Two', 'Three']
+    };
+    const result = validateDataset({ title: 'Selections', items: [item] });
+    expect(result.ok).toBe(true);
+    expect(isResponseCorrect(item, ['Two', 'One'])).toBe(true);
+    expect(isResponseCorrect(item, ['One'])).toBe(false);
+    expect(isResponseCorrect(item, ['One', 'Three'])).toBe(false);
+  });
+
+  it('requires complete metadata for curated exams', () => {
+    const result = validateDataset({
+      title: 'Incomplete exam',
+      kind: 'exam',
+      curated: true,
+      items: [{ type: 'multiple-choice', prompt: 'Question', answer: 'A', options: ['A', 'B'] }]
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.errors).toContain('Curated exams must include an exam code.');
+      expect(result.errors).toContain('Item 1 must include an explanation.');
     }
   });
 });

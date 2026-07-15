@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import type { PublicDataset } from '../../shared/quiz.js';
+import { findCuratedDataset } from '../_curated.js';
 import { getDatabase } from '../_firebase.js';
 import { sendJson } from '../_http.js';
 
@@ -14,6 +15,11 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     const id = getRouteId(request);
+    const curated = findCuratedDataset(id);
+    if (curated) {
+      sendJson(response, 200, { dataset: curated });
+      return;
+    }
     const database = getDatabase();
     const directDoc = await database.collection(COLLECTION).doc(id).get();
 
@@ -57,6 +63,13 @@ function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData): Publ
     description: data.description ?? '',
     tags: data.tags ?? [],
     shuffleQuestions: Boolean(data.shuffleQuestions),
+    kind: data.kind ?? 'quiz',
+    curated: Boolean(data.curated),
+    examCode: data.examCode,
+    blueprintVersion: data.blueprintVersion,
+    durationMinutes: data.durationMinutes,
+    readinessTarget: data.readinessTarget,
+    domains: data.domains,
     itemCount: data.itemCount ?? data.items?.length ?? 0,
     createdAt,
     status: data.status ?? 'approved',

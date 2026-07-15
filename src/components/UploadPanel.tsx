@@ -10,8 +10,9 @@ type UploadState = {
   dataset: DatasetInput | null;
   errors: string[];
 };
+type FriendlyItemType = Exclude<QuizItemType, 'multi-select'>;
 type FriendlyItem = {
-  type: QuizItemType;
+  type: FriendlyItemType;
   prompt: string;
   answer: string;
   options: string[];
@@ -125,7 +126,7 @@ export function UploadPanel({
                   </div>
                   <label className="field">
                     <span>Type</span>
-                    <select value={item.type} onChange={(event) => updateFriendlyItem(index, { type: event.target.value as QuizItemType })}>
+                    <select value={item.type} onChange={(event) => updateFriendlyItem(index, { type: event.target.value as FriendlyItemType })}>
                       <option value="multiple-choice">Multiple choice</option>
                       <option value="flashcard">Flashcard</option>
                       <option value="free-write">Free write</option>

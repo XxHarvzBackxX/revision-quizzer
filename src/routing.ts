@@ -5,9 +5,24 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
   if (pathname === '/upload') return { name: 'upload', path: pathname };
   if (pathname === '/admin') return { name: 'admin', path: pathname };
 
-  const playMatch = pathname.match(/^\/quiz\/([^/]+)\/play$/);
-  if (playMatch?.[1]) {
-    return { name: 'quiz-play', path: pathname, slug: decodeURIComponent(playMatch[1]) };
+  const resultMatch = pathname.match(/^\/quiz\/([^/]+)\/results\/([^/]+)$/);
+  if (resultMatch?.[1] && resultMatch[2]) {
+    return {
+      name: 'quiz-result',
+      path: pathname,
+      slug: decodeURIComponent(resultMatch[1]),
+      attemptId: decodeURIComponent(resultMatch[2])
+    };
+  }
+
+  const examMatch = pathname.match(/^\/quiz\/([^/]+)\/exam$/);
+  if (examMatch?.[1]) {
+    return { name: 'quiz-exam', path: pathname, slug: decodeURIComponent(examMatch[1]) };
+  }
+
+  const practiceMatch = pathname.match(/^\/quiz\/([^/]+)\/(?:practice|play)$/);
+  if (practiceMatch?.[1]) {
+    return { name: 'quiz-practice', path: pathname, slug: decodeURIComponent(practiceMatch[1]) };
   }
 
   const quizMatch = pathname.match(/^\/quiz\/([^/]+)$/);
@@ -19,5 +34,8 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
 }
 
 export function routeClass(route: AppRoute): string {
-  return route.name === 'quiz-play' ? 'quiz-play' : route.name;
+  if (route.name === 'quiz-practice') return 'quiz-play practice-mode';
+  if (route.name === 'quiz-exam') return 'quiz-play exam-mode';
+  if (route.name === 'quiz-result') return 'quiz-result';
+  return route.name;
 }

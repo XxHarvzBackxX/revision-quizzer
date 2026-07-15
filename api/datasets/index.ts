@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Timestamp } from 'firebase-admin/firestore';
 import { createSlug, type DatasetSummary, type PublicDataset, validateDataset } from '../../shared/quiz.js';
+import { getCuratedSummaries, isSupersededCuratedDataset } from '../_curated.js';
 import { getDatabase } from '../_firebase.js';
 import { getAdminPassword, getUploadKey, readJsonBody, sendJson } from '../_http.js';
 
@@ -27,17 +28,17 @@ export default async function handler(request: VercelRequest, response: VercelRe
 }
 
 async function listDatasets(response: VercelResponse) {
-  const snapshot = await getDatabase()
-    .collection(COLLECTION)
-    .orderBy('createdAt', 'desc')
-    .limit(100)
-    .get();
-
-  const datasets: DatasetSummary[] = snapshot.docs
-    .map((doc) => toPublicDataset(doc.id, doc.data(), false))
-    .filter((dataset) => dataset.status !== 'pending')
-    .slice(0, 50);
-  sendJson(response, 200, { datasets });
+  let community: DatasetSummary[] = [];
+  try {
+    const snapshot = await getDatabase().collection(COLLECTION).orderBy('createdAt', 'desc').limit(100).get();
+    community = snapshot.docs
+      .map((doc) => toPublicDataset(doc.id, doc.data(), false))
+      .filter((dataset) => dataset.status !== 'pending' && !isSupersededCuratedDataset(dataset))
+      .slice(0, 47);
+  } catch (error) {
+    console.warn('Community datasets unavailable; serving the built-in curated library.', error);
+  }
+  sendJson(response, 200, { datasets: [...getCuratedSummaries(), ...community] });
 }
 
 async function createDataset(request: VercelRequest, response: VercelResponse) {
@@ -97,6 +98,13 @@ function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, inclu
     description: data.description ?? '',
     tags: data.tags ?? [],
     shuffleQuestions: Boolean(data.shuffleQuestions),
+    kind: data.kind ?? 'quiz',
+    curated: Boolean(data.curated),
+    examCode: data.examCode,
+    blueprintVersion: data.blueprintVersion,
+    durationMinutes: data.durationMinutes,
+    readinessTarget: data.readinessTarget,
+    domains: data.domains,
     itemCount: data.itemCount ?? data.items?.length ?? 0,
     createdAt,
     status: data.status ?? 'approved'

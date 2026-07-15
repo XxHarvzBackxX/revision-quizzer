@@ -8,7 +8,10 @@
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "lint": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.api.json --noEmit"
+    "lint": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.api.json --noEmit",
+    "content:enrich": "node scripts/enrich-ai901-datasets.mjs",
+    "content:audit": "node scripts/audit-ai901-datasets.mjs",
+    "content:build": "node scripts/regenerate-ai901-datasets.mjs && node scripts/harden-ai901-distractors.mjs && node scripts/enrich-ai901-datasets.mjs && node scripts/audit-ai901-datasets.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",

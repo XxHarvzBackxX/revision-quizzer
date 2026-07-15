@@ -13,6 +13,8 @@ export type AppRoute =
   | { name: 'upload'; path: '/upload' }
   | { name: 'admin'; path: '/admin' }
   | { name: 'quiz-menu'; path: string; slug: string }
-  | { name: 'quiz-play'; path: string; slug: string };
+  | { name: 'quiz-practice'; path: string; slug: string }
+  | { name: 'quiz-exam'; path: string; slug: string }
+  | { name: 'quiz-result'; path: string; slug: string; attemptId: string };
 
 export type Navigate = (path: string) => void;
