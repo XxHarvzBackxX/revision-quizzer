@@ -8,7 +8,7 @@ export function Topbar({ route, navigate }: { route: AppRoute; navigate: Navigat
         <span className="brand-mark"><BrainCircuit size={23} /></span>
         <span>
           <strong>Quiz Arcade</strong>
-          <small>Serious prep, better practice</small>
+          <small>Certification prep with a pulse</small>
         </span>
       </button>
       <nav className="nav-actions">

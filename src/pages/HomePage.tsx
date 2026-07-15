@@ -18,7 +18,7 @@ export function HomePage({
   navigate: Navigate;
 }) {
   const curated = datasets.filter((dataset) => dataset.curated);
-  const featured = (curated.length ? curated : datasets).slice(0, 3);
+  const featured = (curated.length ? curated : datasets).slice(0, 6);
   const resumable = activeSessions.find((session) => new Date(session.expiresAt).getTime() > Date.now());
   const resumeDataset = resumable && datasets.find((dataset) => dataset.id === resumable.datasetId);
   const examAttempts = attempts.filter((attempt) => attempt.mode === 'exam');
@@ -29,9 +29,9 @@ export function HomePage({
     <div className="home-page">
       <section className="study-hero">
         <div className="hero-copy">
-          <span className="hero-badge"><Sparkles size={15} /> Focused AI-901 preparation</span>
+          <span className="hero-badge"><Sparkles size={15} /> Certification prep that keeps its momentum</span>
           <h1>Walk into exam day <em>ready.</em></h1>
-          <p>Realistic mock exams when you want pressure. Clear explanations and focused practice when you want to learn.</p>
+          <p>Realistic mock exams across Microsoft certifications when you want pressure. Clear explanations and focused practice when you want to learn.</p>
           <div className="hero-actions">
             {resumeDataset ? (
               <button className="primary-button large" onClick={() => navigate(`/quiz/${resumeDataset.slug}/exam`)}><Play size={18} /> Continue timed exam</button>
@@ -40,7 +40,7 @@ export function HomePage({
             )}
             <button className="secondary-button large" onClick={() => navigate('/gallery')}>Browse the library <ArrowRight size={18} /></button>
           </div>
-          <p className="hero-disclaimer">Unofficial original practice questions, aligned to Microsoft’s April 2026 skills outline.</p>
+          <p className="hero-disclaimer">Unofficial original practice questions, aligned to the published skills outline shown on each certification.</p>
         </div>
         <div className="readiness-card">
           <div className="readiness-top"><span>Your browser progress</span><Target size={24} /></div>
@@ -55,7 +55,7 @@ export function HomePage({
 
       <section className="home-content">
         <div className="home-section-heading">
-          <div><span className="section-kicker">Start studying</span><h2>AI-901 mock exams</h2><p>Three balanced papers. Two ways to use each one.</p></div>
+          <div><span className="section-kicker">Choose a certification</span><h2>Curated mock exams</h2><p>Blueprint-balanced papers for AI-901 and AZ-900, with more certifications able to follow.</p></div>
           <button className="text-button" onClick={() => navigate('/gallery')}>View full library <ArrowRight size={17} /></button>
         </div>
         {isLoading ? (
@@ -66,8 +66,8 @@ export function HomePage({
               const latest = attempts.find((attempt) => attempt.datasetId === dataset.id);
               return (
                 <article className="featured-exam-card" key={dataset.id}>
-                  <div className="exam-card-top"><span className="paper-number">Paper {index + 1}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
-                  <h3>{dataset.title.replace(/^AI-901 Mock Exam \d+:?\s*/i, '') || dataset.title}</h3>
+                  <div className="exam-card-top"><span className="paper-number">{dataset.examCode ?? 'Community'} · Paper {paperNumber(dataset.title, index)}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
+                  <h3>{dataset.title.replace(/^[A-Z]{2,4}-\d{3} Mock Exam \d+:?\s*/i, '') || dataset.title}</h3>
                   <p>{dataset.description}</p>
                   <div className="exam-card-facts"><span><Clock3 size={16} /> {dataset.durationMinutes ?? 45} min</span><span><BrainCircuit size={16} /> {dataset.itemCount} questions</span></div>
                   <div className="exam-card-footer"><span>{latest ? `Last result ${latest.percentage}%` : 'Not attempted yet'}</span><button className="round-arrow" onClick={() => navigate(`/quiz/${dataset.slug}`)} aria-label={`Open ${dataset.title}`}><ArrowRight size={19} /></button></div>
@@ -88,4 +88,9 @@ export function HomePage({
       </section>
     </div>
   );
+}
+
+function paperNumber(title: string, fallbackIndex: number): number {
+  const match = title.match(/Mock Exam (\d+)/i);
+  return match?.[1] ? Number(match[1]) : fallbackIndex + 1;
 }

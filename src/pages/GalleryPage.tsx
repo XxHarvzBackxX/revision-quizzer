@@ -16,27 +16,31 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
   const [section, setSection] = useState<'curated' | 'community'>('curated');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'new' | 'attempted'>('all');
+  const [certification, setCertification] = useState('all');
+  const certificationCodes = [...new Set(datasets.filter((dataset) => dataset.curated && dataset.examCode).map((dataset) => dataset.examCode as string))];
   const visible = useMemo(() => datasets.filter((dataset) => {
     const belongs = section === 'curated' ? dataset.curated : !dataset.curated;
     const matchesQuery = `${dataset.title} ${dataset.description ?? ''} ${(dataset.tags ?? []).join(' ')}`.toLowerCase().includes(query.toLowerCase());
+    const matchesCertification = section === 'community' || certification === 'all' || dataset.examCode === certification;
     const attempted = attempts.some((attempt) => attempt.datasetId === dataset.id);
-    return belongs && matchesQuery && (status === 'all' || (status === 'attempted' ? attempted : !attempted));
-  }), [datasets, section, query, status, attempts]);
+    return belongs && matchesQuery && matchesCertification && (status === 'all' || (status === 'attempted' ? attempted : !attempted));
+  }), [datasets, section, query, certification, status, attempts]);
 
   return (
     <section className="library-page">
       <header className="library-header">
-        <div><span className="section-kicker light"><Library size={16} /> Exam library</span><h1>Choose how you’ll prepare.</h1><p>Curated AI-901 mock exams are blueprint-balanced and include explanations for every answer.</p></div>
+        <div><span className="section-kicker light"><Library size={16} /> Certification library</span><h1>Choose what comes next.</h1><p>Curated certification mock exams are blueprint-balanced and include explanations and official references for every answer.</p></div>
         <button className="refresh-button" onClick={onRefresh} aria-label="Refresh library">{isLoading ? <Loader2 className="spin" size={18} /> : <RotateCcw size={18} />}</button>
       </header>
 
       <div className="library-tabs" role="tablist">
-        <button className={section === 'curated' ? 'active' : ''} onClick={() => setSection('curated')}><BookOpenCheck size={18} /><span><strong>Curated exams</strong><small>Blueprint-aligned AI-901 papers</small></span></button>
+        <button className={section === 'curated' ? 'active' : ''} onClick={() => setSection('curated')}><BookOpenCheck size={18} /><span><strong>Curated exams</strong><small>Blueprint-aligned certification papers</small></span></button>
         <button className={section === 'community' ? 'active' : ''} onClick={() => setSection('community')}><Users size={18} /><span><strong>Community sets</strong><small>Quizzes shared by learners</small></span></button>
       </div>
 
       <div className="library-toolbar">
         <label className="search-field"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the library" /></label>
+        {section === 'curated' && <select value={certification} onChange={(event) => setCertification(event.target.value)} aria-label="Filter by certification"><option value="all">All certifications</option>{certificationCodes.map((code) => <option value={code} key={code}>{code}</option>)}</select>}
         <select value={status} onChange={(event) => setStatus(event.target.value as typeof status)} aria-label="Filter by attempt status"><option value="all">All sets</option><option value="new">Not attempted</option><option value="attempted">Attempted</option></select>
       </div>
 
@@ -50,7 +54,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
             const latest = attempts.find((attempt) => attempt.datasetId === dataset.id);
             return (
               <article className={`library-card ${dataset.curated ? 'curated' : ''}`} key={dataset.id}>
-                <div className="library-card-top"><span>{dataset.curated ? `Mock paper ${index + 1}` : 'Community quiz'}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
+                <div className="library-card-top"><span>{dataset.curated ? `${dataset.examCode} · Mock paper ${paperNumber(dataset.title, index)}` : 'Community quiz'}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
                 <h2>{dataset.title}</h2>
                 <p>{dataset.description || 'A community revision set.'}</p>
                 <div className="tag-row">{(dataset.tags ?? []).slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
@@ -63,4 +67,9 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
       )}
     </section>
   );
+}
+
+function paperNumber(title: string, fallbackIndex: number): number {
+  const match = title.match(/Mock Exam (\d+)/i);
+  return match?.[1] ? Number(match[1]) : fallbackIndex + 1;
 }

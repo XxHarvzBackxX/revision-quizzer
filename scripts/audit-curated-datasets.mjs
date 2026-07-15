@@ -1,18 +1,35 @@
 import { readFileSync } from 'node:fs';
 
-const files = [1, 2, 3].map((number) => `datasets/ai-901-mock-exam-${number}.json`);
+const configs = [
+  ...[1, 2, 3].map((paper) => ({
+    file: `datasets/ai-901-mock-exam-${paper}.json`,
+    examCode: 'AI-901',
+    blueprintVersion: '2026-04-15',
+    domains: { concepts: 22, foundry: 28 }
+  })),
+  ...[1, 2, 3].map((paper) => ({
+    file: `datasets/az-900-mock-exam-${paper}.json`,
+    examCode: 'AZ-900',
+    blueprintVersion: '2026-07-20',
+    domains: { 'cloud-concepts': 14, 'architecture-services': 19, 'management-governance': 17 }
+  }))
+];
+
 const allPrompts = [];
 let failed = false;
 
-for (const file of files) {
-  const dataset = JSON.parse(readFileSync(file, 'utf8'));
+for (const config of configs) {
+  const dataset = JSON.parse(readFileSync(config.file, 'utf8'));
   const errors = [];
   if (dataset.items.length !== 50) errors.push(`expected 50 questions, found ${dataset.items.length}`);
   if (dataset.kind !== 'exam' || !dataset.curated) errors.push('dataset is not marked as a curated exam');
-  if (dataset.blueprintVersion !== '2026-04-15') errors.push('blueprint version is not current');
+  if (dataset.examCode !== config.examCode) errors.push(`exam code must be ${config.examCode}`);
+  if (dataset.blueprintVersion !== config.blueprintVersion) errors.push(`blueprint version must be ${config.blueprintVersion}`);
 
   const domains = count(dataset.items, 'domainId');
-  if (domains.concepts !== 22 || domains.foundry !== 28) errors.push(`domain split is ${domains.concepts || 0}/${domains.foundry || 0}, expected 22/28`);
+  for (const [domainId, expected] of Object.entries(config.domains)) {
+    if (domains[domainId] !== expected) errors.push(`${domainId} has ${domains[domainId] || 0} questions; expected ${expected}`);
+  }
   const difficulties = count(dataset.items, 'difficulty');
   if (difficulties.easy !== 10 || difficulties.medium !== 30 || difficulties.hard !== 10) errors.push('difficulty split must be 10/30/10');
   const types = count(dataset.items, 'type');
@@ -29,15 +46,16 @@ for (const file of files) {
     if (new Set(item.options.map(normalize)).size !== item.options.length) errors.push(`${label} contains duplicate options`);
     const correct = item.type === 'multi-select' ? item.answers : [item.answer];
     if (correct.some((answer) => !item.options.some((option) => normalize(option) === normalize(answer)))) errors.push(`${label} has an answer outside its options`);
-    allPrompts.push({ file, index, prompt: item.prompt, tokens: tokenSet(item.prompt) });
+    allPrompts.push({ file: config.file, index, prompt: item.prompt, tokens: tokenSet(item.prompt) });
   });
 
   if (errors.length) {
     failed = true;
-    console.error(`\n${file}`);
+    console.error(`\n${config.file}`);
     errors.forEach((error) => console.error(`  - ${error}`));
   } else {
-    console.log(`✓ ${file}: 50 questions, 22/28 domains, 10/30/10 difficulty, 46/4 formats`);
+    const domainSummary = Object.entries(config.domains).map(([id, count]) => `${id}=${count}`).join(', ');
+    console.log(`✓ ${config.file}: 50 questions; ${domainSummary}; 10/30/10 difficulty; 46/4 formats`);
   }
 }
 
@@ -52,7 +70,7 @@ for (let left = 0; left < allPrompts.length; left += 1) {
 }
 
 if (failed) process.exitCode = 1;
-else console.log('✓ Cross-paper duplicate audit passed');
+else console.log('✓ Cross-paper duplicate audit passed for all six curated exams');
 
 function count(items, property) {
   return items.reduce((result, item) => ({ ...result, [item[property]]: (result[item[property]] || 0) + 1 }), {});

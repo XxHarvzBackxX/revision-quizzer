@@ -1,0 +1,1148 @@
+{
+  "title": "AZ-900 Mock Exam 3: Architecture, Security, and Governance",
+  "description": "A 50-question unofficial mock paper aligned to the AZ-900 skills measured from July 20, 2026. Covers cloud concepts, Azure architecture and services, and management and governance. Includes detailed explanations and official Microsoft Learn references. Original practice content; not official exam questions.",
+  "tags": [
+    "az-900",
+    "azure",
+    "fundamentals",
+    "mock-exam"
+  ],
+  "shuffleQuestions": true,
+  "kind": "exam",
+  "curated": true,
+  "examCode": "AZ-900",
+  "blueprintVersion": "2026-07-20",
+  "durationMinutes": 45,
+  "readinessTarget": 70,
+  "domains": [
+    {
+      "id": "cloud-concepts",
+      "title": "Describe cloud concepts",
+      "weight": 28
+    },
+    {
+      "id": "architecture-services",
+      "title": "Describe Azure architecture and services",
+      "weight": 38
+    },
+    {
+      "id": "management-governance",
+      "title": "Describe Azure management and governance",
+      "weight": 34
+    }
+  ],
+  "items": [
+    {
+      "type": "multiple-choice",
+      "prompt": "A bank operates a cloud environment dedicated to that organization in its own facilities. Which deployment model is this?",
+      "answer": "Private cloud",
+      "options": [
+        "Private cloud",
+        "Public cloud",
+        "Hybrid cloud",
+        "Serverless computing"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-computing",
+      "difficulty": "medium",
+      "id": "az900-p3-q01",
+      "explanation": "“Private cloud” is the best answer because it directly matches the requirement in the scenario. Cloud models, consumption pricing, serverless operation, and the shared responsibility model determine who manages each layer and how the service is consumed.",
+      "references": [
+        {
+          "title": "Describe cloud computing",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Who owns and operates the physical infrastructure in the Microsoft Azure public cloud?",
+      "answer": "Microsoft",
+      "options": [
+        "Microsoft",
+        "Every Azure subscriber jointly",
+        "The local internet provider",
+        "The application end users"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-computing",
+      "difficulty": "easy",
+      "id": "az900-p3-q02",
+      "explanation": "“Microsoft” is the best answer because it directly matches the requirement in the scenario. Cloud models, consumption pricing, serverless operation, and the shared responsibility model determine who manages each layer and how the service is consumed.",
+      "references": [
+        {
+          "title": "Describe cloud computing",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team stops an unused pay-as-you-go resource to avoid further compute charges. Which cloud concept makes this possible?",
+      "answer": "Consumption-based pricing",
+      "options": [
+        "Consumption-based pricing",
+        "Capital depreciation",
+        "Perpetual support",
+        "Private cloud ownership"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-computing",
+      "difficulty": "medium",
+      "id": "az900-p3-q03",
+      "explanation": "“Consumption-based pricing” is the best answer because it directly matches the requirement in the scenario. Cloud models, consumption pricing, serverless operation, and the shared responsibility model determine who manages each layer and how the service is consumed.",
+      "references": [
+        {
+          "title": "Describe cloud computing",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A function runs only when a message arrives and the team does not manage its host servers. Which computing model is being used?",
+      "answer": "Serverless computing",
+      "options": [
+        "Serverless computing",
+        "Dedicated hosting",
+        "Private networking",
+        "Desktop virtualization"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-computing",
+      "difficulty": "medium",
+      "id": "az900-p3-q04",
+      "explanation": "“Serverless computing” is the best answer because it directly matches the requirement in the scenario. Cloud models, consumption pricing, serverless operation, and the shared responsibility model determine who manages each layer and how the service is consumed.",
+      "references": [
+        {
+          "title": "Describe cloud computing",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "prompt": "A company runs an application on Azure virtual machines. Which TWO tasks are normally the customer’s responsibility?",
+      "answers": [
+        "Patching the guest operating system",
+        "Configuring access to the application"
+      ],
+      "options": [
+        "Patching the guest operating system",
+        "Configuring access to the application",
+        "Replacing failed physical disks in the Azure datacenter",
+        "Maintaining the Azure hypervisor"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-computing",
+      "difficulty": "hard",
+      "id": "az900-p3-q05",
+      "explanation": "“Patching the guest operating system” and “Configuring access to the application” are the required choices because it directly matches the requirement in the scenario. Cloud models, consumption pricing, serverless operation, and the shared responsibility model determine who manages each layer and how the service is consumed.",
+      "references": [
+        {
+          "title": "Describe cloud computing",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A cloud application recovers from component failures without losing its service objective. Which benefit does this demonstrate?",
+      "answer": "Reliability",
+      "options": [
+        "Reliability",
+        "Consumption pricing",
+        "Data tagging",
+        "Shared responsibility"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-benefits",
+      "difficulty": "medium",
+      "id": "az900-p3-q06",
+      "explanation": "“Reliability” is the best answer because it directly matches the requirement in the scenario. Cloud benefits distinguish availability, scalability, elasticity, reliability, predictability, governance, security, and manageability.",
+      "references": [
+        {
+          "title": "Describe the benefits of using cloud services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team adds more virtual machines to handle increased demand. Which type of scaling is this?",
+      "answer": "Horizontal scaling",
+      "options": [
+        "Horizontal scaling",
+        "Vertical scaling",
+        "Data scaling",
+        "Geographic scaling"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-benefits",
+      "difficulty": "easy",
+      "id": "az900-p3-q07",
+      "explanation": "“Horizontal scaling” is the best answer because it directly matches the requirement in the scenario. Cloud benefits distinguish availability, scalability, elasticity, reliability, predictability, governance, security, and manageability.",
+      "references": [
+        {
+          "title": "Describe the benefits of using cloud services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team increases the CPU and memory assigned to one virtual machine. Which type of scaling is this?",
+      "answer": "Vertical scaling",
+      "options": [
+        "Vertical scaling",
+        "Horizontal scaling",
+        "Elastic scaling only",
+        "Zone scaling"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-benefits",
+      "difficulty": "medium",
+      "id": "az900-p3-q08",
+      "explanation": "“Vertical scaling” is the best answer because it directly matches the requirement in the scenario. Cloud benefits distinguish availability, scalability, elasticity, reliability, predictability, governance, security, and manageability.",
+      "references": [
+        {
+          "title": "Describe the benefits of using cloud services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Security tools and centrally enforced configuration reduce inconsistent resource settings. Which cloud benefits do these capabilities primarily support?",
+      "answer": "Security and governance",
+      "options": [
+        "Security and governance",
+        "Capital ownership and depreciation",
+        "Physical server maintenance",
+        "Perpetual licensing"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "cloud-benefits",
+      "difficulty": "hard",
+      "id": "az900-p3-q09",
+      "explanation": "“Security and governance” is the best answer because it directly matches the requirement in the scenario. Cloud benefits distinguish availability, scalability, elasticity, reliability, predictability, governance, security, and manageability.",
+      "references": [
+        {
+          "title": "Describe the benefits of using cloud services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A lift-and-shift migration moves an existing server to an Azure virtual machine with minimal application changes. Which service type is used?",
+      "answer": "Infrastructure as a service (IaaS)",
+      "options": [
+        "Infrastructure as a service (IaaS)",
+        "Platform as a service (PaaS)",
+        "Software as a service (SaaS)",
+        "Serverless SaaS"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "service-types",
+      "difficulty": "hard",
+      "id": "az900-p3-q10",
+      "explanation": "“Infrastructure as a service (IaaS)” is the best answer because it directly matches the requirement in the scenario. IaaS provides the most customer control, PaaS manages the application platform, and SaaS delivers a complete provider-managed application.",
+      "references": [
+        {
+          "title": "Describe cloud service types",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Employees collaborate in Microsoft 365 without managing application servers. Which cloud service type describes Microsoft 365?",
+      "answer": "Software as a service (SaaS)",
+      "options": [
+        "Software as a service (SaaS)",
+        "Infrastructure as a service (IaaS)",
+        "Platform as a service (PaaS)",
+        "Hybrid infrastructure"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "service-types",
+      "difficulty": "medium",
+      "id": "az900-p3-q11",
+      "explanation": "“Software as a service (SaaS)” is the best answer because it directly matches the requirement in the scenario. IaaS provides the most customer control, PaaS manages the application platform, and SaaS delivers a complete provider-managed application.",
+      "references": [
+        {
+          "title": "Describe cloud service types",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which service type normally requires the customer to patch the guest operating system?",
+      "answer": "Infrastructure as a service (IaaS)",
+      "options": [
+        "Infrastructure as a service (IaaS)",
+        "Platform as a service (PaaS)",
+        "Software as a service (SaaS)",
+        "Managed SaaS database"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "service-types",
+      "difficulty": "medium",
+      "id": "az900-p3-q12",
+      "explanation": "“Infrastructure as a service (IaaS)” is the best answer because it directly matches the requirement in the scenario. IaaS provides the most customer control, PaaS manages the application platform, and SaaS delivers a complete provider-managed application.",
+      "references": [
+        {
+          "title": "Describe cloud service types",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which service type is most appropriate for rapidly building an API with a managed runtime and integrated scaling?",
+      "answer": "Platform as a service (PaaS)",
+      "options": [
+        "Platform as a service (PaaS)",
+        "Infrastructure as a service (IaaS)",
+        "Software as a service (SaaS)",
+        "Physical colocation"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "service-types",
+      "difficulty": "medium",
+      "id": "az900-p3-q13",
+      "explanation": "“Platform as a service (PaaS)” is the best answer because it directly matches the requirement in the scenario. IaaS provides the most customer control, PaaS manages the application platform, and SaaS delivers a complete provider-managed application.",
+      "references": [
+        {
+          "title": "Describe cloud service types",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company subscribes to a fully managed payroll application and configures only its users and business settings. Which service type is this?",
+      "answer": "Software as a service (SaaS)",
+      "options": [
+        "Software as a service (SaaS)",
+        "Infrastructure as a service (IaaS)",
+        "Platform as a service (PaaS)",
+        "Hosted hypervisor"
+      ],
+      "domainId": "cloud-concepts",
+      "objectiveId": "service-types",
+      "difficulty": "hard",
+      "id": "az900-p3-q14",
+      "explanation": "“Software as a service (SaaS)” is the best answer because it directly matches the requirement in the scenario. IaaS provides the most customer control, PaaS manages the application platform, and SaaS delivers a complete provider-managed application.",
+      "references": [
+        {
+          "title": "Describe cloud service types",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A government workload must run in an isolated Azure instance designed for specific sovereignty requirements. Which type of region may be appropriate?",
+      "answer": "A sovereign region",
+      "options": [
+        "A sovereign region",
+        "A resource group region",
+        "A pricing region only",
+        "An availability set"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-architecture",
+      "difficulty": "hard",
+      "id": "az900-p3-q15",
+      "explanation": "“A sovereign region” is the best answer because it directly matches the requirement in the scenario. Azure regions and availability zones describe physical resiliency, while management groups, subscriptions, resource groups, and resources form the governance hierarchy.",
+      "references": [
+        {
+          "title": "Describe core Azure architectural components",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "What is the smallest physical facility described in Azure’s global infrastructure hierarchy?",
+      "answer": "A datacenter",
+      "options": [
+        "A datacenter",
+        "A region pair",
+        "A geography",
+        "A management group"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-architecture",
+      "difficulty": "easy",
+      "id": "az900-p3-q16",
+      "explanation": "“A datacenter” is the best answer because it directly matches the requirement in the scenario. Azure regions and availability zones describe physical resiliency, while management groups, subscriptions, resource groups, and resources form the governance hierarchy.",
+      "references": [
+        {
+          "title": "Describe core Azure architectural components",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An administrator moves a virtual machine to another resource group in the same subscription. What happens to the virtual machine’s Azure region?",
+      "answer": "It remains in its existing region",
+      "options": [
+        "It remains in its existing region",
+        "It automatically moves to the resource group’s region",
+        "It moves to the nearest region pair",
+        "It becomes regionless"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-architecture",
+      "difficulty": "hard",
+      "id": "az900-p3-q17",
+      "explanation": "“It remains in its existing region” is the best answer because it directly matches the requirement in the scenario. Azure regions and availability zones describe physical resiliency, while management groups, subscriptions, resource groups, and resources form the governance hierarchy.",
+      "references": [
+        {
+          "title": "Describe core Azure architectural components",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "prompt": "Which TWO Azure scopes can contain multiple subscriptions beneath them?",
+      "answers": [
+        "A management group",
+        "A Microsoft Entra tenant through its management-group hierarchy"
+      ],
+      "options": [
+        "A management group",
+        "A Microsoft Entra tenant through its management-group hierarchy",
+        "A resource group",
+        "An availability zone"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-architecture",
+      "difficulty": "hard",
+      "id": "az900-p3-q18",
+      "explanation": "“A management group” and “A Microsoft Entra tenant through its management-group hierarchy” are the required choices because it directly matches the requirement in the scenario. Azure regions and availability zones describe physical resiliency, while management groups, subscriptions, resource groups, and resources form the governance hierarchy.",
+      "references": [
+        {
+          "title": "Describe core Azure architectural components",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An application requires complete control over its Windows operating system and installed software. Which compute option is most appropriate?",
+      "answer": "An Azure virtual machine",
+      "options": [
+        "An Azure virtual machine",
+        "Azure Functions",
+        "Azure DNS",
+        "Azure Policy"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "compute-networking",
+      "difficulty": "hard",
+      "id": "az900-p3-q19",
+      "explanation": "“An Azure virtual machine” is the best answer because it directly matches the requirement in the scenario. The correct Azure compute or networking service follows from the required management model, connectivity, scaling, and exposure of the workload.",
+      "references": [
+        {
+          "title": "Describe Azure compute and networking services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Several virtual machines must be distributed across fault and update domains in one datacenter. Which construct should be used?",
+      "answer": "An availability set",
+      "options": [
+        "An availability set",
+        "A management group",
+        "A resource group lock",
+        "A DNS zone"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "compute-networking",
+      "difficulty": "medium",
+      "id": "az900-p3-q20",
+      "explanation": "“An availability set” is the best answer because it directly matches the requirement in the scenario. The correct Azure compute or networking service follows from the required management model, connectivity, scaling, and exposure of the workload.",
+      "references": [
+        {
+          "title": "Describe Azure compute and networking services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Resources in one virtual network must be divided into separate IP address ranges. What should be created?",
+      "answer": "Subnets",
+      "options": [
+        "Subnets",
+        "Subscriptions",
+        "Management groups",
+        "Availability sets"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "compute-networking",
+      "difficulty": "medium",
+      "id": "az900-p3-q21",
+      "explanation": "“Subnets” is the best answer because it directly matches the requirement in the scenario. The correct Azure compute or networking service follows from the required management model, connectivity, scaling, and exposure of the workload.",
+      "references": [
+        {
+          "title": "Describe Azure compute and networking services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which endpoint type allows an Azure service to be reached from the internet, subject to access controls?",
+      "answer": "A public endpoint",
+      "options": [
+        "A public endpoint",
+        "A private endpoint only",
+        "A resource lock",
+        "A storage tier"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "compute-networking",
+      "difficulty": "medium",
+      "id": "az900-p3-q22",
+      "explanation": "“A public endpoint” is the best answer because it directly matches the requirement in the scenario. The correct Azure compute or networking service follows from the required management model, connectivity, scaling, and exposure of the workload.",
+      "references": [
+        {
+          "title": "Describe Azure compute and networking services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company wants a managed container platform with Kubernetes orchestration. Which Azure compute service should it evaluate?",
+      "answer": "Azure Kubernetes Service (AKS)",
+      "options": [
+        "Azure Kubernetes Service (AKS)",
+        "Azure Virtual Desktop",
+        "Azure Files",
+        "Azure Advisor"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "compute-networking",
+      "difficulty": "medium",
+      "id": "az900-p3-q23",
+      "explanation": "“Azure Kubernetes Service (AKS)” is the best answer because it directly matches the requirement in the scenario. The correct Azure compute or networking service follows from the required management model, connectivity, scaling, and exposure of the workload.",
+      "references": [
+        {
+          "title": "Describe Azure compute and networking services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Compliance records are rarely retrieved and can tolerate hours of retrieval latency. Which blob access tier is most cost-effective?",
+      "answer": "Archive tier",
+      "options": [
+        "Archive tier",
+        "Hot tier",
+        "Premium tier",
+        "Transaction optimized tier"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-storage",
+      "difficulty": "medium",
+      "id": "az900-p3-q24",
+      "explanation": "“Archive tier” is the best answer because it directly matches the requirement in the scenario. Azure storage choices depend on the data shape, access pattern, durability requirement, access tier, and transfer method.",
+      "references": [
+        {
+          "title": "Describe Azure storage services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Managed disks attached to Azure virtual machines use which broad storage category?",
+      "answer": "Disk storage",
+      "options": [
+        "Disk storage",
+        "Queue storage",
+        "Table storage",
+        "DNS storage"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-storage",
+      "difficulty": "easy",
+      "id": "az900-p3-q25",
+      "explanation": "“Disk storage” is the best answer because it directly matches the requirement in the scenario. Azure storage choices depend on the data shape, access pattern, durability requirement, access tier, and transfer method.",
+      "references": [
+        {
+          "title": "Describe Azure storage services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "An application needs a schemaless key-value store for large amounts of nonrelational structured data. Which service should it use?",
+      "answer": "Azure Table Storage",
+      "options": [
+        "Azure Table Storage",
+        "Azure Files",
+        "Azure Disk Storage",
+        "Azure VPN Gateway"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-storage",
+      "difficulty": "medium",
+      "id": "az900-p3-q26",
+      "explanation": "“Azure Table Storage” is the best answer because it directly matches the requirement in the scenario. Azure storage choices depend on the data shape, access pattern, durability requirement, access tier, and transfer method.",
+      "references": [
+        {
+          "title": "Describe Azure storage services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which redundancy option keeps three synchronous copies in one physical datacenter?",
+      "answer": "Locally redundant storage (LRS)",
+      "options": [
+        "Locally redundant storage (LRS)",
+        "Zone-redundant storage (ZRS)",
+        "Geo-redundant storage (GRS)",
+        "Geo-zone-redundant storage (GZRS)"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-storage",
+      "difficulty": "easy",
+      "id": "az900-p3-q27",
+      "explanation": "“Locally redundant storage (LRS)” is the best answer because it directly matches the requirement in the scenario. Azure storage choices depend on the data shape, access pattern, durability requirement, access tier, and transfer method.",
+      "references": [
+        {
+          "title": "Describe Azure storage services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company wants to assess and migrate on-premises servers, databases, and applications to Azure. Which service should it use?",
+      "answer": "Azure Migrate",
+      "options": [
+        "Azure Migrate",
+        "AzCopy",
+        "Azure Queue Storage",
+        "Azure DNS"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "azure-storage",
+      "difficulty": "medium",
+      "id": "az900-p3-q28",
+      "explanation": "“Azure Migrate” is the best answer because it directly matches the requirement in the scenario. Azure storage choices depend on the data shape, access pattern, durability requirement, access tier, and transfer method.",
+      "references": [
+        {
+          "title": "Describe Azure storage services",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A user signs in with a fingerprint instead of a password. Which authentication category does this represent?",
+      "answer": "Passwordless authentication",
+      "options": [
+        "Passwordless authentication",
+        "Single-factor password authentication",
+        "Resource authorization only",
+        "Storage encryption"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "identity-security",
+      "difficulty": "medium",
+      "id": "az900-p3-q29",
+      "explanation": "“Passwordless authentication” is the best answer because it directly matches the requirement in the scenario. Microsoft Entra capabilities establish identity and access, Azure RBAC controls resource authorization, and layered security services reduce risk.",
+      "references": [
+        {
+          "title": "Describe Azure identity, access, and security",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team needs to grant read-only access to resources in one resource group. What should it assign?",
+      "answer": "An Azure RBAC role at the resource-group scope",
+      "options": [
+        "An Azure RBAC role at the resource-group scope",
+        "A storage access tier",
+        "An Azure region pair",
+        "A DNS record"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "identity-security",
+      "difficulty": "medium",
+      "id": "az900-p3-q30",
+      "explanation": "“An Azure RBAC role at the resource-group scope” is the best answer because it directly matches the requirement in the scenario. Microsoft Entra capabilities establish identity and access, Azure RBAC controls resource authorization, and layered security services reduce risk.",
+      "references": [
+        {
+          "title": "Describe Azure identity, access, and security",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "In a defense-in-depth strategy, which layer focuses on user identities and access privileges?",
+      "answer": "The identity and access layer",
+      "options": [
+        "The identity and access layer",
+        "The physical security layer only",
+        "The data transfer pricing layer",
+        "The availability-zone layer"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "identity-security",
+      "difficulty": "medium",
+      "id": "az900-p3-q31",
+      "explanation": "“The identity and access layer” is the best answer because it directly matches the requirement in the scenario. Microsoft Entra capabilities establish identity and access, Azure RBAC controls resource authorization, and layered security services reduce risk.",
+      "references": [
+        {
+          "title": "Describe Azure identity, access, and security",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which principle assumes a breach may already have occurred and designs controls accordingly?",
+      "answer": "Assume breach",
+      "options": [
+        "Assume breach",
+        "Trust the internal network",
+        "Use maximum privilege",
+        "Disable monitoring"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "identity-security",
+      "difficulty": "easy",
+      "id": "az900-p3-q32",
+      "explanation": "“Assume breach” is the best answer because it directly matches the requirement in the scenario. Microsoft Entra capabilities establish identity and access, Azure RBAC controls resource authorization, and layered security services reduce risk.",
+      "references": [
+        {
+          "title": "Describe Azure identity, access, and security",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "prompt": "Which TWO methods can strengthen authentication beyond a reusable password?",
+      "answers": [
+        "Multifactor authentication",
+        "Passwordless authentication"
+      ],
+      "options": [
+        "Multifactor authentication",
+        "Passwordless authentication",
+        "A resource tag",
+        "A storage lifecycle rule"
+      ],
+      "domainId": "architecture-services",
+      "objectiveId": "identity-security",
+      "difficulty": "medium",
+      "id": "az900-p3-q33",
+      "explanation": "“Multifactor authentication” and “Passwordless authentication” are the required choices because it directly matches the requirement in the scenario. Microsoft Entra capabilities establish identity and access, Azure RBAC controls resource authorization, and layered security services reduce risk.",
+      "references": [
+        {
+          "title": "Describe Azure identity, access, and security",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Management needs cost totals by project, but resources are spread across resource groups. Which metadata helps allocate the costs?",
+      "answer": "Consistent project tags",
+      "options": [
+        "Consistent project tags",
+        "Availability-zone numbers",
+        "Private IP addresses",
+        "DNS aliases"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "cost-management",
+      "difficulty": "medium",
+      "id": "az900-p3-q34",
+      "explanation": "“Consistent project tags” is the best answer because it directly matches the requirement in the scenario. Azure pricing and Cost Management tools estimate, allocate, monitor, and optimize spending; tags add useful business metadata but do not enforce access.",
+      "references": [
+        {
+          "title": "Describe cost management in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which tool can recommend underutilized resources that may be resized to reduce cost?",
+      "answer": "Azure Advisor",
+      "options": [
+        "Azure Advisor",
+        "Azure DNS",
+        "Microsoft Entra ID",
+        "Azure Files"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "cost-management",
+      "difficulty": "easy",
+      "id": "az900-p3-q35",
+      "explanation": "“Azure Advisor” is the best answer because it directly matches the requirement in the scenario. Azure pricing and Cost Management tools estimate, allocate, monitor, and optimize spending; tags add useful business metadata but do not enforce access.",
+      "references": [
+        {
+          "title": "Describe cost management in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team compares pay-as-you-go prices for two architectures before either exists. Which tool should it use?",
+      "answer": "Azure Pricing Calculator",
+      "options": [
+        "Azure Pricing Calculator",
+        "Cost analysis of actual charges",
+        "Azure Service Health",
+        "Application Insights"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "cost-management",
+      "difficulty": "medium",
+      "id": "az900-p3-q36",
+      "explanation": "“Azure Pricing Calculator” is the best answer because it directly matches the requirement in the scenario. Azure pricing and Cost Management tools estimate, allocate, monitor, and optimize spending; tags add useful business metadata but do not enforce access.",
+      "references": [
+        {
+          "title": "Describe cost management in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which statement about Azure tags is correct?",
+      "answer": "Tags can add business metadata used for organization and cost reporting",
+      "options": [
+        "Tags can add business metadata used for organization and cost reporting",
+        "Tags automatically grant RBAC permissions",
+        "Tags prevent resources from being deleted",
+        "Tags move resources between regions"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "cost-management",
+      "difficulty": "easy",
+      "id": "az900-p3-q37",
+      "explanation": "“Tags can add business metadata used for organization and cost reporting” is the best answer because it directly matches the requirement in the scenario. Azure pricing and Cost Management tools estimate, allocate, monitor, and optimize spending; tags add useful business metadata but do not enforce access.",
+      "references": [
+        {
+          "title": "Describe cost management in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A resource has both a delete lock and an Azure RBAC Owner assignment for a user. What prevents that user from deleting the resource?",
+      "answer": "The delete lock",
+      "options": [
+        "The delete lock",
+        "The Owner role",
+        "The resource tag",
+        "The pricing tier"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "governance-compliance",
+      "difficulty": "medium",
+      "id": "az900-p3-q38",
+      "explanation": "“The delete lock” is the best answer because it directly matches the requirement in the scenario. Azure Policy evaluates resource compliance, locks prevent accidental changes, and Microsoft Purview supports data governance and discovery.",
+      "references": [
+        {
+          "title": "Describe Azure governance and compliance tools",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A company wants every new resource to include a required cost-center tag. Which service can enforce or remediate this rule?",
+      "answer": "Azure Policy",
+      "options": [
+        "Azure Policy",
+        "Azure Service Health",
+        "Azure DNS",
+        "Azure ExpressRoute"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "governance-compliance",
+      "difficulty": "medium",
+      "id": "az900-p3-q39",
+      "explanation": "“Azure Policy” is the best answer because it directly matches the requirement in the scenario. Azure Policy evaluates resource compliance, locks prevent accidental changes, and Microsoft Purview supports data governance and discovery.",
+      "references": [
+        {
+          "title": "Describe Azure governance and compliance tools",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which statement correctly distinguishes Azure Policy from Azure RBAC?",
+      "answer": "Policy evaluates resource compliance, while RBAC controls permitted user actions",
+      "options": [
+        "Policy evaluates resource compliance, while RBAC controls permitted user actions",
+        "Policy resolves DNS, while RBAC selects storage tiers",
+        "Policy calculates cost, while RBAC creates budgets",
+        "Policy and RBAC perform exactly the same function"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "governance-compliance",
+      "difficulty": "medium",
+      "id": "az900-p3-q40",
+      "explanation": "“Policy evaluates resource compliance, while RBAC controls permitted user actions” is the best answer because it directly matches the requirement in the scenario. Azure Policy evaluates resource compliance, locks prevent accidental changes, and Microsoft Purview supports data governance and discovery.",
+      "references": [
+        {
+          "title": "Describe Azure governance and compliance tools",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which governance feature inherits through the Azure scope hierarchy when assigned at a management group?",
+      "answer": "Azure Policy assignments",
+      "options": [
+        "Azure Policy assignments",
+        "Availability zones",
+        "Storage access tiers",
+        "Virtual machine sizes"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "governance-compliance",
+      "difficulty": "medium",
+      "id": "az900-p3-q41",
+      "explanation": "“Azure Policy assignments” is the best answer because it directly matches the requirement in the scenario. Azure Policy evaluates resource compliance, locks prevent accidental changes, and Microsoft Purview supports data governance and discovery.",
+      "references": [
+        {
+          "title": "Describe Azure governance and compliance tools",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A template deployment is run twice with no template changes. What is the intended result of declarative infrastructure as code?",
+      "answer": "The environment remains in the declared state",
+      "options": [
+        "The environment remains in the declared state",
+        "Every resource is duplicated",
+        "All existing resources are deleted",
+        "The subscription is moved to another tenant"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "management-deployment",
+      "difficulty": "hard",
+      "id": "az900-p3-q42",
+      "explanation": "“The environment remains in the declared state” is the best answer because it directly matches the requirement in the scenario. Azure management tools provide portal, shell, hybrid, and infrastructure-as-code approaches through a consistent Resource Manager control plane.",
+      "references": [
+        {
+          "title": "Describe tools for managing and deploying Azure resources",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which Azure feature provides a simplified declarative language that compiles to ARM templates?",
+      "answer": "Bicep",
+      "options": [
+        "Bicep",
+        "Azure DNS",
+        "Azure Queue Storage",
+        "Microsoft Entra Domain Services"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "management-deployment",
+      "difficulty": "medium",
+      "id": "az900-p3-q43",
+      "explanation": "“Bicep” is the best answer because it directly matches the requirement in the scenario. Azure management tools provide portal, shell, hybrid, and infrastructure-as-code approaches through a consistent Resource Manager control plane.",
+      "references": [
+        {
+          "title": "Describe tools for managing and deploying Azure resources",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A developer needs to manage Azure resources from a local terminal using commands such as az group create. Which tool is being used?",
+      "answer": "Azure CLI",
+      "options": [
+        "Azure CLI",
+        "Azure PowerShell",
+        "Azure Advisor",
+        "Azure Policy"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "management-deployment",
+      "difficulty": "medium",
+      "id": "az900-p3-q44",
+      "explanation": "“Azure CLI” is the best answer because it directly matches the requirement in the scenario. Azure management tools provide portal, shell, hybrid, and infrastructure-as-code approaches through a consistent Resource Manager control plane.",
+      "references": [
+        {
+          "title": "Describe tools for managing and deploying Azure resources",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Why are ARM template deployments considered repeatable?",
+      "answer": "The desired resource configuration is defined declaratively in a file",
+      "options": [
+        "The desired resource configuration is defined declaratively in a file",
+        "The portal records every mouse movement",
+        "Tags perform each deployment",
+        "Availability zones copy the source code"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "management-deployment",
+      "difficulty": "medium",
+      "id": "az900-p3-q45",
+      "explanation": "“The desired resource configuration is defined declaratively in a file” is the best answer because it directly matches the requirement in the scenario. Azure management tools provide portal, shell, hybrid, and infrastructure-as-code approaches through a consistent Resource Manager control plane.",
+      "references": [
+        {
+          "title": "Describe tools for managing and deploying Azure resources",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "prompt": "Which TWO interfaces use Azure Resource Manager as the common deployment and management layer?",
+      "answers": [
+        "The Azure portal",
+        "Azure CLI"
+      ],
+      "options": [
+        "The Azure portal",
+        "Azure CLI",
+        "Azure Data Box hardware",
+        "A storage access tier"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "management-deployment",
+      "difficulty": "hard",
+      "id": "az900-p3-q46",
+      "explanation": "“The Azure portal” and “Azure CLI” are the required choices because it directly matches the requirement in the scenario. Azure management tools provide portal, shell, hybrid, and infrastructure-as-code approaches through a consistent Resource Manager control plane.",
+      "references": [
+        {
+          "title": "Describe tools for managing and deploying Azure resources",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A team needs a visual dashboard combining resource metrics and log-query results. Which platform should it use?",
+      "answer": "Azure Monitor",
+      "options": [
+        "Azure Monitor",
+        "Azure Policy",
+        "Azure Files",
+        "Azure Cost tags"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "monitoring",
+      "difficulty": "medium",
+      "id": "az900-p3-q47",
+      "explanation": "“Azure Monitor” is the best answer because it directly matches the requirement in the scenario. Advisor recommends improvements, Service Health reports Azure service impact, and Azure Monitor collects and acts on platform and application telemetry.",
+      "references": [
+        {
+          "title": "Describe monitoring tools in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which monitoring capability traces application requests across dependencies?",
+      "answer": "Application Insights",
+      "options": [
+        "Application Insights",
+        "Azure Service Health",
+        "Azure Pricing Calculator",
+        "Azure Data Box"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "monitoring",
+      "difficulty": "easy",
+      "id": "az900-p3-q48",
+      "explanation": "“Application Insights” is the best answer because it directly matches the requirement in the scenario. Advisor recommends improvements, Service Health reports Azure service impact, and Azure Monitor collects and acts on platform and application telemetry.",
+      "references": [
+        {
+          "title": "Describe monitoring tools in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "A global Azure incident should be checked before sign-in-specific impact is known. Which public resource gives broad service status?",
+      "answer": "Azure status",
+      "options": [
+        "Azure status",
+        "Azure Policy compliance",
+        "Azure Advisor recommendations",
+        "Azure Storage Explorer"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "monitoring",
+      "difficulty": "medium",
+      "id": "az900-p3-q49",
+      "explanation": "“Azure status” is the best answer because it directly matches the requirement in the scenario. Advisor recommends improvements, Service Health reports Azure service impact, and Azure Monitor collects and acts on platform and application telemetry.",
+      "references": [
+        {
+          "title": "Describe monitoring tools in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "prompt": "Which Azure Monitor data type records time-stamped numeric values such as CPU percentage?",
+      "answer": "Metrics",
+      "options": [
+        "Metrics",
+        "Resource locks",
+        "Tags",
+        "Management groups"
+      ],
+      "domainId": "management-governance",
+      "objectiveId": "monitoring",
+      "difficulty": "easy",
+      "id": "az900-p3-q50",
+      "explanation": "“Metrics” is the best answer because it directly matches the requirement in the scenario. Advisor recommends improvements, Service Health reports Azure service impact, and Azure Monitor collects and acts on platform and application telemetry.",
+      "references": [
+        {
+          "title": "Describe monitoring tools in Azure",
+          "url": "https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/"
+        }
+      ]
+    }
+  ]
+}

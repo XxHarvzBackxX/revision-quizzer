@@ -1,6 +1,6 @@
 # Quiz Arcade
 
-Quiz Arcade is an unofficial AI-901 exam-preparation app. It includes three curated 50-question mock papers, a timed serious mode, guided practice with explanations, local attempt history, and a secondary community quiz library.
+Quiz Arcade is an unofficial certification-preparation app. It includes curated 50-question papers for AI-901 and AZ-900, a timed serious mode, guided practice with explanations, local attempt history, and a secondary community quiz library.
 
 ## Development
 
@@ -20,7 +20,7 @@ npm run build
 npm run content:audit
 ```
 
-`npm run content:build` regenerates the base AI-901 papers, applies the distractor pass, enriches every question with blueprint metadata and references, then runs the content audit.
+`npm run content:build` rebuilds the AI-901 and AZ-900 papers, enriches every question with blueprint metadata and references, then runs the six-paper content audit. Use `npm run content:az900` when only the AZ-900 papers need regenerating.
 
 ## Curated exam format
 
