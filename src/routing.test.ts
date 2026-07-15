@@ -20,4 +20,11 @@ describe('quiz routes', () => {
     expect(parseRoute('/wiki/az-900/cloud-computing')).toMatchObject({ name: 'wiki-page', examCode: 'az-900', pageSlug: 'cloud-computing' });
     expect(routeClass(parseRoute('/wiki/ai-901/responsible-ai'))).toBe('wiki-page');
   });
+
+  it('parses certification study and drill routes', () => {
+    expect(parseRoute('/study/ai-901')).toMatchObject({ name: 'study-hub', examCode: 'ai-901' });
+    expect(parseRoute('/study/ai-901/drill')).toMatchObject({ name: 'study-drill-setup', examCode: 'ai-901' });
+    expect(parseRoute('/study/ai-901/drill/play')).toMatchObject({ name: 'study-drill-play', examCode: 'ai-901' });
+    expect(parseRoute('/study/ai-901/drill/results/run-1')).toMatchObject({ name: 'study-drill-result', attemptId: 'run-1' });
+  });
 });

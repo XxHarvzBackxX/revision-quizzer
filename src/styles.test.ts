@@ -10,6 +10,13 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/\.revision-course-hero::before\s*\{[^}]*position:absolute/);
   });
 
+  it('bounds the smart-study readiness indicator and adapts the drill layout', () => {
+    expect(css).toMatch(/\.study-readiness-orb\s*\{[^}]*width:180px/);
+    expect(css).toMatch(/\.study-readiness-orb\s*\{[^}]*width:118px/);
+    expect(css).toContain('.study-dashboard-grid');
+    expect(css).toContain('.confidence-picker');
+  });
+
   it('defines every selectable site theme and contrast overrides', () => {
     for (const theme of ['light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint']) {
       expect(css).toContain(`:root[data-theme="${theme}"]`);

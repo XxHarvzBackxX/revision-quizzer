@@ -1,25 +1,31 @@
-import { BookOpenText, Check, ChevronLeft, ChevronRight, ExternalLink, Flag, Lightbulb, Sparkles, X, Zap } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { BookOpenText, Check, ChevronLeft, ChevronRight, ExternalLink, Flag, Flame, Lightbulb, Sparkles, X, Zap } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import type { PublicDataset, QuizItem } from '../../shared/quiz';
 import { answerSimilarity, getCorrectAnswers, isFreeWritePass, isObjectiveItem, isResponseCorrect } from '../../shared/quiz';
-import type { ActiveExamSession, AttemptRecord } from '../storage';
+import { clearActiveExamSession, getActiveExamSession, saveActiveExamSession, type ActiveExamSession, type AttemptRecord, type StudyConfidence } from '../storage';
 import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, getOrderedQuestions } from '../utils/exam';
 import { revisionPathForObjective } from '../revision/registry';
+import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
+import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
+import { getStudyState, localDateKey, recordQuestionActivity, studyTotals } from '../study/storage';
 
 export function QuizPlayPage({
   dataset,
   navigate,
-  onAttempt
+  onAttempt,
+  studyExamCode
 }: {
   dataset: PublicDataset;
   navigate: Navigate;
   onAttempt: (attempt: AttemptRecord) => void;
+  studyExamCode?: string;
 }) {
-  const [session, setSession] = useState<ActiveExamSession>(() => createPracticeSession(dataset));
+  const [session, setSession] = useState<ActiveExamSession>(() => studyExamCode ? getActiveExamSession(dataset.id) ?? createPracticeSession(dataset) : createPracticeSession(dataset));
   const [revealed, setRevealed] = useState(false);
   const [typed, setTyped] = useState('');
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
+  const [reward, setReward] = useState('');
   const questions = useMemo(() => getOrderedQuestions(dataset, session), [dataset, session.itemOrder, session.optionOrders]);
   const current = questions[session.currentIndex] ?? questions[0];
   const selected = current ? session.answers[String(current.originalIndex)] ?? [] : [];
@@ -27,6 +33,16 @@ export function QuizPlayPage({
   const runningScore = questions.slice(0, session.currentIndex + (revealed ? 1 : 0)).filter((question) => (
     isResponseCorrect(question.item, session.answers[String(question.originalIndex)] ?? [])
   )).length;
+
+  useEffect(() => {
+    if (studyExamCode) saveActiveExamSession(session);
+  }, [session, studyExamCode]);
+
+  useEffect(() => {
+    if (!reward) return;
+    const timer = window.setTimeout(() => setReward(''), 4200);
+    return () => window.clearTimeout(timer);
+  }, [reward]);
 
   function updateObjectiveResponse(value: string) {
     if (!current || !isObjectiveItem(current.item) || revealed) return;
@@ -45,13 +61,28 @@ export function QuizPlayPage({
   function reveal(response?: string[]) {
     if (!current) return;
     const resolved = response ?? selected;
+    const correct = isResponseCorrect(current.item, resolved);
+    const alreadyRecorded = session.activityRecorded?.includes(current.originalIndex);
+    if (!alreadyRecorded) {
+      const before = getStudyState();
+      const beforeLevel = studyTotals(before).level;
+      const updated = recordQuestionActivity(correct);
+      const completedToday = updated.activity[localDateKey()]?.goalAwarded;
+      if (!before.activity[localDateKey()]?.goalAwarded && completedToday) setReward('Daily goal complete · +50 XP');
+      else if (studyTotals(updated).level > beforeLevel) setReward(`Level ${studyTotals(updated).level} reached!`);
+    }
     setSession((existing) => ({
       ...existing,
-      answers: { ...existing.answers, [String(current.originalIndex)]: resolved }
+      answers: { ...existing.answers, [String(current.originalIndex)]: resolved },
+      activityRecorded: alreadyRecorded ? existing.activityRecorded : [...(existing.activityRecorded ?? []), current.originalIndex]
     }));
-    const correct = isResponseCorrect(current.item, resolved);
     setEffect(correct ? 'correct' : 'wrong');
     setRevealed(true);
+  }
+
+  function updateConfidence(confidence: StudyConfidence) {
+    if (!current || revealed) return;
+    setSession((existing) => ({ ...existing, confidence: { ...existing.confidence, [String(current.originalIndex)]: confidence } }));
   }
 
   function next() {
@@ -64,8 +95,10 @@ export function QuizPlayPage({
       return;
     }
     const attempt = buildAttempt({ dataset, mode: 'practice', session });
-    onAttempt(attempt);
-    navigate(`/quiz/${dataset.slug}/results/${attempt.id}`);
+    clearActiveExamSession(dataset.id);
+    const completed = studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
+    onAttempt(completed);
+    navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
 
   if (!current) return null;
@@ -75,9 +108,10 @@ export function QuizPlayPage({
 
   return (
     <section className={`practice-shell effect-${effect}`}>
+      {reward && <div className="study-reward-pop" role="status"><Flame size={18} /> {reward}</div>}
       {effect === 'correct' && <div className="confetti-burst" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>}
       <header className="practice-header">
-        <button className="quiet-button light" onClick={() => navigate(`/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Exit practice</button>
+        <button className="quiet-button light" onClick={() => navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Exit practice</button>
         <div><strong>{dataset.title}</strong><span>Question {session.currentIndex + 1} of {questions.length}</span></div>
         <div className="practice-score"><Zap size={16} /> {runningScore} correct</div>
       </header>
@@ -90,6 +124,8 @@ export function QuizPlayPage({
           {current.item.domainId && <span>{domainTitle(dataset, current.item.domainId)}</span>}
         </div>
         <h1>{current.item.prompt}</h1>
+        <QuestionStudyTools dataset={dataset} item={current.item} questionIndex={current.originalIndex} />
+        <StudyConfidencePicker value={session.confidence?.[String(current.originalIndex)]} onChange={updateConfidence} disabled={revealed} />
 
         {isObjectiveItem(current.item) && (
           <div className="practice-options">
