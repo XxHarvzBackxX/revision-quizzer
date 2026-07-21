@@ -31,6 +31,8 @@ describe('responsive and theme style contracts', () => {
       expect(contrast(variables['--theme-ink'], variables['--theme-paper']), `${theme} primary text`).toBeGreaterThanOrEqual(7);
       expect(contrast(variables['--theme-muted'], variables['--theme-paper']), `${theme} secondary text`).toBeGreaterThanOrEqual(4.5);
       expect(contrast(variables['--theme-accent'], variables['--theme-paper']), `${theme} accent text`).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(variables['--theme-primary-text'], variables['--theme-primary']), `${theme} button text`).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(variables['--theme-primary-text'], variables['--theme-accent']), `${theme} accent badge text`).toBeGreaterThanOrEqual(4.5);
     }
     expect(css).toContain('RevisionWiki semantic foregrounds');
     expect(css).toContain('--course-text-accent:color-mix');
@@ -40,7 +42,19 @@ describe('responsive and theme style contracts', () => {
     expect(css).toContain('.site-footer');
     expect(css).toContain('.changelog-dialog');
     expect(css).toContain('.changelog-scroll');
+    expect(css).toMatch(/\.changelog-sections section\s*\{[^}]*background:var\(--theme-soft,#f7f8fa\)[^}]*color:var\(--theme-ink,#172033\)/);
     expect(css).toMatch(/@media \(max-width:640px\)[\s\S]*\.changelog-dialog/);
+  });
+
+  it('defines every referenced theme token and themes inherited-text surfaces', () => {
+    const referenced = new Set(Array.from(css.matchAll(/var\((--theme-[\w-]+)/g), (match) => match[1]));
+    const defined = new Set(Array.from(css.matchAll(/(--theme-[\w-]+)\s*:/g), (match) => match[1]));
+    expect([...referenced].filter((variable) => !defined.has(variable))).toEqual([]);
+    expect(css).toContain(':is(.question-navigator,.submit-dialog) { background:var(--theme-paper)');
+    expect(css).toContain(':is(.changelog-sections section,.submit-summary,.review-filters,.empty-inline) { background:var(--theme-soft)');
+    expect(css).toContain('--theme-success-bg:color-mix');
+    expect(css).toContain('--theme-warning-bg:color-mix');
+    expect(css).toContain('--theme-danger-bg:color-mix');
   });
 
   it('gives official datasets a distinct purple approval seal', () => {

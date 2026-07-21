@@ -24,6 +24,37 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.2.1',
+    deployment: 6,
+    releasedAt: '2026-07-21',
+    title: 'Theme-safe surfaces across Quiz Arcade',
+    summary: 'Dark themes now keep panels, controls, badges, and feedback states on the correct palette throughout the app.',
+    sections: [
+      {
+        title: 'Dark-theme consistency',
+        items: [
+          'Fixed changelog cards that combined a light fallback surface with dark-theme text.',
+          'The exam question navigator, submission dialog, option markers, result filters, and empty states now use the selected theme’s surfaces and foregrounds.',
+          'Hover, selected, answered, correct, warning, and incorrect states remain visually distinct without switching back to light-only colours.'
+        ]
+      },
+      {
+        title: 'Badges and feedback',
+        items: [
+          'Official, curated, result, question-type, and upload badges now adapt their colour treatment to every light and dark theme.',
+          'Success, warning, and error messages share semantic theme tokens for consistent contrast across practice, exams, results, and administration.'
+        ]
+      },
+      {
+        title: 'Theme safeguards',
+        items: [
+          'Added automated checks that reject undefined theme tokens before their fallback colours can leak into another palette.',
+          'Expanded contrast checks to cover button and accent-badge foregrounds in all six selectable themes.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.2.0',
     deployment: 5,
     releasedAt: '2026-07-21',
