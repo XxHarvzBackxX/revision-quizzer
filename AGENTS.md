@@ -31,10 +31,11 @@ Then open or provide a pull request targeting `dev`.
 
 ## Release version workflow
 
-Every user-facing feature must participate in the app's release history:
+Every completed feature, including internal tooling and refactoring work, must participate in the app's release history. A feature is not ready for handoff until it includes both a new app version and a matching changelog entry:
 
 1. Follow Semantic Versioning for the net change: use a patch increment for compatible fixes, a minor increment for backward-compatible features, and a major increment for breaking changes.
 2. Keep the root versions in `package.json` and `package-lock.json` identical. Do not create a Git tag unless the user explicitly requests a release.
 3. Add the new version to the top of `src/changelog.ts`. Its version must match `package.json`, and its notes must describe only behavior that survives in the final diff.
-4. Treat the in-app changelog as user-facing copy: group related outcomes, avoid commit-level implementation noise, and make the release date and impact clear.
+4. Treat the in-app changelog as user-facing copy: group related outcomes, avoid commit-level implementation noise, and make the release date and impact clear. For internal work, describe the resulting reliability, maintainability, security, or delivery improvement rather than omitting the entry.
 5. Add or update tests that verify the package version, newest changelog entry, unread-release behavior, and visible version label remain aligned.
+6. Before declaring a feature complete, verify the version bump and changelog entry are included in the final branch diff, committed, and pushed with the rest of the feature.
