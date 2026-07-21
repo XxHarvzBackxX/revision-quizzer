@@ -17,7 +17,9 @@ describe('versioned changelog state', () => {
     expect(APP_VERSION).toBe(packageMetadata.version);
     expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
     expect(changelogEntries[0]).toBe(currentChangelog);
-    expect(currentChangelog?.version).toBe('0.2.0');
+    expect(currentChangelog?.version).toBe('0.3.0');
+    expect(changelogEntries.map((entry) => entry.deployment)).toEqual([5, 4, 3, 2, 1]);
+    expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([3, 2, 1]);
   });
 
   it('shows the newest unread release once and persists its dismissal', () => {
@@ -36,7 +38,7 @@ describe('versioned changelog state', () => {
     localStorage.setItem(CHANGELOG_STORAGE_KEY, JSON.stringify({ version: 1, readVersions: [APP_VERSION] }));
 
     expect(getLatestUnreadChangelog()).toBeUndefined();
-    expect(changelogEntries.some((entry) => entry.version === '0.1.0')).toBe(true);
+    expect(changelogEntries.some((entry) => entry.deployment === 1 && !entry.version)).toBe(true);
   });
 
   it('recovers safely from malformed or unknown stored versions', () => {

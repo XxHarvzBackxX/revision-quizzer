@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { APP_VERSION, changelogEntries, currentChangelog, getLatestUnreadChangelog, markChangelogRead, type ChangelogEntry } from '../changelog';
+import { APP_VERSION, changelogEntries, changelogEntryKey, currentChangelog, getLatestUnreadChangelog, markChangelogRead, type ChangelogEntry } from '../changelog';
 import { ChangelogModal } from './ChangelogModal';
 
 type ChangelogView =
@@ -13,8 +13,8 @@ export function ChangelogExperience() {
   });
 
   function dismiss() {
-    if (view?.mode === 'latest') markChangelogRead(view.entry.version);
-    else if (currentChangelog) markChangelogRead(currentChangelog.version);
+    if (view?.mode === 'latest') markChangelogRead(changelogEntryKey(view.entry));
+    else if (currentChangelog) markChangelogRead(changelogEntryKey(currentChangelog));
     setView(null);
   }
 

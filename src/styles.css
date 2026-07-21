@@ -84,6 +84,8 @@ p {
 .changelog-release-heading { align-items:center; display:flex; flex-wrap:wrap; gap:8px; }
 .changelog-version { background:var(--theme-accent,#5b4bd6); border-radius:999px; color:var(--theme-accent-contrast,#fff); font-size:.68rem; font-weight:900; padding:5px 9px; }
 .changelog-current { background:var(--theme-accent-soft,#ece9ff); border-radius:999px; color:var(--theme-accent,#5b4bd6); font-size:.57rem; font-weight:900; letter-spacing:.06em; padding:5px 8px; text-transform:uppercase; }
+.changelog-deployment,.changelog-legacy { border:1px solid var(--theme-line,#e2e6ec); border-radius:999px; color:var(--theme-muted,#697386); font-size:.57rem; font-weight:850; padding:4px 8px; }
+.changelog-legacy { font-style:italic; }
 .changelog-date { align-items:center; color:var(--theme-muted,#697386); display:flex; font-size:.64rem; gap:5px; margin-left:auto; }
 .changelog-release>h3 { font-size:1.25rem; margin:13px 0 5px; }
 .changelog-release>p { color:var(--theme-muted,#697386); font-size:.76rem; line-height:1.55; margin:0; max-width:690px; }

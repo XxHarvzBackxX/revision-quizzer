@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from 'react';
 import { CalendarDays, Check, History, Sparkles, X } from 'lucide-react';
-import { APP_VERSION, formatChangelogDate, type ChangelogEntry } from '../changelog';
+import { APP_VERSION, changelogEntryKey, formatChangelogDate, type ChangelogEntry } from '../changelog';
 
 export function ChangelogModal({ mode, entries, onDismiss }: {
   mode: 'latest' | 'history';
@@ -35,7 +35,7 @@ export function ChangelogModal({ mode, entries, onDismiss }: {
         </header>
 
         <div className="changelog-scroll">
-          {entries.map((entry) => <ReleaseEntry entry={entry} current={entry.version === APP_VERSION} key={entry.version} />)}
+          {entries.map((entry) => <ReleaseEntry entry={entry} current={entry.version === APP_VERSION} key={changelogEntryKey(entry)} />)}
         </div>
 
         <footer className="changelog-dialog-footer">
@@ -51,7 +51,9 @@ function ReleaseEntry({ entry, current }: { entry: ChangelogEntry; current: bool
   return (
     <article className="changelog-release">
       <div className="changelog-release-heading">
-        <span className="changelog-version">v{entry.version}</span>
+        <span className="changelog-version">{entry.version ? `v${entry.version}` : `Deployment #${entry.deployment}`}</span>
+        {entry.version && <span className="changelog-deployment">Deployment #{entry.deployment}</span>}
+        {!entry.version && <span className="changelog-legacy">Previously unversioned</span>}
         {current && <span className="changelog-current">Current</span>}
         <span className="changelog-date"><CalendarDays size={14} /> {formatChangelogDate(entry.releasedAt)}</span>
       </div>
