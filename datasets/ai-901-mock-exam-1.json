@@ -150,21 +150,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "responsible-ai",
       "difficulty": "medium",
-      "prompt": "Which TWO design choices make an AI service more inclusive?",
-      "answers": [
-        "Test the experience with people who have varied abilities",
-        "Provide interaction alternatives such as text and speech"
-      ],
+      "prompt": "A public-service chatbot must be usable by people who cannot operate a mouse. Which design choice most directly supports inclusiveness?",
+      "answer": "Provide a complete keyboard-accessible interaction path",
       "options": [
-        "Test the experience with people who have varied abilities",
-        "Provide interaction alternatives such as text and speech",
-        "Use one language and input method for consistency",
-        "Measure only the average response time"
+        "Provide a complete keyboard-accessible interaction path",
+        "Require pointer gestures for every action",
+        "Measure only the average response time",
+        "Hide accessibility settings until after sign-in"
       ],
-      "explanation": "Inclusive design considers a range of abilities and contexts and offers usable alternatives. A single interaction path and an average latency metric do not establish accessibility.",
+      "explanation": "Inclusiveness requires the service to accommodate varied abilities and interaction needs. A complete keyboard path removes the stated barrier; performance averages and hidden settings do not make the required actions accessible.",
       "id": "ai901-r1-p1-q06",
       "domainId": "concepts",
       "references": [
@@ -527,21 +524,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "ai-workloads",
       "difficulty": "medium",
-      "prompt": "Which TWO capabilities are required for a kiosk that accepts spoken questions and reads answers aloud?",
-      "answers": [
-        "Speech recognition for the input",
-        "Speech synthesis for the output"
-      ],
+      "prompt": "A kiosk already converts spoken questions into text. Which capability should it add to read the generated answers aloud?",
+      "answer": "Speech synthesis",
       "options": [
-        "Speech recognition for the input",
-        "Speech synthesis for the output",
-        "OCR for the input",
-        "Image segmentation for the output"
+        "Speech synthesis",
+        "Optical character recognition",
+        "Image segmentation",
+        "Named entity recognition"
       ],
-      "explanation": "A voice interaction needs speech-to-text processing for spoken input and text-to-speech processing for audible output. OCR and segmentation process visual data.",
+      "explanation": "Speech synthesis converts the generated text response into audible speech. Recognition has already produced the text input, while OCR, segmentation, and entity recognition do not create spoken output.",
       "id": "ai901-r1-p1-q22",
       "domainId": "concepts",
       "references": [
@@ -555,15 +549,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-generative",
       "difficulty": "medium",
-      "prompt": "A team wants to configure instructions, a model, and file search in the Foundry portal without maintaining custom orchestration code. What should it create?",
-      "answer": "A prompt agent",
+      "prompt": "A Foundry project must deploy an Azure OpenAI model with built-in customizable guardrails and pay-per-token billing. Which deployment type should the team select?",
+      "answer": "A standard deployment",
       "options": [
-        "A prompt agent",
-        "A hosted agent with custom packages",
+        "A standard deployment",
+        "A provisioned deployment with reserved throughput",
         "A Content Understanding analyzer",
-        "An Azure virtual network gateway"
+        "A hosted agent runtime"
       ],
-      "explanation": "A prompt agent is configured declaratively with instructions, a model, and tools. Hosted agents are for custom orchestration, while analyzers and gateways solve different problems.",
+      "explanation": "Standard deployments support Azure OpenAI models with consumption-based billing and configurable content filters. Provisioned deployments reserve throughput, while analyzers and hosted agents do not deploy a base model for inference.",
       "id": "ai901-r1-p1-q23",
       "domainId": "foundry",
       "references": [
@@ -830,15 +824,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-text-speech",
       "difficulty": "hard",
-      "prompt": "A meeting recording must be transcribed asynchronously after it ends. Which Speech capability is most appropriate?",
-      "answer": "Batch transcription",
+      "prompt": "A Python app has a SpeechRecognizer and needs one short utterance before continuing. Which call returns that single recognition result?",
+      "answer": "recognize_once_async().get()",
       "options": [
-        "Batch transcription",
-        "Real-time speech synthesis",
-        "Image understanding",
-        "Text sentiment analysis"
+        "recognize_once_async().get()",
+        "start_continuous_recognition()",
+        "speak_text_async().get()",
+        "recognize_entities()"
       ],
-      "explanation": "Batch transcription is designed for processing stored audio asynchronously. Synthesis creates audio, while image and sentiment workloads do not transcribe speech.",
+      "explanation": "recognize_once_async().get() performs single-shot speech recognition and returns the result when it completes. Continuous recognition keeps listening, speech synthesis creates audio, and entity recognition analyzes text.",
       "id": "ai901-r1-p1-q35",
       "domainId": "foundry",
       "references": [
@@ -951,15 +945,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-vision",
       "difficulty": "medium",
-      "prompt": "A user submits a photograph and asks a model to explain the visible safety hazard. What model capability is required?",
-      "answer": "Visual input understanding in a multimodal model",
+      "prompt": "A Responses API request asks a model to explain a photograph. Which content-part type should contain the photograph?",
+      "answer": "input_image",
       "options": [
-        "Visual input understanding in a multimodal model",
-        "Text-only embeddings",
-        "Speech synthesis",
-        "Time-series forecasting"
+        "input_image",
+        "input_text",
+        "output_audio",
+        "tool_result"
       ],
-      "explanation": "The model must interpret visual evidence together with a text instruction, requiring multimodal visual understanding. Text embeddings, audio generation, and forecasting do not inspect images.",
+      "explanation": "The photograph belongs in an input_image content part, while the written instruction uses input_text. Output audio and tool results represent different response or orchestration data rather than the supplied visual input.",
       "id": "ai901-r1-p1-q40",
       "domainId": "foundry",
       "references": [
@@ -1047,15 +1041,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-extraction",
       "difficulty": "medium",
-      "prompt": "Which prebuilt Content Understanding analyzer is the most direct starting point for common invoice fields?",
-      "answer": "A prebuilt invoice analyzer",
+      "prompt": "A team wants Content Understanding to summarize calls, identify sentiment, and extract named entities without defining a custom schema. Which analyzer should it try first?",
+      "answer": "prebuilt-callCenter",
       "options": [
-        "A prebuilt invoice analyzer",
-        "A speech synthesis voice",
-        "A prompt agent with web search",
-        "An image-generation deployment"
+        "prebuilt-callCenter",
+        "prebuilt-invoice",
+        "prebuilt-read",
+        "prebuilt-imageSearch"
       ],
-      "explanation": "A prebuilt invoice analyzer is designed to extract established invoice structure. Speech, web search, and image generation do not provide grounded invoice field extraction.",
+      "explanation": "prebuilt-callCenter is designed for contact-center audio insights such as summaries, sentiment, and entities. Invoice, read, and image-search analyzers target documents, OCR-oriented reading, or images instead.",
       "id": "ai901-r1-p1-q44",
       "domainId": "foundry",
       "references": [

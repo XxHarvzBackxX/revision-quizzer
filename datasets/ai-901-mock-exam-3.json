@@ -150,21 +150,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "responsible-ai",
       "difficulty": "hard",
-      "prompt": "Which TWO pieces of information improve transparency for users?",
-      "answers": [
-        "The intended purpose and important limitations",
-        "Notice that AI is contributing to the interaction"
-      ],
+      "prompt": "A service gives customers consequential recommendations. Which notice provides the most useful transparency?",
+      "answer": "Explain that AI contributes to the result and state important limitations",
       "options": [
-        "The intended purpose and important limitations",
-        "Notice that AI is contributing to the interaction",
-        "Private credentials used by the backend",
-        "Proprietary model weights regardless of user need"
+        "Explain that AI contributes to the result and state important limitations",
+        "Publish the backend administrator credential",
+        "Claim that the recommendation is always correct",
+        "Show only the proprietary model file name"
       ],
-      "explanation": "Useful transparency explains AI involvement, purpose, and limitations without exposing secrets or irrelevant proprietary artifacts.",
+      "explanation": "Useful transparency tells people that AI is involved and explains purpose or limitations relevant to their decision. Exposing secrets, making absolute claims, or showing an internal filename does not help users interpret the result safely.",
       "id": "ai901-r1-p3-q06",
       "domainId": "concepts",
       "references": [
@@ -527,21 +524,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "ai-workloads",
       "difficulty": "medium",
-      "prompt": "Which TWO scenarios are information-extraction workloads?",
-      "answers": [
-        "Return named fields from a scanned form",
-        "Return structured events and timestamps from a video"
-      ],
+      "prompt": "A claims app returns policy number, claimant, and incident date from a scanned form. Which workload describes this task?",
+      "answer": "Information extraction",
       "options": [
-        "Return named fields from a scanned form",
-        "Return structured events and timestamps from a video",
-        "Create a fictional landscape image",
-        "Read a response aloud"
+        "Information extraction",
+        "Image generation",
+        "Speech synthesis",
+        "Unsupervised clustering"
       ],
-      "explanation": "Extraction derives grounded structure from supplied content. Creating an image and synthesizing speech generate new media instead.",
+      "explanation": "Information extraction derives defined structured fields from supplied source content. Image generation and speech synthesis create new media, while clustering discovers groups rather than returning the requested grounded fields.",
       "id": "ai901-r1-p3-q22",
       "domainId": "concepts",
       "references": [
@@ -577,15 +571,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-generative",
       "difficulty": "medium",
-      "prompt": "A team already runs custom agent code and wants to call Foundry models through a common API. Which API family is designed for model responses and tools?",
-      "answer": "The Responses API",
+      "prompt": "A Python app has an authenticated OpenAI client and must send a request to a deployed model. Which method should it call?",
+      "answer": "responses.create()",
       "options": [
-        "The Responses API",
-        "The Azure DNS API",
-        "The Cost Management exports API",
-        "The Storage lifecycle API"
+        "responses.create()",
+        "responses.list_models()",
+        "agents.delete()",
+        "analyzers.begin_create()"
       ],
-      "explanation": "The Responses API provides a model interaction surface that can support tools and response state. DNS, cost, and storage APIs do not perform generative inference.",
+      "explanation": "responses.create() sends model input through the Responses API and returns the generated response. Listing, deletion, and analyzer-management methods do not perform the requested model inference.",
       "id": "ai901-r1-p3-q24",
       "domainId": "foundry",
       "references": [
@@ -830,15 +824,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-text-speech",
       "difficulty": "hard",
-      "prompt": "A transcription system often misses product codes. What is an appropriate first adaptation?",
-      "answer": "Supply a phrase list containing expected product codes",
+      "prompt": "A multimodal Responses API request includes a short WAV recording as a base64 string. Which content-part type identifies that supplied recording?",
+      "answer": "input_audio",
       "options": [
-        "Supply a phrase list containing expected product codes",
-        "Increase image resolution",
-        "Use a resource lock",
-        "Generate a new logo"
+        "input_audio",
+        "input_image",
+        "output_text",
+        "agent_reference"
       ],
-      "explanation": "A phrase list supplies contextual vocabulary that can improve recognition of expected terms. Visual, governance, and image-generation changes do not affect transcription.",
+      "explanation": "input_audio identifies audio supplied to the model and can carry base64-encoded audio data with its format. Image input, generated text, and agent references represent different request or response elements.",
       "id": "ai901-r1-p3-q35",
       "domainId": "foundry",
       "references": [
@@ -973,15 +967,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-vision",
       "difficulty": "medium",
-      "prompt": "A model is asked to compare two diagrams supplied with a text instruction. Which capability is essential?",
-      "answer": "A deployment that accepts visual inputs",
+      "prompt": "A Responses API request includes an image hosted at a public HTTPS URL. How should the application supply the image?",
+      "answer": "Use the URL in an input_image content part",
       "options": [
-        "A deployment that accepts visual inputs",
-        "A text-only embedding index",
-        "Text sentiment analysis",
-        "Batch audio transcription"
+        "Use the URL in an input_image content part",
+        "Copy the URL into the model deployment name",
+        "Put the URL in an output_audio part",
+        "Convert the URL into an Azure RBAC role"
       ],
-      "explanation": "The task requires a deployment capable of interpreting images with text. Text-only embeddings, sentiment analysis, and audio transcription cannot inspect diagrams.",
+      "explanation": "The API can accept a public image URL in an input_image content part. A deployment name selects the model, output_audio represents generated audio, and RBAC controls access rather than carrying image content.",
       "id": "ai901-r1-p3-q41",
       "domainId": "foundry",
       "references": [
@@ -1047,15 +1041,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-extraction",
       "difficulty": "medium",
-      "prompt": "A claims system needs policy number and incident date from standard forms. What should it use first?",
-      "answer": "A suitable prebuilt or custom document analyzer",
+      "prompt": "A Content Understanding schema must choose exactly one document category from an allowed list. Which field method should it use?",
+      "answer": "classify",
       "options": [
-        "A suitable prebuilt or custom document analyzer",
-        "Key phrase extraction only",
-        "An image generator",
-        "A clustering model with no schema"
+        "classify",
+        "generate",
+        "extract without categories",
+        "transcribe"
       ],
-      "explanation": "A document analyzer extracts defined fields from supplied forms. Key phrases, image creation, and unsupervised grouping do not produce the required grounded structure.",
+      "explanation": "The classify method selects a value from defined categories, which matches a controlled document label. Generate creates new content, unconstrained extraction does not enforce the list, and transcription converts audio to text.",
       "id": "ai901-r1-p3-q44",
       "domainId": "foundry",
       "references": [

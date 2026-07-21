@@ -6,6 +6,7 @@ export const CURATED_CONTENT_REVISION_KEY = 'quiz-arcade:curated-content-revisio
 
 const CURATED_DATASET_IDS = new Set([
   'builtin-ai901-paper-1', 'builtin-ai901-paper-2', 'builtin-ai901-paper-3',
+  'builtin-ai901-official-practice-assessment',
   'builtin-az900-paper-1', 'builtin-az900-paper-2', 'builtin-az900-paper-3'
 ]);
 const EXAM_CODES = new Set(['AI-901', 'AZ-900']);

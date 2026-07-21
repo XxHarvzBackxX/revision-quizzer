@@ -125,21 +125,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "responsible-ai",
       "difficulty": "medium",
-      "prompt": "Which TWO evaluation choices best support fairness?",
-      "answers": [
-        "Compare error rates across relevant user groups",
-        "Use representative data that includes affected populations"
-      ],
+      "prompt": "An overall accuracy score looks acceptable, but the team is concerned about unequal service quality. Which evaluation should it run next?",
+      "answer": "Compare relevant error rates across affected user groups",
       "options": [
-        "Compare error rates across relevant user groups",
-        "Use representative data that includes affected populations",
-        "Report only one overall average",
-        "Exclude difficult cases from every test set"
+        "Compare relevant error rates across affected user groups",
+        "Report only the same overall average",
+        "Exclude difficult cases from the test set",
+        "Measure the color contrast of the monitoring dashboard"
       ],
-      "explanation": "Group-level metrics and representative data can expose unequal performance hidden by averages. Removing difficult cases and reporting only aggregates can conceal harms.",
+      "explanation": "Group-level error rates can reveal performance disparities hidden by one aggregate score. Repeating the aggregate or excluding hard cases conceals evidence, while dashboard styling does not measure model fairness.",
       "id": "ai901-r1-p2-q05",
       "domainId": "concepts",
       "references": [
@@ -527,21 +524,18 @@
       ]
     },
     {
-      "type": "multi-select",
+      "type": "multiple-choice",
       "objectiveId": "ai-workloads",
       "difficulty": "medium",
-      "prompt": "Which TWO techniques analyze written customer comments without generating new text?",
-      "answers": [
-        "Sentiment analysis",
-        "Named entity recognition"
-      ],
+      "prompt": "A retailer wants to label each written review as positive, neutral, or negative without creating new content. Which technique should it use?",
+      "answer": "Sentiment analysis",
       "options": [
         "Sentiment analysis",
-        "Named entity recognition",
         "Speech synthesis",
-        "Image generation"
+        "Speaker diarization",
+        "Optical character recognition"
       ],
-      "explanation": "Sentiment and entity recognition derive signals from existing text. Speech synthesis and image generation create new media outputs.",
+      "explanation": "Sentiment analysis derives an opinion label from existing text without generating a new response. Speech synthesis and diarization process audio, while optical character recognition reads text from images rather than classifying expressed opinion.",
       "id": "ai901-r1-p2-q22",
       "domainId": "concepts",
       "references": [
@@ -555,15 +549,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-generative",
       "difficulty": "easy",
-      "prompt": "Where can a developer test prompts against a deployed model interactively in Microsoft Foundry?",
-      "answer": "A model playground",
+      "prompt": "A Python app has authenticated an AIProjectClient. Which method creates a client for calling deployed Azure OpenAI models in the project?",
+      "answer": "get_openai_client()",
       "options": [
-        "A model playground",
-        "Azure Cost Management",
-        "A virtual network peering blade",
-        "A storage lifecycle rule"
+        "get_openai_client()",
+        "get_storage_client()",
+        "create_analyzer()",
+        "recognize_once_async()"
       ],
-      "explanation": "A model playground provides an interactive inference experience for prompt testing. Cost, network, and storage management surfaces do not run model conversations.",
+      "explanation": "AIProjectClient.get_openai_client() returns the project-scoped Azure OpenAI client used for model requests. The alternatives create unrelated clients or invoke Content Understanding or Speech operations.",
       "id": "ai901-r1-p2-q23",
       "domainId": "foundry",
       "references": [
@@ -830,15 +824,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-text-speech",
       "difficulty": "hard",
-      "prompt": "A call recording is several hours long and can be processed after upload. Which transcription approach is appropriate?",
-      "answer": "Asynchronous batch transcription",
+      "prompt": "A Speech SDK app must use the en-US-AvaMultilingualNeural voice for text-to-speech. Which configuration property should it set?",
+      "answer": "speech_synthesis_voice_name",
       "options": [
-        "Asynchronous batch transcription",
-        "Text-to-speech synthesis",
-        "Real-time image analysis",
-        "Key phrase extraction without transcription"
+        "speech_synthesis_voice_name",
+        "speech_recognition_language",
+        "endpoint_id",
+        "output_format_only"
       ],
-      "explanation": "Batch transcription is suitable for stored long-form audio that does not require an immediate streaming result. The other options do not convert the recording to text.",
+      "explanation": "speech_synthesis_voice_name selects the synthesis voice used to generate audio. Recognition language configures speech-to-text input, while an endpoint identifier or output format alone does not choose the requested voice.",
       "id": "ai901-r1-p2-q35",
       "domainId": "foundry",
       "references": [
@@ -973,15 +967,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-vision",
       "difficulty": "medium",
-      "prompt": "A model receives a chart image and a question asking which bar is largest. What capability does it need?",
-      "answer": "Multimodal visual reasoning",
+      "prompt": "A developer builds one user message for visual question answering. Which pair of content parts should the message contain?",
+      "answer": "input_text and input_image",
       "options": [
-        "Multimodal visual reasoning",
-        "Text-only completion",
-        "Batch transcription",
-        "Clustering without image input"
+        "input_text and input_image",
+        "input_audio and output_audio",
+        "system and tool_result",
+        "embedding and speech_voice"
       ],
-      "explanation": "The model must interpret the visual chart in the context of a written question. Text-only completion, audio transcription, and nonvisual clustering cannot inspect the bars.",
+      "explanation": "A visual question-answering message supplies the written question as input_text and the visual evidence as input_image. The other pairs represent audio, orchestration, or unrelated configuration rather than the two required inputs.",
       "id": "ai901-r1-p2-q41",
       "domainId": "foundry",
       "references": [
@@ -1047,15 +1041,15 @@
       "type": "multiple-choice",
       "objectiveId": "foundry-extraction",
       "difficulty": "medium",
-      "prompt": "An organization needs standard vendor, date, and total fields from invoices. What is the best starting point?",
-      "answer": "The prebuilt invoice analyzer",
+      "prompt": "A Content Understanding analyzer must read printed text before extracting custom document fields. Which analyzer setting enables OCR processing?",
+      "answer": "enableOcr",
       "options": [
-        "The prebuilt invoice analyzer",
-        "A custom speech voice",
-        "An agent memory store",
-        "A model deployment with no extraction schema"
+        "enableOcr",
+        "disableGrounding",
+        "speechVoiceName",
+        "maxOutputTokens"
       ],
-      "explanation": "A prebuilt invoice analyzer already targets common invoice fields and is the fastest grounded starting point. Speech, memory, and an undefined output do not meet the extraction requirement.",
+      "explanation": "enableOcr turns on optical character recognition for applicable analyzer processing. Grounding, speech voices, and generative output limits do not enable the document text-reading step.",
       "id": "ai901-r1-p2-q44",
       "domainId": "foundry",
       "references": [

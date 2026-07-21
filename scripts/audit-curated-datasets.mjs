@@ -1,6 +1,14 @@
 import { readFileSync } from 'node:fs';
 
-const formats = [
+const implementationSignal = /\b(?:SDK|API|Python|deployment|client|endpoint|analyzer|schema|tool|agent_reference|input_image|input_audio|responses\.create|get_openai_client|recognize_once|speech_synthesis)\b/i;
+
+const aiFormats = [
+  { 'multiple-choice': 30, 'multi-select': 5, dropdown: 8, 'statement-group': 7 },
+  { 'multiple-choice': 30, 'multi-select': 5, dropdown: 7, 'statement-group': 8 },
+  { 'multiple-choice': 30, 'multi-select': 5, dropdown: 8, 'statement-group': 7 }
+];
+
+const azFormats = [
   { 'multiple-choice': 28, 'multi-select': 7, dropdown: 8, 'statement-group': 7 },
   { 'multiple-choice': 28, 'multi-select': 7, dropdown: 7, 'statement-group': 8 },
   { 'multiple-choice': 28, 'multi-select': 7, dropdown: 8, 'statement-group': 7 }
@@ -8,14 +16,23 @@ const formats = [
 
 const definitions = [
   {
-    examCode: 'AI-901', filePrefix: 'ai-901', blueprintVersion: '2026-04-15',
+    label: 'AI-901 original papers', examCode: 'AI-901', filePrefix: 'ai-901', paperCount: 3, blueprintVersion: '2026-04-15', contentRevision: '2026-realistic-v1', formats: aiFormats,
     domains: { concepts: 22, foundry: 28 },
-    objectives: { 'responsible-ai': 6, 'model-components': 6, 'ai-workloads': 10, 'foundry-generative': 10, 'foundry-text-speech': 6, 'foundry-vision': 5, 'foundry-extraction': 7 }
+    objectives: { 'responsible-ai': 6, 'model-components': 6, 'ai-workloads': 10, 'foundry-generative': 10, 'foundry-text-speech': 6, 'foundry-vision': 5, 'foundry-extraction': 7 },
+    blankPositions: { start: 7, middle: 8, end: 8 }, statementAnswers: { true: 33, false: 33 }, minImplementationQuestions: 5
   },
   {
-    examCode: 'AZ-900', filePrefix: 'az-900', blueprintVersion: '2026-07-20',
+    label: 'AZ-900 original papers', examCode: 'AZ-900', filePrefix: 'az-900', paperCount: 3, blueprintVersion: '2026-07-20', contentRevision: '2026-realistic-v1', formats: azFormats,
     domains: { 'cloud-concepts': 14, 'architecture-services': 19, 'management-governance': 17 },
-    objectives: { 'cloud-computing': 5, 'cloud-benefits': 4, 'service-types': 5, 'azure-architecture': 4, 'compute-networking': 5, 'azure-storage': 5, 'identity-security': 5, 'cost-management': 4, 'governance-compliance': 4, 'management-deployment': 5, monitoring: 4 }
+    objectives: { 'cloud-computing': 5, 'cloud-benefits': 4, 'service-types': 5, 'azure-architecture': 4, 'compute-networking': 5, 'azure-storage': 5, 'identity-security': 5, 'cost-management': 4, 'governance-compliance': 4, 'management-deployment': 5, monitoring: 4 },
+    blankPositions: { start: 7, middle: 8, end: 8 }, statementAnswers: { true: 33, false: 33 }
+  },
+  {
+    label: 'AI-901 observed Microsoft Learn assessment', examCode: 'AI-901', files: ['datasets/ai-901-official-microsoft-learn-practice-assessment.json'], paperCount: 1,
+    blueprintVersion: '2026-04-15', contentRevision: '2026-observed-practice-v1', formats: [{ 'multiple-choice': 30, 'multi-select': 5, dropdown: 8, 'statement-group': 7 }],
+    domains: { concepts: 21, foundry: 29 },
+    objectives: { 'responsible-ai': 7, 'model-components': 1, 'ai-workloads': 13, 'foundry-generative': 11, 'foundry-text-speech': 6, 'foundry-vision': 6, 'foundry-extraction': 6 },
+    statementAnswers: { true: 10, false: 11 }, preserveObservedOptionSets: true
   }
 ];
 
@@ -30,22 +47,26 @@ for (const definition of definitions) {
   let trueStatements = 0;
   let falseStatements = 0;
 
-  for (let paperIndex = 0; paperIndex < 3; paperIndex += 1) {
-    const file = `datasets/${definition.filePrefix}-mock-exam-${paperIndex + 1}.json`;
+  for (let paperIndex = 0; paperIndex < definition.paperCount; paperIndex += 1) {
+    const file = definition.files?.[paperIndex] ?? `datasets/${definition.filePrefix}-mock-exam-${paperIndex + 1}.json`;
     const dataset = JSON.parse(readFileSync(file, 'utf8'));
     const errors = [];
-    const expectedFormats = formats[paperIndex];
+    const expectedFormats = definition.formats[paperIndex];
 
     if (dataset.items.length !== 50) errors.push(`expected 50 questions, found ${dataset.items.length}`);
     if (dataset.kind !== 'exam' || !dataset.curated) errors.push('dataset is not marked as a curated exam');
     if (dataset.examCode !== definition.examCode) errors.push(`exam code must be ${definition.examCode}`);
     if (dataset.blueprintVersion !== definition.blueprintVersion) errors.push(`blueprint version must be ${definition.blueprintVersion}`);
-    if (dataset.contentRevision !== '2026-realistic-v1') errors.push('content revision must be 2026-realistic-v1');
+    if (dataset.contentRevision !== definition.contentRevision) errors.push(`content revision must be ${definition.contentRevision}`);
 
     checkCounts(errors, 'domain', count(dataset.items, 'domainId'), definition.domains);
     checkCounts(errors, 'objective', count(dataset.items, 'objectiveId'), definition.objectives);
     checkCounts(errors, 'format', count(dataset.items, 'type'), expectedFormats);
     checkCounts(errors, 'difficulty', count(dataset.items, 'difficulty'), { easy: 10, medium: 30, hard: 10 });
+    if (definition.minImplementationQuestions) {
+      const implementationQuestions = dataset.items.filter((item) => implementationSignal.test(`${item.prompt} ${(item.options ?? []).join(' ')}`)).length;
+      if (implementationQuestions < definition.minImplementationQuestions) errors.push(`expected at least ${definition.minImplementationQuestions} implementation-specific questions, found ${implementationQuestions}`);
+    }
 
     const paperIds = new Set();
     const optionSets = new Set();
@@ -72,7 +93,7 @@ for (const definition of definitions) {
         if (correct.some((answer) => !item.options.some((option) => normalize(option) === normalize(answer)))) errors.push(`${label} has an answer outside its options`);
         if (item.type === 'multi-select' && (correct.length !== 2 || !/\bTWO\b/.test(item.prompt))) errors.push(`${label} must ask for exactly TWO answers`);
         const optionSet = item.options.map(normalize).sort().join('|');
-        if (optionSets.has(optionSet)) errors.push(`${label} repeats an option set within the paper`);
+        if (!definition.preserveObservedOptionSets && optionSets.has(optionSet)) errors.push(`${label} repeats an option set within the paper`);
         optionSets.add(optionSet);
       }
 
@@ -91,10 +112,12 @@ for (const definition of definitions) {
   }
 
   const examErrors = [];
-  checkCounts(examErrors, 'dropdown position', blankPositions, { start: 7, middle: 8, end: 8 });
-  if (trueStatements !== 33 || falseStatements !== 33) examErrors.push(`statement answers must balance 33 true and 33 false; found ${trueStatements}/${falseStatements}`);
+  if (definition.blankPositions) checkCounts(examErrors, 'dropdown position', blankPositions, definition.blankPositions);
+  if (trueStatements !== definition.statementAnswers.true || falseStatements !== definition.statementAnswers.false) {
+    examErrors.push(`statement answers must be ${definition.statementAnswers.true} true and ${definition.statementAnswers.false} false; found ${trueStatements}/${falseStatements}`);
+  }
   checkRepeatLimit(examErrors, examItems, definition.examCode);
-  report(`${definition.examCode} full-bank quality`, examErrors);
+  report(`${definition.label} full-bank quality`, examErrors);
 }
 
 for (let left = 0; left < allPrompts.length; left += 1) {
@@ -109,7 +132,7 @@ for (let left = 0; left < allPrompts.length; left += 1) {
 }
 
 if (failed) process.exitCode = 1;
-else console.log('✓ Cross-paper uniqueness audit passed for all six curated exams');
+else console.log('✓ Cross-paper uniqueness audit passed for all seven curated exams');
 
 function report(label, errors, domains, expectedFormats) {
   if (errors.length) {
