@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { answerSimilarity, isFreeWritePass, isResponseComplete, isResponseCorrect, validateDataset } from './quiz';
+import { answerSimilarity, isFreeWritePass, isResponseComplete, isResponseCorrect, officialDatasetsFirst, validateDataset } from './quiz';
 
 describe('validateDataset', () => {
   it('accepts the three supported item types', () => {
@@ -101,6 +101,36 @@ describe('validateDataset', () => {
       expect(result.errors).toContain('Curated exams must include an exam code.');
       expect(result.errors).toContain('Item 1 must include an explanation.');
     }
+  });
+
+  it('does not accept official provenance from dataset input', () => {
+    const result = validateDataset({
+      title: 'Claimed official set',
+      official: true,
+      items: [{ type: 'multiple-choice', prompt: 'Pick one', answer: 'A', options: ['A', 'B'] }]
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.value).not.toHaveProperty('official');
+  });
+});
+
+describe('dataset discovery order', () => {
+  it('puts official datasets first without changing order within either group', () => {
+    const datasets = [
+      { id: 'curated-1' },
+      { id: 'official-1', official: true },
+      { id: 'curated-2' },
+      { id: 'official-2', official: true }
+    ];
+
+    expect(officialDatasetsFirst(datasets).map((dataset) => dataset.id)).toEqual([
+      'official-1',
+      'official-2',
+      'curated-1',
+      'curated-2'
+    ]);
+    expect(datasets.map((dataset) => dataset.id)).toEqual(['curated-1', 'official-1', 'curated-2', 'official-2']);
   });
 });
 

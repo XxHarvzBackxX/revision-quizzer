@@ -1287,6 +1287,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .exam-card-top { align-items:center; display:flex; justify-content:space-between; }
 .paper-number { color:#6556cf; font-size:.73rem; font-weight:850; letter-spacing:.07em; text-transform:uppercase; }
 .verified-pill, .curated-badge { align-items:center; background:var(--mint-soft); border-radius:999px; color:#147a5d; display:inline-flex; font-size:.71rem; font-weight:800; gap:5px; padding:6px 9px; }
+.official-pill { align-items:center; background:#eee8ff; border:1px solid #c4b5fd; border-radius:999px; color:#6d28d9; display:inline-flex; font-size:.71rem; font-weight:900; gap:5px; padding:5px 9px; }
 .featured-exam-card h3 { font-size:1.35rem; letter-spacing:-.025em; line-height:1.25; margin:28px 0 10px; }
 .featured-exam-card p { color:var(--muted); display:-webkit-box; font-size:.88rem; line-height:1.55; margin:0; overflow:hidden; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
 .exam-card-facts { color:#59657a; display:flex; font-size:.8rem; gap:16px; margin:22px 0; }

@@ -42,6 +42,10 @@ describe('responsive and theme style contracts', () => {
     expect(css).toContain('.changelog-scroll');
     expect(css).toMatch(/@media \(max-width:640px\)[\s\S]*\.changelog-dialog/);
   });
+
+  it('gives official datasets a distinct purple approval seal', () => {
+    expect(css).toMatch(/\.official-pill\s*\{[^}]*background:#eee8ff[^}]*border:1px solid #c4b5fd[^}]*color:#6d28d9/);
+  });
 });
 
 function themeVariables(theme: string): Record<string, string> {
