@@ -39,3 +39,4 @@ Every completed feature, including internal tooling and refactoring work, must p
 4. Treat the in-app changelog as user-facing copy: group related outcomes, avoid commit-level implementation noise, and make the release date and impact clear. For internal work, describe the resulting reliability, maintainability, security, or delivery improvement rather than omitting the entry.
 5. Add or update tests that verify the package version, newest changelog entry, unread-release behavior, and visible version label remain aligned.
 6. Before declaring a feature complete, verify the version bump and changelog entry are included in the final branch diff, committed, and pushed with the rest of the feature.
+7. Keep commit subjects focused on the actual product or engineering change. Do not use generic subjects such as `release <feature> as v<version>`; record the version in package metadata and the changelog instead.
