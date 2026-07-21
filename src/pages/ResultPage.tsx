@@ -60,7 +60,8 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
           <div className="result-study-reward"><span><Flame size={15} /> {studyStreak(study).current}-day streak</span><span><Star size={15} /> Level {studyTotals(study).level}</span></div>
           <div className="result-actions">
             {missedIndexes.length > 0 && <button className="primary-button" onClick={retryMissed}><RotateCcw size={17} /> Practice {missedIndexes.length} missed</button>}
-            <button className="secondary-button" onClick={() => navigate(academyChallenge && studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}>{academyChallenge ? 'Academy map' : studyExamCode ? 'Study plan' : 'Exam overview'} <ArrowRight size={17} /></button>
+            <button className="secondary-button" onClick={() => navigate(academyChallenge && studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}>{academyChallenge ? 'Campaign map' : studyExamCode ? 'Continue study plan' : 'Exam overview'} <ArrowRight size={17} /></button>
+            {studyExamCode && !academyChallenge && <button className="secondary-button" onClick={() => navigate(`/study/${studyExamCode.toLowerCase()}/academy`)}><Gamepad2 size={17} /> See campaign progress</button>}
             {coursePath && <button className="secondary-button" onClick={() => navigate(coursePath)}><BookOpenText size={17} /> Open RevisionWiki</button>}
             {!studyExamCode && dataset.examCode && <button className="secondary-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={17} /> Smart study plan</button>}
           </div>

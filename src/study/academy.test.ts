@@ -7,7 +7,8 @@ import {
   buildAcademyQuests,
   createAcademyChallengeConfig,
   domainChallengeId,
-  localWeekKey
+  localWeekKey,
+  selectAcademyMapPosition
 } from './academy';
 import { buildCertificationPool } from './pool';
 
@@ -40,6 +41,8 @@ describe('Arcade Academy campaign', () => {
       stars: { studied: true, practised: true, mastered: true }
     });
     expect(campaign.totalStars).toBe(course.pages.length * 3);
+    expect(selectAcademyMapPosition(campaign, page.objectiveId)?.stage.objectiveId).toBe(page.objectiveId);
+    expect(selectAcademyMapPosition(campaign)?.stage.objectiveId).toBe(course.pages[1].objectiveId);
   });
 
   it('builds deterministic daily and Monday-based weekly quests', () => {

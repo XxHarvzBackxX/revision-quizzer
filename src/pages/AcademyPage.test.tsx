@@ -29,6 +29,11 @@ describe('AcademyPage', () => {
     expect(screen.getByRole('heading', { name: /Master the map/i })).toBeInTheDocument();
     expect(await screen.findByText('Warm-up run')).toBeInTheDocument();
     expect(screen.getByText('Responsible AI principles')).toBeInTheDocument();
+    expect(screen.getByText('You are here')).toBeInTheDocument();
+    expect(screen.getByLabelText('New Challenger map token')).toBeInTheDocument();
+
+    await user.click(screen.getAllByRole('button', { name: /Practise/i })[0]);
+    expect(navigate).toHaveBeenCalledWith('/study/ai-901/drill?objective=responsible-ai');
 
     await user.click(screen.getAllByRole('button', { name: /Start boss/i })[0]);
 

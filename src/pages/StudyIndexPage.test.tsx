@@ -15,7 +15,9 @@ describe('StudyIndexPage', () => {
     expect(screen.getByRole('heading', { name: /Pick a certification/ })).toBeInTheDocument();
     expect(screen.getByText('AI in Azure')).toBeInTheDocument();
     expect(screen.getByText('Azure Fundamentals')).toBeInTheDocument();
-    const openButtons = screen.getAllByRole('button', { name: /Open study plan/ });
+    expect(screen.getByText('Equipped title')).toBeInTheDocument();
+    expect(screen.getByText('New Challenger')).toBeInTheDocument();
+    const openButtons = screen.getAllByRole('button', { name: /Continue journey/ });
     expect(openButtons).toHaveLength(2);
     await userEvent.click(openButtons[0]);
     expect(navigate).toHaveBeenCalledWith('/study/ai-901');

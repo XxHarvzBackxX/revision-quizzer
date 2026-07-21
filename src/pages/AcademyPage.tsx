@@ -7,7 +7,6 @@ import {
   Crown,
   Flame,
   Gamepad2,
-  Loader2,
   LockKeyholeOpen,
   RefreshCcw,
   Shield,
@@ -26,12 +25,13 @@ import { revisionPageKey, useRevisionState } from '../revision/storage';
 import type { AttemptRecord } from '../storage';
 import {
   BOSS_PASS_PERCENTAGE,
+  academyTitleLabel,
   buildAcademyCampaign,
   createAcademyChallengeConfig,
-  type AcademyCampaign,
+  selectAcademyMapPosition,
   type AcademyQuestContext
 } from '../study/academy';
-import { calculateCertificationMastery } from '../study/mastery';
+import { calculateCertificationMastery, selectStudyRecommendation } from '../study/mastery';
 import { buildCertificationPool } from '../study/pool';
 import {
   beginStudyDrill,
@@ -112,6 +112,10 @@ export function AcademyPage({
   const quests = getActiveAcademyQuests(study, course.examCode);
   const recoveryDate = shieldRecoveryDate(study);
   const totals = studyTotals(study);
+  const recommendation = selectStudyRecommendation(mastery);
+  const requestedObjective = typeof window === 'undefined' ? undefined : new URLSearchParams(window.location.search).get('objective') ?? undefined;
+  const mapPosition = selectAcademyMapPosition(campaign, requestedObjective ?? recommendation.objectiveId);
+  const playerTitle = academyTitleLabel(study.academy.inventory.equippedTitle);
 
   function startBoss(kind: 'domain-boss' | 'final-boss', domainId?: string) {
     const config = createAcademyChallengeConfig({
@@ -140,6 +144,15 @@ export function AcademyPage({
     if (updated.academy.inventory.rerolls < study.academy.inventory.rerolls) onToast('info', 'Daily quest rerolled.');
   }
 
+  function openRecommendation() {
+    if (recommendation.kind === 'revision' && recommendation.objectiveId) {
+      navigate(revisionPathForObjective(course!.examCode, recommendation.objectiveId) ?? `/wiki/${course!.examCode.toLowerCase()}`);
+    } else if (recommendation.kind === 'drill') {
+      const query = recommendation.objectiveId ? `?objective=${encodeURIComponent(recommendation.objectiveId)}` : '';
+      navigate(`/study/${course!.examCode.toLowerCase()}/drill${query}`);
+    } else navigate('/gallery');
+  }
+
   return (
     <section className="academy-page" style={{ '--course-accent': course.accent } as React.CSSProperties}>
       <header className="academy-hero">
@@ -155,12 +168,19 @@ export function AcademyPage({
         </div>
         <div className="academy-player-orb">
           <div className={`academy-map-token ${study.academy.inventory.equippedToken}`}>{mapToken(study.academy.inventory.equippedToken)}</div>
-          <span>Level {totals.level}</span>
+          <span>{playerTitle}</span>
+          <small>Level {totals.level}</small>
           <strong>{campaign.earnedStars}/{campaign.totalStars}</strong>
           <small>campaign stars</small>
           <div><span style={{ width: `${campaign.totalStars ? campaign.earnedStars / campaign.totalStars * 100 : 0}%` }} /></div>
         </div>
       </header>
+
+      <section className="campaign-recommendation">
+        <div className="campaign-recommendation-icon"><Sparkles size={24} /></div>
+        <div><span className="section-kicker">Recommended from your study plan</span><h2>{recommendation.title}</h2><p>{recommendation.description}{mapPosition ? ` Your token is waiting in ${mapPosition.zone.title}.` : ''}</p></div>
+        <div><button className="primary-button" onClick={openRecommendation}>Start next action <ArrowRight size={17} /></button><button className="secondary-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}`)}>Open full study plan</button></div>
+      </section>
 
       {recoveryDate && (
         <section className="shield-recovery-card">
@@ -185,7 +205,8 @@ export function AcademyPage({
                 {zone.stages.map((stage, index) => (
                   <div className="campaign-stage-wrap" key={stage.id}>
                     {index > 0 && <span className="campaign-connector" aria-hidden="true" />}
-                    <button className={`campaign-stage stars-${stage.earnedStars}`} onClick={() => navigate(revisionPathForObjective(course.examCode, stage.objectiveId) ?? `/wiki/${course.examCode.toLowerCase()}`)}>
+                    <article className={`campaign-stage stars-${stage.earnedStars} ${mapPosition?.stage.id === stage.id ? 'current' : ''}`}>
+                      {mapPosition?.stage.id === stage.id && <div className="campaign-map-marker"><div className={`academy-map-token ${study.academy.inventory.equippedToken}`} aria-label={`${playerTitle} map token`}>{mapToken(study.academy.inventory.equippedToken)}</div><span><strong>You are here</strong><small>{playerTitle}</small></span></div>}
                       <span className="campaign-stage-number">{index + 1}</span>
                       <span className="campaign-stage-copy"><strong>{stage.title}</strong><small>{stage.mastery.evidence} answers · {stage.mastery.evidence ? `${stage.mastery.score}% mastery` : 'unseen'}</small></span>
                       <span className="campaign-stars" aria-label={`${stage.earnedStars} of 3 stars`}>
@@ -193,11 +214,11 @@ export function AcademyPage({
                         <Star className={stage.stars.practised ? 'earned' : ''} size={17} aria-label="Practice evidence" />
                         <Star className={stage.stars.mastered ? 'earned' : ''} size={17} aria-label="Objective mastered" />
                       </span>
-                      <ArrowRight size={17} />
-                    </button>
+                      <div className="campaign-stage-actions"><button onClick={() => navigate(revisionPathForObjective(course.examCode, stage.objectiveId) ?? `/wiki/${course.examCode.toLowerCase()}`)}><BookOpenText size={15} /> Revise</button><button onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill?objective=${encodeURIComponent(stage.objectiveId)}`)}><Target size={15} /> Practise</button></div>
+                    </article>
                   </div>
                 ))}
-                <BossNode campaign={campaign} zoneId={zone.id} title={`${zone.title} Boss`} progress={zone.boss} loading={isLoading} onStart={() => startBoss('domain-boss', zone.id)} />
+                <BossNode title={`${zone.title} Boss`} progress={zone.boss} loading={isLoading} onStart={() => startBoss('domain-boss', zone.id)} />
               </div>
             </article>
           ))}
@@ -246,10 +267,8 @@ function QuestBoard({ quests, rerolls, onClaim, onReroll }: {
 }
 
 function BossNode({ title, progress, loading, onStart }: {
-  campaign: AcademyCampaign;
-  zoneId: string;
   title: string;
-  progress: AcademyCampaign['zones'][number]['boss'];
+  progress: ReturnType<typeof buildAcademyCampaign>['zones'][number]['boss'];
   loading: boolean;
   onStart: () => void;
 }) {

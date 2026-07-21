@@ -18,6 +18,9 @@ describe('StudyHubPage', () => {
     render(<StudyHubPage examCode="AI-901" datasets={[summary]} attempts={[]} navigate={navigate} />);
     expect(screen.getByRole('heading', { name: /Know what to do next/ })).toBeInTheDocument();
     expect(screen.getAllByText('Explore Responsible AI principles')).toHaveLength(2);
+    expect(screen.getByText(/campaign stars/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /View on map/ }));
+    expect(navigate).toHaveBeenCalledWith('/study/ai-901/academy?objective=responsible-ai');
     await userEvent.selectOptions(screen.getByLabelText(/Daily question target/), '20');
     await userEvent.click(screen.getByText('Confidence controls in timed exams'));
     expect(getStudyState().settings).toEqual({ dailyQuestionGoal: 20, showExamConfidence: true });

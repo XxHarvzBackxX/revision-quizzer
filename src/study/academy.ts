@@ -47,6 +47,13 @@ export type AcademyCampaign = {
   passedBosses: number;
 };
 
+export type AcademyStageLocation = {
+  zone: AcademyZone;
+  stage: AcademyStage;
+  zoneIndex: number;
+  stageIndex: number;
+};
+
 export type AcademyQuestContext = {
   examCode: string;
   now?: Date;
@@ -78,6 +85,32 @@ export const academyCosmetics = {
     { id: 'token-crown', label: 'Crown' }
   ]
 } as const;
+
+export function academyTitleLabel(id: string): string {
+  return academyCosmetics.titles.find((item) => item.id === id)?.label ?? 'New Challenger';
+}
+
+export function findAcademyStage(campaign: AcademyCampaign, objectiveId?: string): AcademyStageLocation | undefined {
+  if (!objectiveId) return undefined;
+  for (const [zoneIndex, zone] of campaign.zones.entries()) {
+    const stageIndex = zone.stages.findIndex((stage) => stage.objectiveId === objectiveId);
+    if (stageIndex >= 0) return { zone, stage: zone.stages[stageIndex], zoneIndex, stageIndex };
+  }
+  return undefined;
+}
+
+export function selectAcademyMapPosition(campaign: AcademyCampaign, preferredObjectiveId?: string): AcademyStageLocation | undefined {
+  const preferred = findAcademyStage(campaign, preferredObjectiveId);
+  if (preferred) return preferred;
+  for (const [zoneIndex, zone] of campaign.zones.entries()) {
+    const stageIndex = zone.stages.findIndex((stage) => !stage.stars.mastered);
+    if (stageIndex >= 0) return { zone, stage: zone.stages[stageIndex], zoneIndex, stageIndex };
+  }
+  const zoneIndex = campaign.zones.length - 1;
+  const zone = campaign.zones[zoneIndex];
+  const stageIndex = (zone?.stages.length ?? 0) - 1;
+  return zone && stageIndex >= 0 ? { zone, stage: zone.stages[stageIndex], zoneIndex, stageIndex } : undefined;
+}
 
 export function buildAcademyCampaign({
   course,
