@@ -1,5 +1,5 @@
-import { ArrowRight, BookOpenCheck, BookOpenText, BrainCircuit, Clock3, Gamepad2, Highlighter, Play, Sparkles, Target } from 'lucide-react';
-import type { DatasetSummary } from '../../shared/quiz';
+import { ArrowRight, BadgeCheck, BookOpenCheck, BookOpenText, BrainCircuit, Clock3, Gamepad2, Highlighter, Play, Sparkles, Target } from 'lucide-react';
+import { officialDatasetsFirst, type DatasetSummary } from '../../shared/quiz';
 import { RecentAttempts } from '../components/Stats';
 import type { ActiveExamSession, AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
@@ -20,7 +20,7 @@ export function HomePage({
   navigate: Navigate;
 }) {
   const revisionState = useRevisionState();
-  const curated = datasets.filter((dataset) => dataset.curated);
+  const curated = officialDatasetsFirst(datasets.filter((dataset) => dataset.curated));
   const featured = (curated.length ? curated : datasets).slice(0, 6);
   const resumable = activeSessions.find((session) => datasets.some((dataset) => dataset.id === session.datasetId) && new Date(session.expiresAt).getTime() > Date.now());
   const resumeDataset = resumable && datasets.find((dataset) => dataset.id === resumable.datasetId);
@@ -70,7 +70,7 @@ export function HomePage({
               const latest = attempts.find((attempt) => attempt.datasetId === dataset.id);
               return (
                 <article className="featured-exam-card" key={dataset.id}>
-                  <div className="exam-card-top"><span className="paper-number">{dataset.examCode ?? 'Community'} · Paper {paperNumber(dataset.title, index)}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
+                  <div className="exam-card-top"><span className="paper-number">{dataset.official ? `${dataset.examCode} · Practice assessment` : `${dataset.examCode ?? 'Community'} · Paper ${paperNumber(dataset.title, index)}`}</span>{dataset.official ? <span className="official-pill"><BadgeCheck size={14} /> Official</span> : dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
                   <h3>{dataset.title.replace(/^[A-Z]{2,4}-\d{3} Mock Exam \d+:?\s*/i, '') || dataset.title}</h3>
                   <p>{dataset.description}</p>
                   <div className="exam-card-facts"><span><Clock3 size={16} /> {dataset.durationMinutes ?? 45} min</span><span><BrainCircuit size={16} /> {dataset.itemCount} questions</span></div>

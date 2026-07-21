@@ -93,9 +93,18 @@ export type PublicDataset = DatasetInput & {
   itemCount: number;
   createdAt: string;
   status?: 'approved' | 'pending';
+  /** Trusted provenance assigned to built-in datasets, never accepted from public uploads. */
+  official?: boolean;
 };
 
 export type DatasetSummary = Omit<PublicDataset, 'items'>;
+
+export function officialDatasetsFirst<T extends { official?: boolean }>(datasets: readonly T[]): T[] {
+  return [
+    ...datasets.filter((dataset) => dataset.official),
+    ...datasets.filter((dataset) => !dataset.official)
+  ];
+}
 
 export type AdminConfig = {
   moderationEnabled: boolean;
