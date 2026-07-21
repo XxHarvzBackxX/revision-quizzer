@@ -2,7 +2,7 @@ import { BookOpenText, BrainCircuit, Gamepad2, Library, Upload } from 'lucide-re
 import type { AppRoute, Navigate } from '../types';
 import { ThemePicker } from './ThemePicker';
 
-export function Topbar({ route, navigate }: { route: AppRoute; navigate: Navigate }) {
+export function Topbar({ route, navigate, themesRequireUnlock }: { route: AppRoute; navigate: Navigate; themesRequireUnlock: boolean }) {
   return (
     <header className="topbar">
       <button className="brand-button" onClick={() => navigate('/')} aria-label="Open home">
@@ -28,7 +28,7 @@ export function Topbar({ route, navigate }: { route: AppRoute; navigate: Navigat
             <Upload size={17} /> Share a set
           </button>
         </nav>
-        <ThemePicker />
+        <ThemePicker themesRequireUnlock={themesRequireUnlock} />
       </div>
     </header>
   );

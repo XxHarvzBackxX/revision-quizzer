@@ -34,4 +34,17 @@ describe('AcademyProfilePage', () => {
 
     expect(getStudyState().academy.inventory.equippedTitle).toBe('title-domain-champion');
   });
+
+  it('shows theme rewards as locked or site-wide and equips an available palette', async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<AcademyProfilePage datasets={[]} attempts={[]} navigate={vi.fn()} themesRequireUnlock />);
+
+    expect(screen.getByRole('heading', { name: 'Theme rewards' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Pacific blue.*Locked/i })).toBeDisabled();
+
+    rerender(<AcademyProfilePage datasets={[]} attempts={[]} navigate={vi.fn()} themesRequireUnlock={false} />);
+    await user.click(screen.getByRole('button', { name: /Pacific blue.*Available site-wide.*Available/i }));
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'pacific-blue');
+  });
 });

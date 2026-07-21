@@ -1,4 +1,4 @@
-import { ArrowLeft, BrainCircuit, Check, Crown, Flame, Medal, RefreshCcw, Shield, Star, Trophy, Zap } from 'lucide-react';
+import { ArrowLeft, BrainCircuit, Check, Crown, Flame, LockKeyhole, Medal, RefreshCcw, Shield, Sparkles, Star, Trophy, Zap } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { revisionCourses } from '../revision/registry';
@@ -7,6 +7,7 @@ import type { AttemptRecord } from '../storage';
 import { academyCosmetics, buildAcademyCampaign } from '../study/academy';
 import { calculateCertificationMastery } from '../study/mastery';
 import { equipAcademyCosmetic, studyStreak, studyTotals, syncAcademyAchievements, useStudyState } from '../study/storage';
+import { isThemeAvailable, rewardThemeOptions, useTheme } from '../theme';
 import type { Navigate } from '../types';
 
 const achievementCopy = [
@@ -16,12 +17,14 @@ const achievementCopy = [
   { id: 'certification-conqueror', title: 'Certification Conqueror', description: 'Defeat a final certification boss.' }
 ];
 
-export function AcademyProfilePage({ datasets, attempts, navigate }: {
+export function AcademyProfilePage({ datasets, attempts, navigate, themesRequireUnlock = true }: {
   datasets: DatasetSummary[];
   attempts: AttemptRecord[];
   navigate: Navigate;
+  themesRequireUnlock?: boolean;
 }) {
   const study = useStudyState();
+  const [theme, selectTheme] = useTheme();
   const revision = useRevisionState();
   const campaigns = useMemo(() => revisionCourses.map((course) => buildAcademyCampaign({
     course,
@@ -34,6 +37,7 @@ export function AcademyProfilePage({ datasets, attempts, navigate }: {
   const finalBosses = campaigns.filter((campaign) => campaign.finalBoss?.passedAt).length;
   const totals = studyTotals(study);
   const streak = studyStreak(study);
+  const themeProgress = { level: totals.level, achievementIds: Object.keys(study.academy.achievements) };
 
   useEffect(() => {
     syncAcademyAchievements({ totalStars, passedDomainBosses: domainBosses, passedFinalBosses: finalBosses });
@@ -82,6 +86,30 @@ export function AcademyProfilePage({ datasets, attempts, navigate }: {
           </div>
         </section>
       </div>
+
+      <section className="profile-theme-rewards">
+        <div className="academy-section-heading">
+          <div><span className="section-kicker">Colour collection</span><h2>Theme rewards</h2></div>
+          <p>{themesRequireUnlock ? 'Build your collection through Academy milestones.' : 'The administrator has made every bonus theme available site-wide.'}</p>
+        </div>
+        <div className="profile-theme-grid">
+          {rewardThemeOptions.map((option) => {
+            const available = isThemeAvailable(option, themesRequireUnlock, themeProgress);
+            const equipped = theme === option.id;
+            return <button
+              className={equipped ? 'equipped' : available ? '' : 'locked'}
+              disabled={!available}
+              onClick={() => selectTheme(option.id)}
+              key={option.id}
+            >
+              <span className="profile-theme-swatches" aria-hidden="true">{option.swatches.map((color) => <i style={{ background: color }} key={color} />)}</span>
+              <strong>{option.label}</strong>
+              <small>{themesRequireUnlock ? option.unlock?.requirement : 'Available site-wide'}</small>
+              <span className="profile-theme-status">{equipped ? <><Check size={15} /> Equipped</> : available ? <><Sparkles size={15} /> Available</> : <><LockKeyhole size={15} /> Locked</>}</span>
+            </button>;
+          })}
+        </div>
+      </section>
 
       <section className="profile-campaigns">
         <div className="academy-section-heading"><div><span className="section-kicker">Campaign records</span><h2>Certification worlds</h2></div></div>

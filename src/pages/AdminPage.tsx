@@ -1,6 +1,6 @@
 import { Check, KeyRound, Loader2, Lock, Palette, RotateCcw, Shield } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { DatasetInput, PublicDataset } from '../../shared/quiz';
+import type { AdminConfig, DatasetInput, PublicDataset } from '../../shared/quiz';
 import {
   deleteAdminDataset,
   fetchAdminConfig,
@@ -15,9 +15,11 @@ import { parseDataset } from '../utils/quizUi';
 
 export function AdminPage({
   onUploaded,
+  onConfigChanged,
   onToast
 }: {
   onUploaded: (dataset: PublicDataset) => void;
+  onConfigChanged: (config: AdminConfig) => void;
   onToast: (kind: ToastKind, message: string) => void;
 }) {
   const [password, setPassword] = useState('');
@@ -59,16 +61,18 @@ export function AdminPage({
     );
   }
 
-  return <AdminConsole adminPassword={adminPassword} onUploaded={onUploaded} onToast={onToast} />;
+  return <AdminConsole adminPassword={adminPassword} onUploaded={onUploaded} onConfigChanged={onConfigChanged} onToast={onToast} />;
 }
 
 function AdminConsole({
   adminPassword,
   onUploaded,
+  onConfigChanged,
   onToast
 }: {
   adminPassword: string;
   onUploaded: (dataset: PublicDataset) => void;
+  onConfigChanged: (config: AdminConfig) => void;
   onToast: (kind: ToastKind, message: string) => void;
 }) {
   const [tab, setTab] = useState<'upload' | 'datasets'>('upload');
@@ -93,6 +97,7 @@ function AdminConsole({
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
+      onConfigChanged(config);
       setAdminDatasets(datasets);
     } catch (error) {
       onToast('error', error instanceof Error ? error.message : 'Could not load admin data.');
@@ -108,6 +113,7 @@ function AdminConsole({
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
+      onConfigChanged(config);
       onToast('success', config.moderationEnabled ? 'Approval gate enabled.' : 'Approval gate disabled.');
     } catch (error) {
       setModerationEnabled(!value);
@@ -121,6 +127,7 @@ function AdminConsole({
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
+      onConfigChanged(config);
       onToast('success', config.uploadKey ? 'Upload key saved.' : 'Upload key cleared; public uploads are open.');
     } catch (error) {
       onToast('error', error instanceof Error ? error.message : 'Could not save upload key.');
@@ -137,6 +144,7 @@ function AdminConsole({
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
+      onConfigChanged(config);
       onToast('success', config.themesRequireUnlock ? 'Bonus themes now require Academy rewards.' : 'Bonus themes are now available site-wide.');
     } catch (error) {
       setThemesRequireUnlock(previous);
