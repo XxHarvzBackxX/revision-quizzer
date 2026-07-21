@@ -39,7 +39,7 @@ describe('changelog experience', () => {
     expect(screen.getByText('Quiz Arcade identity and safer releases')).toBeInTheDocument();
     expect(screen.getByText('Study plans get a proper front door')).toBeInTheDocument();
     expect(screen.getByText('Smart study loop and accessible themes')).toBeInTheDocument();
-    expect(screen.getByText('6 releases recorded')).toBeInTheDocument();
+    expect(screen.getByText('7 releases recorded')).toBeInTheDocument();
     expect(screen.getAllByText('Previously unversioned')).toHaveLength(4);
   });
 
