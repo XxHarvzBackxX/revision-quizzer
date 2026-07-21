@@ -148,7 +148,7 @@ export function buildRerollQuest(
   active: AcademyQuest[],
   context: AcademyQuestContext
 ): AcademyQuest | null {
-  if (current.period !== 'daily' || current.completedAt || current.replacedBy) return null;
+  if (current.period !== 'daily' || current.completedAt || current.replacedBy || current.rerolledFrom) return null;
   const used = new Set(active.filter((quest) => !quest.replacedBy).map((quest) => quest.kind === 'objective' ? `${quest.kind}:${quest.objectiveId}` : quest.kind));
   const candidates = [
     template('reroll-drill', 'drill', 'Quick circuit', 'Complete 1 targeted drill.', 1),

@@ -41,6 +41,11 @@ export type AttemptRecord = {
   domains: DomainResult[];
   examCode?: string;
   studyDrill?: boolean;
+  academyChallenge?: {
+    challengeId: string;
+    kind: 'domain-boss' | 'final-boss';
+    domainId?: string;
+  };
 };
 
 export type ActiveExamSession = {

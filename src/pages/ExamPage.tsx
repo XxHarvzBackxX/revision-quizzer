@@ -13,17 +13,22 @@ import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, formatRemainingTime, getOrderedQuestions } from '../utils/exam';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
-import { recordExamActivity, useStudyState } from '../study/storage';
+import { recordAcademyChallenge, recordExamActivity, useStudyState } from '../study/storage';
+import type { StudyDrillConfig } from '../study/types';
 import type { StudyConfidence } from '../storage';
 
 export function ExamPage({
   dataset,
   navigate,
-  onAttempt
+  onAttempt,
+  studyExamCode,
+  studyConfig
 }: {
   dataset: PublicDataset;
   navigate: Navigate;
   onAttempt: (attempt: AttemptRecord) => void;
+  studyExamCode?: string;
+  studyConfig?: StudyDrillConfig;
 }) {
   const [session, setSession] = useState<ActiveExamSession>(() => getActiveExamSession(dataset.id) ?? createExamSession(dataset));
   const [now, setNow] = useState(Date.now());
@@ -88,10 +93,23 @@ export function ExamPage({
     if (submitted.current) return;
     submitted.current = true;
     const attempt = buildAttempt({ dataset, mode: 'exam', session, expired });
-    recordExamActivity(attempt.answers);
+    const completed: AttemptRecord = studyExamCode ? {
+      ...attempt,
+      studyDrill: true,
+      examCode: studyExamCode,
+      ...(studyConfig?.challengeId && (studyConfig.mode === 'domain-boss' || studyConfig.mode === 'final-boss') ? {
+        academyChallenge: {
+          challengeId: studyConfig.challengeId,
+          kind: studyConfig.mode,
+          ...(studyConfig.domainId ? { domainId: studyConfig.domainId } : {})
+        }
+      } : {})
+    } : attempt;
+    recordExamActivity(completed.answers, { examCode: studyExamCode ?? dataset.examCode });
+    if (studyConfig?.challengeId) recordAcademyChallenge(completed, studyConfig);
     clearActiveExamSession(dataset.id);
-    onAttempt(attempt);
-    navigate(`/quiz/${dataset.slug}/results/${attempt.id}`);
+    onAttempt(completed);
+    navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
 
   if (!current) return null;
@@ -101,7 +119,7 @@ export function ExamPage({
   return (
     <section className="exam-shell">
       <header className="exam-header">
-        <button className="quiet-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Save & exit</button>
+        <button className="quiet-button" onClick={() => navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : `/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Save & exit</button>
         <div className="exam-title"><span>{dataset.examCode ?? 'Mock exam'}</span><strong>{dataset.title}</strong></div>
         <div className={`exam-timer ${remaining <= 300 ? 'urgent' : ''}`} aria-live="polite"><Clock3 size={18} /> {formatRemainingTime(remaining)}</div>
       </header>

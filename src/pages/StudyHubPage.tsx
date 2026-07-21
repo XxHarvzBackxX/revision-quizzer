@@ -1,10 +1,11 @@
-import { AlertTriangle, ArrowRight, BookOpenText, BrainCircuit, CheckCircle2, Flame, Gamepad2, Gauge, Settings2, Sparkles, Star, Target, Trophy } from 'lucide-react';
+import { AlertTriangle, ArrowRight, BookOpenText, BrainCircuit, CheckCircle2, Flame, Gamepad2, Gauge, Map, Settings2, Shield, Sparkles, Star, Target, Trophy } from 'lucide-react';
+import { useEffect } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { getRevisionCourse, revisionPathForObjective } from '../revision/registry';
 import { revisionPageKey, useRevisionState } from '../revision/storage';
 import { getActiveExamSession, type AttemptRecord } from '../storage';
 import { calculateCertificationMastery, certificationReadiness, selectStudyRecommendation } from '../study/mastery';
-import { localDateKey, studyStreak, studyTotals, updateStudySettings, useStudyState } from '../study/storage';
+import { ensureAcademyQuests, getActiveAcademyQuests, localDateKey, studyStreak, studyTotals, updateStudySettings, useStudyState } from '../study/storage';
 import type { Navigate } from '../types';
 import { studyDatasetId } from '../study/pool';
 
@@ -17,6 +18,16 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   const course = getRevisionCourse(examCode);
   const study = useStudyState();
   const revision = useRevisionState();
+  const questReviewed = course?.pages.filter((page) => revision.reviewedPages[revisionPageKey(course.examCode, page.id)]).length ?? 0;
+  const questBookmarks = course ? Object.values(study.bookmarks).filter((bookmark) => bookmark.examCode === course.examCode).length : 0;
+  useEffect(() => {
+    if (!course) return;
+    ensureAcademyQuests({
+      examCode: course.examCode,
+      unreviewedGuideCount: course.pages.length - questReviewed,
+      bookmarkCount: questBookmarks
+    });
+  }, [course?.examCode, questReviewed, questBookmarks]);
   if (!course) return <StudyNotFound navigate={navigate} />;
   const activeCourse = course;
 
@@ -32,6 +43,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   const trend = [...examAttempts].slice(0, 6).reverse();
   const activeDrill = study.activeDrills[activeCourse.examCode];
   const canResumeDrill = Boolean(activeDrill && getActiveExamSession(studyDatasetId(activeCourse.examCode, activeDrill.seed)));
+  const academyQuests = getActiveAcademyQuests(study, activeCourse.examCode);
 
   function openRecommendation() {
     if (recommendation.kind === 'revision' && recommendation.objectiveId) {
@@ -53,6 +65,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
             <button className="primary-button large" onClick={openRecommendation}>{recommendation.title} <ArrowRight size={18} /></button>
             {canResumeDrill && <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill/play`)}><Gamepad2 size={18} /> Resume drill</button>}
             <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill`)}><Target size={18} /> Build a drill</button>
+            <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/academy`)}><Map size={18} /> Arcade Academy</button>
           </div>
         </div>
         <div className="study-readiness-orb" aria-label={`${readiness}% readiness`}><strong>{readiness}%</strong><span>objective readiness</span></div>
@@ -106,6 +119,13 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
             <header><div><span className="section-kicker">Question bank</span><h2>{bookmarks.length} saved</h2></div><Target size={23} /></header>
             {bookmarks.slice(0, 3).map((bookmark) => <p key={bookmark.key}><strong>{bookmark.prompt}</strong>{bookmark.note && <small>{bookmark.note}</small>}</p>)}
             <button className="text-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill?filter=bookmarked`)}>Practice bookmarks <ArrowRight size={15} /></button>
+          </section>
+
+          <section className="study-panel academy-shortcut-panel">
+            <header><div><span className="section-kicker">Arcade Academy</span><h2>{academyQuests.filter((quest) => quest.completedAt).length}/{academyQuests.length} quests ready</h2></div><Map size={23} /></header>
+            <p>Earn campaign stars, clear domain bosses, and collect learning-powered rewards.</p>
+            <div className="academy-inventory-row"><span><Shield size={14} /> {study.academy.inventory.streakShields} shields</span><span><Sparkles size={14} /> {study.academy.inventory.rerolls} rerolls</span></div>
+            <button className="text-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/academy`)}>Enter Academy <ArrowRight size={15} /></button>
           </section>
 
           {mastery.some((objective) => objective.confidentWrong > 0) && <section className="study-panel confidence-traps-panel">

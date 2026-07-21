@@ -20,7 +20,19 @@ export function StudyDrillResultPage({ examCode, datasets, attempt, isLoading, n
     const questionId = answer.sourceQuestionId ?? answer.questionId;
     return questionId ? [`${datasetId}/${questionId}`] : [];
   });
-  const config: StudyDrillConfig = { examCode: examCode.toUpperCase(), filter: 'all', count: questionKeys.length, questionKeys, seed: attempt.id, createdAt: attempt.startedAt };
+  const config: StudyDrillConfig = {
+    examCode: examCode.toUpperCase(),
+    filter: 'all',
+    mode: attempt.academyChallenge?.kind ?? 'practice',
+    ...(attempt.academyChallenge ? {
+      challengeId: attempt.academyChallenge.challengeId,
+      ...(attempt.academyChallenge.domainId ? { domainId: attempt.academyChallenge.domainId } : {})
+    } : {}),
+    count: questionKeys.length,
+    questionKeys,
+    seed: attempt.id,
+    createdAt: attempt.startedAt
+  };
   const dataset = createStudyDataset(examCode, buildCertificationPool(examCode, datasets), config);
   return <ResultPage dataset={dataset} attempt={attempt} navigate={navigate} studyExamCode={examCode.toUpperCase()} />;
 }
