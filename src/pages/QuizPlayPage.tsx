@@ -8,7 +8,7 @@ import { buildAttempt, createExamSession, getOrderedQuestions } from '../utils/e
 import { revisionPathForObjective } from '../revision/registry';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
-import { getStudyState, localDateKey, recordQuestionActivity, studyTotals } from '../study/storage';
+import { getStudyState, localDateKey, questionIdentity, recordDrillCompleted, recordQuestionActivity, studyTotals } from '../study/storage';
 
 export function QuizPlayPage({
   dataset,
@@ -66,7 +66,13 @@ export function QuizPlayPage({
     if (!alreadyRecorded) {
       const before = getStudyState();
       const beforeLevel = studyTotals(before).level;
-      const updated = recordQuestionActivity(correct);
+      const identity = questionIdentity(dataset, current.item, current.originalIndex);
+      const updated = recordQuestionActivity({
+        correct,
+        examCode: studyExamCode ?? dataset.examCode,
+        objectiveId: current.item.objectiveId,
+        bookmarked: Boolean(before.bookmarks[identity.key])
+      });
       const completedToday = updated.activity[localDateKey()]?.goalAwarded;
       if (!before.activity[localDateKey()]?.goalAwarded && completedToday) setReward('Daily goal complete · +50 XP');
       else if (studyTotals(updated).level > beforeLevel) setReward(`Level ${studyTotals(updated).level} reached!`);
@@ -97,6 +103,7 @@ export function QuizPlayPage({
     const attempt = buildAttempt({ dataset, mode: 'practice', session });
     clearActiveExamSession(dataset.id);
     const completed = studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
+    if (studyExamCode) recordDrillCompleted(studyExamCode);
     onAttempt(completed);
     navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }

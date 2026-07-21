@@ -19,6 +19,8 @@ import { StudyDrillSetupPage } from './pages/StudyDrillSetupPage';
 import { StudyDrillPlayPage } from './pages/StudyDrillPlayPage';
 import { StudyDrillResultPage } from './pages/StudyDrillResultPage';
 import { StudyIndexPage } from './pages/StudyIndexPage';
+import { AcademyPage } from './pages/AcademyPage';
+import { AcademyProfilePage } from './pages/AcademyProfilePage';
 import { parseRoute, routeClass } from './routing';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
@@ -50,7 +52,7 @@ export function App() {
   }, [route.path]);
 
   useEffect(() => {
-    if (route.name !== 'study-hub' && route.name !== 'study-drill-setup' && route.name !== 'study-drill-play' && route.name !== 'study-drill-result') return;
+    if (route.name !== 'study-hub' && route.name !== 'study-academy' && route.name !== 'study-drill-setup' && route.name !== 'study-drill-play' && route.name !== 'study-drill-result') return;
     const matching = datasets.filter((dataset) => dataset.curated && dataset.id.startsWith('builtin-') && dataset.examCode?.toLowerCase() === route.examCode.toLowerCase());
     if (!matching.length) {
       setStudyDatasets([]);
@@ -166,7 +168,11 @@ export function App() {
 
       {route.name === 'study-index' && <StudyIndexPage datasets={datasets} attempts={attempts} navigate={navigate} />}
 
+      {route.name === 'study-profile' && <AcademyProfilePage datasets={datasets} attempts={attempts} navigate={navigate} />}
+
       {route.name === 'study-hub' && <StudyHubPage examCode={route.examCode} datasets={datasets} attempts={attempts} navigate={navigate} />}
+
+      {route.name === 'study-academy' && <AcademyPage examCode={route.examCode} datasets={studyDatasets} allDatasetSummaries={datasets} attempts={attempts} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} onToast={notify} />}
 
       {route.name === 'study-drill-setup' && <StudyDrillSetupPage examCode={route.examCode} datasets={studyDatasets} allDatasetSummaries={datasets} attempts={attempts} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} onToast={notify} />}
 

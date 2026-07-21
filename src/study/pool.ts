@@ -1,6 +1,7 @@
 import type { Difficulty, PublicDataset, QuizItem } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import { seededShuffle } from '../utils/exam';
+import { academyDatasetTitle } from './academy';
 import { questionIdentity, questionKey } from './storage';
 import type { ObjectiveMastery, StudyBookmark, StudyDrillConfig, StudyPoolFilter } from './types';
 
@@ -86,12 +87,15 @@ export function createStudyDataset(examCode: string, pool: StudyPoolItem[], conf
   const byKey = new Map(pool.map((entry) => [entry.key, entry]));
   const selected = config.questionKeys.flatMap((key) => byKey.get(key) ?? []);
   const domains = uniqueDomains(selected);
+  const copy = academyDatasetTitle(config, examCode);
   return {
     id: studyDatasetId(examCode, config.seed),
     slug: `study-${examCode.toLowerCase()}-${config.seed}`,
-    title: `${examCode.toUpperCase()} Targeted Drill`,
-    description: `${selected.length} questions selected from the built-in ${examCode.toUpperCase()} mock papers.`,
-    kind: 'quiz',
+    title: copy.title,
+    description: config.mode === 'domain-boss' || config.mode === 'final-boss'
+      ? copy.description
+      : `${selected.length} questions selected from the built-in ${examCode.toUpperCase()} mock papers.`,
+    kind: config.mode === 'domain-boss' || config.mode === 'final-boss' ? 'exam' : 'quiz',
     curated: true,
     examCode: examCode.toUpperCase(),
     blueprintVersion: datasetsBlueprintVersion(selected),

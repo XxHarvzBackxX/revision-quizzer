@@ -1,10 +1,12 @@
-import { ArrowRight, BookOpenText, CheckCircle2, Flame, Gamepad2, Sparkles, Star, Target } from 'lucide-react';
+import { ArrowRight, BookOpenText, CheckCircle2, Flame, Gamepad2, RefreshCcw, Shield, Sparkles, Star, Target, UserRound } from 'lucide-react';
+import { useEffect } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { revisionCourses } from '../revision/registry';
 import { revisionPageKey, useRevisionState } from '../revision/storage';
 import type { AttemptRecord } from '../storage';
+import { academyTitleLabel, buildAcademyCampaign } from '../study/academy';
 import { calculateCertificationMastery, certificationReadiness, selectStudyRecommendation } from '../study/mastery';
-import { studyStreak, studyTotals, useStudyState } from '../study/storage';
+import { ensureAcademyQuests, getActiveAcademyQuests, studyStreak, studyTotals, useStudyState } from '../study/storage';
 import type { Navigate } from '../types';
 
 export function StudyIndexPage({ datasets, attempts, navigate }: {
@@ -16,6 +18,23 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
   const revision = useRevisionState();
   const streak = studyStreak(study);
   const totals = studyTotals(study);
+  const activeQuests = revisionCourses.flatMap((course) => getActiveAcademyQuests(study, course.examCode));
+  const playerTitle = academyTitleLabel(study.academy.inventory.equippedTitle);
+
+  useEffect(() => {
+    for (const course of revisionCourses) {
+      const mastery = calculateCertificationMastery({ examCode: course.examCode, attempts, datasets, course });
+      const weak = [...mastery].filter((item) => item.status !== 'ready').sort((left, right) => left.score - right.score)[0];
+      const reviewed = course.pages.filter((page) => revision.reviewedPages[revisionPageKey(course.examCode, page.id)]).length;
+      ensureAcademyQuests({
+        examCode: course.examCode,
+        weakObjectiveId: weak?.objectiveId,
+        weakObjectiveTitle: weak?.title,
+        unreviewedGuideCount: course.pages.length - reviewed,
+        bookmarkCount: Object.values(study.bookmarks).filter((bookmark) => bookmark.examCode === course.examCode).length
+      });
+    }
+  }, [attempts, datasets, revision.reviewedPages, study.bookmarks]);
 
   return (
     <section className="study-index-page">
@@ -29,7 +48,10 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
           <div><span><Star size={18} /> Level {totals.level}</span><strong>{totals.xp} XP</strong></div>
           <div className="study-index-xp"><span style={{ width: `${totals.levelProgress / 5}%` }} /></div>
           <small>{totals.levelProgress}/500 XP to the next level</small>
+          <div className="study-index-player-title"><UserRound size={16} /><span><small>Equipped title</small><strong>{playerTitle}</strong></span></div>
           <div className="study-index-streak"><Flame size={20} /><span><strong>{streak.current} day{streak.current === 1 ? '' : 's'}</strong><small>current streak · longest {streak.longest}</small></span></div>
+          <div className="study-index-academy-status"><span><Sparkles size={15} /> {activeQuests.filter((quest) => quest.completedAt && !quest.claimedAt).length} quests to claim</span><span><Shield size={15} /> {study.academy.inventory.streakShields}</span><span><RefreshCcw size={15} /> {study.academy.inventory.rerolls}</span></div>
+          <button className="study-profile-link" onClick={() => navigate('/study/profile')}><UserRound size={16} /> Player profile</button>
         </div>
       </header>
 
@@ -43,6 +65,10 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
             const reviewed = course.pages.filter((page) => revision.reviewedPages[revisionPageKey(course.examCode, page.id)]).length;
             const bookmarks = Object.values(study.bookmarks).filter((bookmark) => bookmark.examCode === course.examCode).length;
             const readyObjectives = mastery.filter((objective) => objective.status === 'ready').length;
+            const reviewedPageIds = new Set(course.pages.filter((page) => revision.reviewedPages[revisionPageKey(course.examCode, page.id)]).map((page) => page.id));
+            const campaign = buildAcademyCampaign({ course, mastery, reviewedPageIds, challenges: study.academy.challenges });
+            const courseQuests = getActiveAcademyQuests(study, course.examCode);
+            const claimableQuests = courseQuests.filter((quest) => quest.completedAt && !quest.claimedAt).length;
             return (
               <article className="study-course-card" style={{ '--course-accent': course.accent, '--readiness': `${readiness * 3.6}deg` } as React.CSSProperties} key={course.examCode}>
                 <div className="study-course-card-top"><span>{course.examCode}</span><span>Blueprint {course.blueprintVersion}</span></div>
@@ -50,9 +76,9 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
                   <div><h2>{course.shortTitle}</h2><p>{course.description}</p></div>
                   <div className="study-course-readiness" aria-label={`${readiness}% objective readiness`}><span><strong>{readiness}%</strong><small>ready</small></span></div>
                 </div>
-                <div className="study-course-metrics"><span><Target size={15} /> {readyObjectives}/{course.pages.length} objectives ready</span><span><CheckCircle2 size={15} /> {reviewed} guides reviewed</span><span><BookOpenText size={15} /> {bookmarks} saved</span></div>
+                <div className="study-course-metrics"><span><Target size={15} /> {readyObjectives}/{course.pages.length} objectives ready</span><span><Star size={15} /> {campaign.earnedStars}/{campaign.totalStars} campaign stars</span><span><CheckCircle2 size={15} /> {reviewed} guides reviewed</span><span><BookOpenText size={15} /> {bookmarks} saved</span></div>
                 <div className="study-course-next"><Sparkles size={18} /><span><small>Recommended next</small><strong>{recommendation.title}</strong></span></div>
-                <footer><button className="secondary-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill`)}>Build a drill</button><button className="primary-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}`)}>Open study plan <ArrowRight size={17} /></button></footer>
+                <footer><button className="secondary-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/academy`)}><Gamepad2 size={16} /> Campaign map{claimableQuests ? ` · ${claimableQuests} to claim` : ''}</button><button className="primary-button" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}`)}>Continue journey <ArrowRight size={17} /></button></footer>
               </article>
             );
           })}
