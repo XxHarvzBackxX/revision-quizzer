@@ -540,6 +540,36 @@ p {
   padding: 12px;
 }
 
+.admin-theme-setting {
+  align-items: center;
+  background: var(--theme-paper, #ffffff);
+  border: 1px solid var(--theme-line, #d8dde8);
+  border-radius: 12px;
+  color: var(--theme-ink, #172033);
+  display: grid;
+  gap: 14px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  margin-bottom: 18px;
+  padding: 16px;
+}
+
+.admin-setting-icon {
+  align-items: center;
+  background: var(--theme-accent-soft, #eeeafd);
+  border-radius: 10px;
+  color: var(--theme-accent, #6d5ce8);
+  display: flex;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+
+.admin-theme-setting h2 { font-size: .9rem; margin: 0 0 3px; }
+.admin-theme-setting p { color: var(--theme-muted, #667085); font-size: .68rem; margin: 0; }
+.admin-theme-options { background: var(--theme-soft, #f1f3f7); border: 1px solid var(--theme-line, #d8dde8); border-radius: 9px; display: flex; padding: 3px; }
+.admin-theme-options button { background: transparent; border: 0; border-radius: 6px; color: var(--theme-muted, #667085); font-size: .68rem; font-weight: 800; padding: 8px 10px; }
+.admin-theme-options button.active { background: var(--theme-paper, #ffffff); color: var(--theme-ink, #172033); box-shadow: 0 2px 7px var(--theme-shadow, rgba(26,34,57,.09)); }
+
 .upload-intro {
   align-items: center;
   background: rgba(255, 255, 255, 0.86);
@@ -1170,6 +1200,10 @@ textarea {
     align-items: stretch;
     flex-direction: column;
   }
+
+  .admin-theme-setting { align-items: start; grid-template-columns: auto minmax(0, 1fr); }
+  .admin-theme-options { grid-column: 1 / -1; width: 100%; }
+  .admin-theme-options button { flex: 1; }
 
   .nav-actions,
   .card-actions,

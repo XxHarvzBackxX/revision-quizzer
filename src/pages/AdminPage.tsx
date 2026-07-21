@@ -1,4 +1,4 @@
-import { Check, KeyRound, Loader2, Lock, RotateCcw, Shield } from 'lucide-react';
+import { Check, KeyRound, Loader2, Lock, Palette, RotateCcw, Shield } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import type { DatasetInput, PublicDataset } from '../../shared/quiz';
 import {
@@ -75,7 +75,9 @@ function AdminConsole({
   const [adminDatasets, setAdminDatasets] = useState<PublicDataset[]>([]);
   const [moderationEnabled, setModerationEnabled] = useState(false);
   const [uploadKey, setUploadKey] = useState('');
+  const [themesRequireUnlock, setThemesRequireUnlock] = useState(true);
   const [isLoadingAdmin, setIsLoadingAdmin] = useState(true);
+  const [isSavingThemeAvailability, setIsSavingThemeAvailability] = useState(false);
 
   useEffect(() => {
     void refreshAdmin();
@@ -90,6 +92,7 @@ function AdminConsole({
       ]);
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
+      setThemesRequireUnlock(config.themesRequireUnlock);
       setAdminDatasets(datasets);
     } catch (error) {
       onToast('error', error instanceof Error ? error.message : 'Could not load admin data.');
@@ -101,9 +104,10 @@ function AdminConsole({
   async function toggleModeration(value: boolean) {
     setModerationEnabled(value);
     try {
-      const config = await updateAdminConfig({ moderationEnabled: value, uploadKey }, adminPassword);
+      const config = await updateAdminConfig({ moderationEnabled: value, uploadKey, themesRequireUnlock }, adminPassword);
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
+      setThemesRequireUnlock(config.themesRequireUnlock);
       onToast('success', config.moderationEnabled ? 'Approval gate enabled.' : 'Approval gate disabled.');
     } catch (error) {
       setModerationEnabled(!value);
@@ -113,12 +117,32 @@ function AdminConsole({
 
   async function saveUploadKey() {
     try {
-      const config = await updateAdminConfig({ moderationEnabled, uploadKey }, adminPassword);
+      const config = await updateAdminConfig({ moderationEnabled, uploadKey, themesRequireUnlock }, adminPassword);
       setModerationEnabled(config.moderationEnabled);
       setUploadKey(config.uploadKey);
+      setThemesRequireUnlock(config.themesRequireUnlock);
       onToast('success', config.uploadKey ? 'Upload key saved.' : 'Upload key cleared; public uploads are open.');
     } catch (error) {
       onToast('error', error instanceof Error ? error.message : 'Could not save upload key.');
+    }
+  }
+
+  async function setThemeAvailability(requireUnlock: boolean) {
+    if (requireUnlock === themesRequireUnlock) return;
+    const previous = themesRequireUnlock;
+    setThemesRequireUnlock(requireUnlock);
+    setIsSavingThemeAvailability(true);
+    try {
+      const config = await updateAdminConfig({ moderationEnabled, uploadKey, themesRequireUnlock: requireUnlock }, adminPassword);
+      setModerationEnabled(config.moderationEnabled);
+      setUploadKey(config.uploadKey);
+      setThemesRequireUnlock(config.themesRequireUnlock);
+      onToast('success', config.themesRequireUnlock ? 'Bonus themes now require Academy rewards.' : 'Bonus themes are now available site-wide.');
+    } catch (error) {
+      setThemesRequireUnlock(previous);
+      onToast('error', error instanceof Error ? error.message : 'Could not update theme availability.');
+    } finally {
+      setIsSavingThemeAvailability(false);
     }
   }
 
@@ -147,6 +171,28 @@ function AdminConsole({
           Refresh
         </button>
       </div>
+
+      <section className="admin-theme-setting" aria-labelledby="admin-theme-setting-title">
+        <span className="admin-setting-icon"><Palette size={22} /></span>
+        <div>
+          <h2 id="admin-theme-setting-title">Bonus colour themes</h2>
+          <p>Choose whether every visitor gets the new palettes immediately or earns them through Academy progress.</p>
+        </div>
+        <div className="admin-theme-options" role="group" aria-label="Bonus theme availability">
+          <button
+            className={!themesRequireUnlock ? 'active' : ''}
+            disabled={isSavingThemeAvailability}
+            aria-pressed={!themesRequireUnlock}
+            onClick={() => setThemeAvailability(false)}
+          >Site-wide</button>
+          <button
+            className={themesRequireUnlock ? 'active' : ''}
+            disabled={isSavingThemeAvailability}
+            aria-pressed={themesRequireUnlock}
+            onClick={() => setThemeAvailability(true)}
+          >Academy unlocks</button>
+        </div>
+      </section>
 
       {tab === 'upload' ? (
         <UploadPanel adminPassword={adminPassword} mode="admin" onUploaded={(dataset) => {

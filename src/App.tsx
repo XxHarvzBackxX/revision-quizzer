@@ -35,7 +35,7 @@ export function App() {
     migrateCuratedContentRevision();
     return getAttempts();
   });
-  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true });
+  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true, themesRequireUnlock: true });
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +97,7 @@ export function App() {
     try {
       setPublicConfig(await fetchPublicConfig());
     } catch (error) {
-      notify('error', error instanceof Error ? error.message : 'Could not load upload settings.');
+      notify('error', error instanceof Error ? error.message : 'Could not load site settings.');
     }
   }
 
