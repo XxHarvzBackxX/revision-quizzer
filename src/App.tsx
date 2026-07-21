@@ -35,7 +35,7 @@ export function App() {
     migrateCuratedContentRevision();
     return getAttempts();
   });
-  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true });
+  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true, themesRequireUnlock: true });
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +97,7 @@ export function App() {
     try {
       setPublicConfig(await fetchPublicConfig());
     } catch (error) {
-      notify('error', error instanceof Error ? error.message : 'Could not load upload settings.');
+      notify('error', error instanceof Error ? error.message : 'Could not load site settings.');
     }
   }
 
@@ -134,7 +134,7 @@ export function App() {
 
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
-      {showSiteChrome && <Topbar route={route} navigate={navigate} />}
+      {showSiteChrome && <Topbar route={route} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} />}
       <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {route.name === 'home' && <HomePage datasets={datasets} attempts={attempts} activeSessions={getActiveExamSessions()} isLoading={isLoading} navigate={navigate} />}
@@ -165,7 +165,14 @@ export function App() {
         />
       )}
 
-      {route.name === 'admin' && <AdminPage onToast={notify} onUploaded={handleApprovedUpload} />}
+      {route.name === 'admin' && <AdminPage
+        onToast={notify}
+        onUploaded={handleApprovedUpload}
+        onConfigChanged={(config) => setPublicConfig({
+          uploadKeyRequired: config.uploadKey.length > 0,
+          themesRequireUnlock: config.themesRequireUnlock
+        })}
+      />}
 
       {route.name === 'wiki' && <RevisionWikiIndexPage navigate={navigate} onToast={notify} />}
 
@@ -175,7 +182,7 @@ export function App() {
 
       {route.name === 'study-index' && <StudyIndexPage datasets={datasets} attempts={attempts} navigate={navigate} />}
 
-      {route.name === 'study-profile' && <AcademyProfilePage datasets={datasets} attempts={attempts} navigate={navigate} />}
+      {route.name === 'study-profile' && <AcademyProfilePage datasets={datasets} attempts={attempts} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} />}
 
       {route.name === 'study-hub' && <StudyHubPage examCode={route.examCode} datasets={datasets} attempts={attempts} navigate={navigate} />}
 

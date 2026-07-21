@@ -2,6 +2,12 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
+const selectableThemes = [
+  'light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint',
+  'pacific-blue', 'dark-pacific-blue', 'arcade-red', 'dark-arcade-red',
+  'sunset-orange', 'dark-sunset-orange', 'solar-yellow', 'dark-solar-yellow',
+  'neon-pink', 'dark-neon-pink'
+];
 
 describe('responsive and theme style contracts', () => {
   it('hard-bounds the RevisionWiki cover progress ring', () => {
@@ -18,7 +24,7 @@ describe('responsive and theme style contracts', () => {
   });
 
   it('defines every selectable site theme and contrast overrides', () => {
-    for (const theme of ['light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint']) {
+    for (const theme of selectableThemes) {
       expect(css).toContain(`:root[data-theme="${theme}"]`);
     }
     expect(css).toContain(':root[data-theme^="dark"] .revision-block.block-highlight.yellow');
@@ -26,7 +32,7 @@ describe('responsive and theme style contracts', () => {
   });
 
   it('keeps primary, secondary, and accent text readable on every theme surface', () => {
-    for (const theme of ['light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint']) {
+    for (const theme of selectableThemes) {
       const variables = themeVariables(theme);
       expect(contrast(variables['--theme-ink'], variables['--theme-paper']), `${theme} primary text`).toBeGreaterThanOrEqual(7);
       expect(contrast(variables['--theme-muted'], variables['--theme-paper']), `${theme} secondary text`).toBeGreaterThanOrEqual(4.5);
