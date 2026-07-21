@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { clearActiveExamSession, getActiveExamSession, getAttempts, saveActiveExamSession } from './storage';
+import { clearActiveExamSession, getActiveExamSession, getAttempts, resetStoredQuizProgress, saveActiveExamSession } from './storage';
 
 const values = new Map<string, string>();
 Object.defineProperty(globalThis, 'localStorage', {
@@ -33,5 +33,28 @@ describe('local progress storage', () => {
     expect(getActiveExamSession('paper')).toEqual(session);
     clearActiveExamSession('paper');
     expect(getActiveExamSession('paper')).toBeUndefined();
+  });
+
+  it('resets rewritten curated and study-drill progress while preserving unrelated records', () => {
+    const attempt = (id: string, datasetId: string, sourceDatasetId?: string) => ({
+      version: 2, id, datasetId, slug: datasetId, title: datasetId, mode: 'practice', score: 0, total: 1, percentage: 0, readinessTarget: 70,
+      startedAt: '2026-01-01T10:00:00.000Z', completedAt: '2026-01-01T10:01:00.000Z', durationSeconds: 60,
+      answers: [{ questionIndex: 0, response: [], correct: false, flagged: false, ...(sourceDatasetId ? { sourceDatasetId } : {}) }], domains: []
+    });
+    localStorage.setItem('quiz-arcade:attempts:v2', JSON.stringify([
+      attempt('curated', 'builtin-ai901-paper-1'),
+      attempt('drill', 'study-ai901-seed', 'builtin-ai901-paper-2'),
+      attempt('keep', 'community-paper')
+    ]));
+    localStorage.setItem('quiz-arcade:active-exams:v1', JSON.stringify([
+      { version: 1, datasetId: 'study-az900-seed', slug: 'study', title: 'Study', itemOrder: [], optionOrders: {}, answers: {}, flags: [], currentIndex: 0, startedAt: '', expiresAt: '' },
+      { version: 1, datasetId: 'community-paper', slug: 'keep', title: 'Keep', itemOrder: [], optionOrders: {}, answers: {}, flags: [], currentIndex: 0, startedAt: '', expiresAt: '' }
+    ]));
+
+    resetStoredQuizProgress(new Set(['builtin-ai901-paper-1', 'builtin-ai901-paper-2']), ['study-ai901-', 'study-az900-']);
+
+    expect(getAttempts().map(({ id }) => id)).toEqual(['keep']);
+    expect(getActiveExamSession('community-paper')).toBeTruthy();
+    expect(getActiveExamSession('study-az900-seed')).toBeUndefined();
   });
 });

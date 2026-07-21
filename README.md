@@ -2,7 +2,9 @@
 
 Quiz Arcade is an unofficial certification-preparation app. It includes curated 50-question papers for AI-901 and AZ-900, a timed serious mode, guided practice with explanations, a detailed RevisionWiki, local progress, and a secondary community quiz library.
 
-Each built-in certification also has a smart study hub. It combines objective-level results, answer confidence, and RevisionWiki progress into a next-best action, certification-wide targeted drills, bookmarks, personal question notes, score trends, XP levels, and meaningful daily streaks. Smart-study data remains on the device under `quiz-arcade:study:v1`.
+Each built-in certification also has a smart study hub. It combines objective-level results, answer confidence, and RevisionWiki progress into a next-best action, certification-wide targeted drills, bookmarks, personal question notes, score trends, XP levels, and meaningful daily streaks.
+
+Arcade Academy turns that evidence into an open certification campaign for both AI-901 and AZ-900. Learners earn study, practice, and mastery stars; complete daily and weekly quests; face exam-style domain and final bosses; collect titles and map tokens; and earn capped rerolls and streak shields. No lessons or challenges are locked. Academy progress remains on the device under `quiz-arcade:study:v2`, with automatic migration from the original smart-study state.
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are stored locally under `quiz-arcade:revision:v1` and can be exported or imported as JSON.
 

@@ -1,14 +1,15 @@
 import { BookOpenText, Check, ChevronLeft, ChevronRight, ExternalLink, Flag, Flame, Lightbulb, Sparkles, X, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { PublicDataset, QuizItem } from '../../shared/quiz';
-import { answerSimilarity, getCorrectAnswers, isFreeWritePass, isObjectiveItem, isResponseCorrect } from '../../shared/quiz';
+import type { PublicDataset } from '../../shared/quiz';
+import { answerSimilarity, getCorrectAnswers, isFreeWritePass, isObjectiveItem, isResponseComplete, isResponseCorrect } from '../../shared/quiz';
+import { formatQuestionType, QuestionPrompt, QuestionResponseControls } from '../components/QuestionResponse';
 import { clearActiveExamSession, getActiveExamSession, saveActiveExamSession, type ActiveExamSession, type AttemptRecord, type StudyConfidence } from '../storage';
 import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, getOrderedQuestions } from '../utils/exam';
 import { revisionPathForObjective } from '../revision/registry';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
-import { getStudyState, localDateKey, recordQuestionActivity, studyTotals } from '../study/storage';
+import { getStudyState, localDateKey, questionIdentity, recordDrillCompleted, recordQuestionActivity, studyTotals } from '../study/storage';
 
 export function QuizPlayPage({
   dataset,
@@ -21,7 +22,7 @@ export function QuizPlayPage({
   onAttempt: (attempt: AttemptRecord) => void;
   studyExamCode?: string;
 }) {
-  const [session, setSession] = useState<ActiveExamSession>(() => studyExamCode ? getActiveExamSession(dataset.id) ?? createPracticeSession(dataset) : createPracticeSession(dataset));
+  const [session, setSession] = useState<ActiveExamSession>(() => studyExamCode ? getActiveExamSession(dataset.id, dataset.contentRevision) ?? createPracticeSession(dataset) : createPracticeSession(dataset));
   const [revealed, setRevealed] = useState(false);
   const [typed, setTyped] = useState('');
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
@@ -44,16 +45,10 @@ export function QuizPlayPage({
     return () => window.clearTimeout(timer);
   }, [reward]);
 
-  function updateObjectiveResponse(value: string) {
+  function updateObjectiveResponse(response: string[]) {
     if (!current || !isObjectiveItem(current.item) || revealed) return;
     setSession((existing) => {
       const key = String(current.originalIndex);
-      const chosen = existing.answers[key] ?? [];
-      const response = current.item.type === 'multiple-choice'
-        ? [value]
-        : chosen.includes(value)
-          ? chosen.filter((option) => option !== value)
-          : [...chosen, value];
       return { ...existing, answers: { ...existing.answers, [key]: response } };
     });
   }
@@ -66,7 +61,13 @@ export function QuizPlayPage({
     if (!alreadyRecorded) {
       const before = getStudyState();
       const beforeLevel = studyTotals(before).level;
-      const updated = recordQuestionActivity(correct);
+      const identity = questionIdentity(dataset, current.item, current.originalIndex);
+      const updated = recordQuestionActivity({
+        correct,
+        examCode: studyExamCode ?? dataset.examCode,
+        objectiveId: current.item.objectiveId,
+        bookmarked: Boolean(before.bookmarks[identity.key])
+      });
       const completedToday = updated.activity[localDateKey()]?.goalAwarded;
       if (!before.activity[localDateKey()]?.goalAwarded && completedToday) setReward('Daily goal complete · +50 XP');
       else if (studyTotals(updated).level > beforeLevel) setReward(`Level ${studyTotals(updated).level} reached!`);
@@ -97,6 +98,7 @@ export function QuizPlayPage({
     const attempt = buildAttempt({ dataset, mode: 'practice', session });
     clearActiveExamSession(dataset.id);
     const completed = studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
+    if (studyExamCode) recordDrillCompleted(studyExamCode);
     onAttempt(completed);
     navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
@@ -119,38 +121,18 @@ export function QuizPlayPage({
 
       <article className="practice-card">
         <div className="question-context">
-          <span>{formatType(current.item)}</span>
+          <span>{formatQuestionType(current.item)}</span>
           {current.item.difficulty && <span>{current.item.difficulty}</span>}
           {current.item.domainId && <span>{domainTitle(dataset, current.item.domainId)}</span>}
         </div>
-        <h1>{current.item.prompt}</h1>
+        <QuestionPrompt item={current.item} options={current.options} response={selected} disabled={revealed} appearance="practice" onChange={updateObjectiveResponse} />
         <QuestionStudyTools dataset={dataset} item={current.item} questionIndex={current.originalIndex} />
         <StudyConfidencePicker value={session.confidence?.[String(current.originalIndex)]} onChange={updateConfidence} disabled={revealed} />
 
-        {isObjectiveItem(current.item) && (
-          <div className="practice-options">
-            {current.options.map((option, optionIndex) => {
-              const chosen = selected.includes(option);
-              const expected = getCorrectAnswers(current.item).includes(option);
-              const state = revealed ? expected ? 'correct' : chosen ? 'wrong' : '' : chosen ? 'selected' : '';
-              return (
-                <button className={`practice-option ${state}`} disabled={revealed} key={option} onClick={() => updateObjectiveResponse(option)}>
-                  <span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span>
-                  <span>{option}</span>
-                  {revealed && expected && <Check size={19} />}
-                  {revealed && chosen && !expected && <X size={19} />}
-                </button>
-              );
-            })}
-            {!revealed && (
-              <button
-                className="primary-button check-answer"
-                disabled={selected.length === 0 || (current.item.type === 'multi-select' && selected.length !== current.item.answers.length)}
-                onClick={() => reveal()}
-              >Check answer</button>
-            )}
-          </div>
-        )}
+        {isObjectiveItem(current.item) && <>
+          <QuestionResponseControls item={current.item} options={current.options} response={selected} disabled={revealed} revealed={revealed} appearance="practice" questionKey={`question-${current.originalIndex}`} onChange={updateObjectiveResponse} />
+          {!revealed && <button className="primary-button check-answer practice-response-submit" disabled={!isResponseComplete(current.item, selected) || (current.item.type === 'multi-select' && selected.length !== current.item.answers.length)} onClick={() => reveal()}>Check answer</button>}
+        </>}
 
         {current.item.type === 'free-write' && (
           <div className="written-answer">
@@ -214,11 +196,6 @@ function createPracticeSession(dataset: PublicDataset): ActiveExamSession {
     // A normal full practice run is a safe fallback.
   }
   return session;
-}
-
-function formatType(item: QuizItem): string {
-  if (item.type === 'multi-select') return `Choose ${item.answers.length}`;
-  return item.type.replace('-', ' ');
 }
 
 function domainTitle(dataset: PublicDataset, id: string): string {

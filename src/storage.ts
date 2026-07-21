@@ -40,11 +40,18 @@ export type AttemptRecord = {
   answers: AttemptAnswer[];
   domains: DomainResult[];
   examCode?: string;
+  contentRevision?: string;
   studyDrill?: boolean;
+  academyChallenge?: {
+    challengeId: string;
+    kind: 'domain-boss' | 'final-boss';
+    domainId?: string;
+  };
 };
 
 export type ActiveExamSession = {
   version: 1;
+  contentRevision?: string;
   datasetId: string;
   slug: string;
   title: string;
@@ -114,8 +121,8 @@ export function getActiveExamSessions(): ActiveExamSession[] {
   return Array.isArray(sessions) ? sessions.filter((session): session is ActiveExamSession => session?.version === 1) : [];
 }
 
-export function getActiveExamSession(datasetId: string): ActiveExamSession | undefined {
-  return getActiveExamSessions().find((session) => session.datasetId === datasetId);
+export function getActiveExamSession(datasetId: string, contentRevision?: string): ActiveExamSession | undefined {
+  return getActiveExamSessions().find((session) => session.datasetId === datasetId && (contentRevision === undefined || session.contentRevision === contentRevision));
 }
 
 export function saveActiveExamSession(session: ActiveExamSession): void {
@@ -127,8 +134,21 @@ export function clearActiveExamSession(datasetId: string): void {
   writeJson(SESSION_KEY, getActiveExamSessions().filter((session) => session.datasetId !== datasetId));
 }
 
-export function hasResumableExam(datasetId: string, now = Date.now()): boolean {
-  const session = getActiveExamSession(datasetId);
+export function resetStoredQuizProgress(datasetIds: ReadonlySet<string>, studyDatasetPrefixes: readonly string[]): void {
+  const matches = (datasetId: string) => datasetIds.has(datasetId) || studyDatasetPrefixes.some((prefix) => datasetId.startsWith(prefix));
+  const attempts = readJson<AttemptRecord[]>(ATTEMPT_KEY, []).filter(isAttemptRecord).filter((attempt) => (
+    !matches(attempt.datasetId)
+    && !attempt.answers.some((answer) => Boolean(answer.sourceDatasetId && matches(answer.sourceDatasetId)))
+  ));
+  const sessions = getActiveExamSessions().filter((session) => !matches(session.datasetId));
+  const legacyScores = getLegacyScores().filter((score) => !matches(score.datasetId));
+  writeJson(ATTEMPT_KEY, attempts);
+  writeJson(SESSION_KEY, sessions);
+  writeJson(LEGACY_SCORE_KEY, legacyScores);
+}
+
+export function hasResumableExam(datasetId: string, now = Date.now(), contentRevision?: string): boolean {
+  const session = getActiveExamSession(datasetId, contentRevision);
   return Boolean(session && new Date(session.expiresAt).getTime() > now);
 }
 

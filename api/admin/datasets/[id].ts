@@ -1,17 +1,21 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createSlug, validateDataset } from '../../../shared/quiz.js';
 import { requireAdmin } from '../../_admin.js';
-import { getDatabase } from '../../_firebase.js';
-import { readJsonBody, sendJson } from '../../_http.js';
-
-const COLLECTION = 'datasets';
+import { getDatasetsCollection } from '../../_datasets.js';
+import {
+  getQueryParam,
+  readJsonBody,
+  sendJson,
+  sendMethodNotAllowed,
+  sendServerError
+} from '../../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   if (!requireAdmin(request, response)) {
     return;
   }
 
-  const id = getRouteId(request);
+  const id = getQueryParam(request, 'id');
   if (!id) {
     sendJson(response, 400, { error: 'Dataset id is required.' });
     return;
@@ -24,16 +28,14 @@ export default async function handler(request: VercelRequest, response: VercelRe
     }
 
     if (request.method === 'DELETE') {
-      await getDatabase().collection(COLLECTION).doc(id).delete();
+      await getDatasetsCollection().doc(id).delete();
       sendJson(response, 200, { ok: true });
       return;
     }
 
-    response.setHeader('Allow', 'PUT, DELETE');
-    sendJson(response, 405, { error: 'Method not allowed.' });
+    sendMethodNotAllowed(response, ['PUT', 'DELETE']);
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unexpected server error.';
-    sendJson(response, 500, { error: message });
+    sendServerError(response, error);
   }
 }
 
@@ -48,7 +50,7 @@ async function updateDataset(id: string, request: VercelRequest, response: Verce
     return;
   }
 
-  const document = getDatabase().collection(COLLECTION).doc(id);
+  const document = getDatasetsCollection().doc(id);
   const current = await document.get();
   if (!current.exists) {
     sendJson(response, 404, { error: 'Dataset not found.' });
@@ -65,11 +67,6 @@ async function updateDataset(id: string, request: VercelRequest, response: Verce
   }, { merge: true });
 
   sendJson(response, 200, { ok: true });
-}
-
-function getRouteId(request: VercelRequest): string {
-  const value = request.query.id;
-  return Array.isArray(value) ? value[0] ?? '' : value ?? '';
 }
 
 function getStatus(body: unknown): 'approved' | 'pending' {

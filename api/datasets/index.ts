@@ -1,11 +1,22 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Timestamp } from 'firebase-admin/firestore';
-import { createSlug, type DatasetSummary, type PublicDataset, validateDataset } from '../../shared/quiz.js';
+import { createSlug, type DatasetSummary, validateDataset } from '../../shared/quiz.js';
+import { getAppConfig } from '../_config.js';
 import { getCuratedSummaries, isSupersededCuratedDataset } from '../_curated.js';
-import { getDatabase } from '../_firebase.js';
-import { getAdminPassword, getUploadKey, readJsonBody, sendJson } from '../_http.js';
-
-const COLLECTION = 'datasets';
+import {
+  getDatasetsCollection,
+  isPublicDataset,
+  toDatasetSummary,
+  toPublicDataset
+} from '../_datasets.js';
+import {
+  getAdminPassword,
+  getUploadKey,
+  readJsonBody,
+  sendJson,
+  sendMethodNotAllowed,
+  sendServerError
+} from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   try {
@@ -19,21 +30,19 @@ export default async function handler(request: VercelRequest, response: VercelRe
       return;
     }
 
-    response.setHeader('Allow', 'GET, POST');
-    sendJson(response, 405, { error: 'Method not allowed.' });
+    sendMethodNotAllowed(response, ['GET', 'POST']);
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unexpected server error.';
-    sendJson(response, 500, { error: message });
+    sendServerError(response, error);
   }
 }
 
 async function listDatasets(response: VercelResponse) {
   let community: DatasetSummary[] = [];
   try {
-    const snapshot = await getDatabase().collection(COLLECTION).orderBy('createdAt', 'desc').limit(100).get();
+    const snapshot = await getDatasetsCollection().orderBy('createdAt', 'desc').limit(100).get();
     community = snapshot.docs
-      .map((doc) => toPublicDataset(doc.id, doc.data(), false))
-      .filter((dataset) => dataset.status !== 'pending' && !isSupersededCuratedDataset(dataset))
+      .map((doc) => toDatasetSummary(doc.id, doc.data()))
+      .filter((dataset) => isPublicDataset(dataset) && !isSupersededCuratedDataset(dataset))
       .slice(0, 47);
   } catch (error) {
     console.warn('Community datasets unavailable; serving the built-in curated library.', error);
@@ -42,13 +51,10 @@ async function listDatasets(response: VercelResponse) {
 }
 
 async function createDataset(request: VercelRequest, response: VercelResponse) {
-  const database = getDatabase();
-  const configDoc = await database.collection('config').doc('app').get();
-  const config = configDoc.data() ?? {};
-  const expectedKey = String(config.uploadKey ?? process.env.UPLOAD_KEY ?? '').trim();
+  const config = await getAppConfig();
 
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const hasUploadKey = expectedKey.length === 0 || getUploadKey(request) === expectedKey;
+  const hasUploadKey = config.uploadKey.length === 0 || getUploadKey(request) === config.uploadKey;
   const hasAdminPassword = Boolean(adminPassword && getAdminPassword(request) === adminPassword);
 
   if (!hasUploadKey && !hasAdminPassword) {
@@ -64,10 +70,9 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
     return;
   }
 
-  const document = database.collection(COLLECTION).doc();
+  const document = getDatasetsCollection().doc();
   const slug = createSlug(result.value.title, document.id);
-  const moderationEnabled = Boolean(config.moderationEnabled);
-  const status = hasAdminPassword || !moderationEnabled ? 'approved' : 'pending';
+  const status = hasAdminPassword || !config.moderationEnabled ? 'approved' : 'pending';
 
   const dataset = {
     ...result.value,
@@ -80,35 +85,6 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
   await document.set(dataset);
 
   sendJson(response, 201, {
-    dataset: toPublicDataset(document.id, dataset, true)
+    dataset: toPublicDataset(document.id, dataset)
   });
-}
-
-function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, includeItems: true): PublicDataset;
-function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, includeItems: false): DatasetSummary;
-function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData, includeItems: boolean): PublicDataset | DatasetSummary {
-  const createdAt = typeof data.createdAt?.toDate === 'function'
-    ? data.createdAt.toDate().toISOString()
-    : new Date().toISOString();
-
-  const base = {
-    id,
-    slug: data.slug,
-    title: data.title,
-    description: data.description ?? '',
-    tags: data.tags ?? [],
-    shuffleQuestions: Boolean(data.shuffleQuestions),
-    kind: data.kind ?? 'quiz',
-    curated: Boolean(data.curated),
-    examCode: data.examCode,
-    blueprintVersion: data.blueprintVersion,
-    durationMinutes: data.durationMinutes,
-    readinessTarget: data.readinessTarget,
-    domains: data.domains,
-    itemCount: data.itemCount ?? data.items?.length ?? 0,
-    createdAt,
-    status: data.status ?? 'approved'
-  };
-
-  return includeItems ? { ...base, items: data.items ?? [] } : base;
 }

@@ -19,7 +19,7 @@ export function Topbar({ route, navigate }: { route: AppRoute; navigate: Navigat
             <Library size={17} /> Exam library
           </button>
           <button className={route.name.startsWith('study') ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/study')}>
-            <Gamepad2 size={17} /> Study plans
+            <Gamepad2 size={17} /> Study & Academy
           </button>
           <button className={route.name.startsWith('wiki') ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/wiki')}>
             <BookOpenText size={17} /> RevisionWiki

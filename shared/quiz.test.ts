@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { answerSimilarity, isFreeWritePass, isResponseCorrect, validateDataset } from './quiz';
+import { answerSimilarity, isFreeWritePass, isResponseComplete, isResponseCorrect, validateDataset } from './quiz';
 
 describe('validateDataset', () => {
   it('accepts the three supported item types', () => {
@@ -57,6 +57,36 @@ describe('validateDataset', () => {
     expect(isResponseCorrect(item, ['Two', 'One'])).toBe(true);
     expect(isResponseCorrect(item, ['One'])).toBe(false);
     expect(isResponseCorrect(item, ['One', 'Three'])).toBe(false);
+  });
+
+  it('validates and scores an inline dropdown', () => {
+    const item = {
+      type: 'dropdown' as const,
+      prompt: 'Azure {{blank}} provides private dedicated connectivity.',
+      answer: 'ExpressRoute',
+      options: ['ExpressRoute', 'DNS', 'Policy']
+    };
+    expect(validateDataset({ title: 'Dropdown', items: [item] }).ok).toBe(true);
+    expect(isResponseCorrect(item, ['ExpressRoute'])).toBe(true);
+    expect(validateDataset({ title: 'Bad dropdown', items: [{ ...item, prompt: 'No blank here.' }] }).ok).toBe(false);
+  });
+
+  it('requires all three ordered statement answers', () => {
+    const item = {
+      type: 'statement-group' as const,
+      prompt: 'Evaluate each statement.',
+      answerMode: 'yes-no' as const,
+      statements: [
+        { text: 'Azure supports availability zones.', answer: true },
+        { text: 'Every region has three zones.', answer: false },
+        { text: 'Zones are separate datacenter groups.', answer: true }
+      ]
+    };
+    expect(validateDataset({ title: 'Statements', items: [item] }).ok).toBe(true);
+    expect(isResponseComplete(item, ['Yes', '', 'Yes'])).toBe(false);
+    expect(isResponseComplete(item, ['Yes', 'No', 'Yes'])).toBe(true);
+    expect(isResponseCorrect(item, ['Yes', 'No', 'Yes'])).toBe(true);
+    expect(isResponseCorrect(item, ['Yes', 'Yes', 'No'])).toBe(false);
   });
 
   it('requires complete metadata for curated exams', () => {

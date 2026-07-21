@@ -1,7 +1,8 @@
 import { AlertTriangle, Bookmark, CheckCircle2, ChevronLeft, ChevronRight, Clock3, Flag, Menu, Send, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PublicDataset } from '../../shared/quiz';
-import { isObjectiveItem } from '../../shared/quiz';
+import { isObjectiveItem, isResponseComplete } from '../../shared/quiz';
+import { formatQuestionType, QuestionPrompt, QuestionResponseControls } from '../components/QuestionResponse';
 import {
   clearActiveExamSession,
   getActiveExamSession,
@@ -13,19 +14,24 @@ import type { Navigate } from '../types';
 import { buildAttempt, createExamSession, formatRemainingTime, getOrderedQuestions } from '../utils/exam';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
-import { recordExamActivity, useStudyState } from '../study/storage';
+import { recordAcademyChallenge, recordExamActivity, useStudyState } from '../study/storage';
+import type { StudyDrillConfig } from '../study/types';
 import type { StudyConfidence } from '../storage';
 
 export function ExamPage({
   dataset,
   navigate,
-  onAttempt
+  onAttempt,
+  studyExamCode,
+  studyConfig
 }: {
   dataset: PublicDataset;
   navigate: Navigate;
   onAttempt: (attempt: AttemptRecord) => void;
+  studyExamCode?: string;
+  studyConfig?: StudyDrillConfig;
 }) {
-  const [session, setSession] = useState<ActiveExamSession>(() => getActiveExamSession(dataset.id) ?? createExamSession(dataset));
+  const [session, setSession] = useState<ActiveExamSession>(() => getActiveExamSession(dataset.id, dataset.contentRevision) ?? createExamSession(dataset));
   const [now, setNow] = useState(Date.now());
   const [showNavigator, setShowNavigator] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
@@ -34,7 +40,7 @@ export function ExamPage({
   const questions = useMemo(() => getOrderedQuestions(dataset, session), [dataset, session.itemOrder, session.optionOrders]);
   const current = questions[session.currentIndex] ?? questions[0];
   const remaining = Math.max(0, Math.ceil((new Date(session.expiresAt).getTime() - now) / 1000));
-  const answeredCount = session.itemOrder.filter((index) => (session.answers[String(index)] ?? []).length > 0).length;
+  const answeredCount = questions.filter((question) => isResponseComplete(question.item, session.answers[String(question.originalIndex)] ?? [])).length;
   const unansweredCount = questions.length - answeredCount;
 
   useEffect(() => {
@@ -50,16 +56,10 @@ export function ExamPage({
     if (remaining === 0) finish(true);
   }, [remaining]);
 
-  function updateResponse(value: string) {
+  function updateResponse(response: string[]) {
     if (!current || !isObjectiveItem(current.item)) return;
     setSession((existing) => {
       const key = String(current.originalIndex);
-      const selected = existing.answers[key] ?? [];
-      const response = current.item.type === 'multiple-choice'
-        ? [value]
-        : selected.includes(value)
-          ? selected.filter((option) => option !== value)
-          : [...selected, value];
       return { ...existing, answers: { ...existing.answers, [key]: response } };
     });
   }
@@ -88,10 +88,23 @@ export function ExamPage({
     if (submitted.current) return;
     submitted.current = true;
     const attempt = buildAttempt({ dataset, mode: 'exam', session, expired });
-    recordExamActivity(attempt.answers);
+    const completed: AttemptRecord = studyExamCode ? {
+      ...attempt,
+      studyDrill: true,
+      examCode: studyExamCode,
+      ...(studyConfig?.challengeId && (studyConfig.mode === 'domain-boss' || studyConfig.mode === 'final-boss') ? {
+        academyChallenge: {
+          challengeId: studyConfig.challengeId,
+          kind: studyConfig.mode,
+          ...(studyConfig.domainId ? { domainId: studyConfig.domainId } : {})
+        }
+      } : {})
+    } : attempt;
+    recordExamActivity(completed.answers, { examCode: studyExamCode ?? dataset.examCode });
+    if (studyConfig?.challengeId) recordAcademyChallenge(completed, studyConfig);
     clearActiveExamSession(dataset.id);
-    onAttempt(attempt);
-    navigate(`/quiz/${dataset.slug}/results/${attempt.id}`);
+    onAttempt(completed);
+    navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
 
   if (!current) return null;
@@ -101,7 +114,7 @@ export function ExamPage({
   return (
     <section className="exam-shell">
       <header className="exam-header">
-        <button className="quiet-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Save & exit</button>
+        <button className="quiet-button" onClick={() => navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : `/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Save & exit</button>
         <div className="exam-title"><span>{dataset.examCode ?? 'Mock exam'}</span><strong>{dataset.title}</strong></div>
         <div className={`exam-timer ${remaining <= 300 ? 'urgent' : ''}`} aria-live="polite"><Clock3 size={18} /> {formatRemainingTime(remaining)}</div>
       </header>
@@ -114,7 +127,7 @@ export function ExamPage({
           </div>
           <div className="question-grid">
             {questions.map((question, index) => {
-              const answered = (session.answers[String(question.originalIndex)] ?? []).length > 0;
+              const answered = isResponseComplete(question.item, session.answers[String(question.originalIndex)] ?? []);
               const flagged = session.flags.includes(question.originalIndex);
               return (
                 <button
@@ -142,28 +155,13 @@ export function ExamPage({
           </div>
           <article className="exam-question-card">
             <div className="question-context">
-              <span>{current.item.type === 'multi-select' ? `Choose ${current.item.answers.length}` : 'Choose one'}</span>
+              <span>{formatQuestionType(current.item)}</span>
               {current.item.domainId && <span>{domainTitle(dataset, current.item.domainId)}</span>}
             </div>
-            <h1>{current.item.prompt}</h1>
+            <QuestionPrompt item={current.item} options={current.options} response={selected} appearance="exam" onChange={updateResponse} />
             <QuestionStudyTools dataset={dataset} item={current.item} questionIndex={current.originalIndex} />
             {study.settings.showExamConfidence && <StudyConfidencePicker value={session.confidence?.[String(current.originalIndex)]} onChange={updateConfidence} />}
-            {isObjectiveItem(current.item) && (
-              <div className="exam-options">
-                {current.options.map((option, optionIndex) => (
-                  <label className={selected.includes(option) ? 'exam-option selected' : 'exam-option'} key={option}>
-                    <input
-                      type={current.item.type === 'multi-select' ? 'checkbox' : 'radio'}
-                      name={`question-${current.originalIndex}`}
-                      checked={selected.includes(option)}
-                      onChange={() => updateResponse(option)}
-                    />
-                    <span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span>
-                    <span>{option}</span>
-                  </label>
-                ))}
-              </div>
-            )}
+            {isObjectiveItem(current.item) && <QuestionResponseControls item={current.item} options={current.options} response={selected} appearance="exam" questionKey={`question-${current.originalIndex}`} onChange={updateResponse} />}
           </article>
           <footer className="exam-question-footer">
             <button className="secondary-button" disabled={session.currentIndex === 0} onClick={() => goTo(session.currentIndex - 1)}><ChevronLeft size={18} /> Previous</button>
@@ -188,7 +186,7 @@ export function ExamPage({
               <span><Bookmark size={18} /> {session.flags.length} flagged</span>
               <span className={unansweredCount ? 'warning' : ''}><AlertTriangle size={18} /> {unansweredCount} unanswered</span>
             </div>
-            {unansweredCount > 0 && <button className="secondary-button full" onClick={() => { const first = questions.findIndex((question) => !(session.answers[String(question.originalIndex)] ?? []).length); setShowSubmit(false); goTo(first); }}>Return to unanswered</button>}
+            {unansweredCount > 0 && <button className="secondary-button full" onClick={() => { const first = questions.findIndex((question) => !isResponseComplete(question.item, session.answers[String(question.originalIndex)] ?? [])); setShowSubmit(false); goTo(first); }}>Return to unanswered</button>}
             <button className="submit-exam-button full" onClick={() => finish(false)}>Submit exam</button>
           </div>
         </div>

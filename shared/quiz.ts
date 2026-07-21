@@ -1,4 +1,4 @@
-export type QuizItemType = 'flashcard' | 'free-write' | 'multiple-choice' | 'multi-select';
+export type QuizItemType = 'flashcard' | 'free-write' | 'multiple-choice' | 'multi-select' | 'dropdown' | 'statement-group';
 export type DatasetKind = 'quiz' | 'exam';
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -44,7 +44,26 @@ export type MultiSelectItem = BaseQuizItem & {
   options: string[];
 };
 
-export type QuizItem = FlashcardItem | FreeWriteItem | MultipleChoiceItem | MultiSelectItem;
+export type DropdownItem = BaseQuizItem & {
+  type: 'dropdown';
+  answer: string;
+  options: string[];
+};
+
+export type StatementAnswerMode = 'yes-no' | 'true-false';
+
+export type StatementGroupItem = BaseQuizItem & {
+  type: 'statement-group';
+  answerMode: StatementAnswerMode;
+  statements: Array<{
+    text: string;
+    answer: boolean;
+  }>;
+};
+
+export type OptionItem = MultipleChoiceItem | MultiSelectItem | DropdownItem;
+export type ObjectiveItem = OptionItem | StatementGroupItem;
+export type QuizItem = FlashcardItem | FreeWriteItem | ObjectiveItem;
 
 export type ExamDomain = {
   id: string;
@@ -63,6 +82,7 @@ export type DatasetInput = {
   blueprintVersion?: string;
   durationMinutes?: number;
   readinessTarget?: number;
+  contentRevision?: string;
   domains?: ExamDomain[];
   items: QuizItem[];
 };
@@ -117,6 +137,7 @@ export function validateDataset(input: unknown): ValidationResult {
   const blueprintVersion = normalizeOptionalText(input.blueprintVersion);
   const durationMinutes = normalizeOptionalNumber(input.durationMinutes);
   const readinessTarget = normalizeOptionalNumber(input.readinessTarget);
+  const contentRevision = normalizeOptionalText(input.contentRevision);
   const domains = normalizeDomains(input.domains, errors);
   const items = Array.isArray(input.items) ? input.items : [];
 
@@ -187,6 +208,7 @@ export function validateDataset(input: unknown): ValidationResult {
       blueprintVersion: blueprintVersion || undefined,
       durationMinutes,
       readinessTarget,
+      contentRevision: contentRevision || undefined,
       domains: domains.length ? domains : undefined,
       items: validItems
     }
@@ -220,11 +242,22 @@ export function isFreeWritePass(actual: string, expected: string): boolean {
 }
 
 export function getCorrectAnswers(item: QuizItem): string[] {
-  return item.type === 'multi-select' ? item.answers : [item.answer];
+  if (item.type === 'multi-select') return item.answers;
+  if (item.type === 'statement-group') return item.statements.map((statement) => statementAnswerLabel(item.answerMode, statement.answer));
+  return [item.answer];
 }
 
-export function isObjectiveItem(item: QuizItem): item is MultipleChoiceItem | MultiSelectItem {
-  return item.type === 'multiple-choice' || item.type === 'multi-select';
+export function isOptionItem(item: QuizItem): item is OptionItem {
+  return item.type === 'multiple-choice' || item.type === 'multi-select' || item.type === 'dropdown';
+}
+
+export function isObjectiveItem(item: QuizItem): item is ObjectiveItem {
+  return isOptionItem(item) || item.type === 'statement-group';
+}
+
+export function isResponseComplete(item: QuizItem, response: string[]): boolean {
+  if (item.type === 'statement-group') return response.length === item.statements.length && response.every((answer) => Boolean(answer));
+  return response.some(Boolean);
 }
 
 export function isResponseCorrect(item: QuizItem, response: string[]): boolean {
@@ -232,9 +265,23 @@ export function isResponseCorrect(item: QuizItem, response: string[]): boolean {
     return isFreeWritePass(response[0] ?? '', item.answer);
   }
 
-  const expected = getCorrectAnswers(item).map(normalizeAnswer).sort();
-  const actual = response.map(normalizeAnswer).filter(Boolean).sort();
+  const preserveOrder = item.type === 'statement-group';
+  const expected = getCorrectAnswers(item).map(normalizeAnswer);
+  const actual = response.map(normalizeAnswer).filter(Boolean);
+  if (!preserveOrder) {
+    expected.sort();
+    actual.sort();
+  }
   return expected.length === actual.length && expected.every((answer, index) => answer === actual[index]);
+}
+
+export function statementAnswerLabels(mode: StatementAnswerMode): [string, string] {
+  return mode === 'true-false' ? ['True', 'False'] : ['Yes', 'No'];
+}
+
+export function statementAnswerLabel(mode: StatementAnswerMode, answer: boolean): string {
+  const [affirmative, negative] = statementAnswerLabels(mode);
+  return answer ? affirmative : negative;
 }
 
 export function createSlug(title: string, id: string): string {
@@ -262,8 +309,8 @@ function normalizeItem(item: unknown, index: number, errors: string[], strictExa
     : undefined;
   const references = normalizeReferences(item.references, label, errors);
 
-  if (type !== 'flashcard' && type !== 'free-write' && type !== 'multiple-choice' && type !== 'multi-select') {
-    errors.push(`${label} type must be flashcard, free-write, multiple-choice, or multi-select.`);
+  if (type !== 'flashcard' && type !== 'free-write' && type !== 'multiple-choice' && type !== 'multi-select' && type !== 'dropdown' && type !== 'statement-group') {
+    errors.push(`${label} uses an unsupported question type.`);
   }
   if (!prompt) errors.push(`${label} prompt is required.`);
   else if (prompt.length > MAX_PROMPT_LENGTH) errors.push(`${label} prompt must be ${MAX_PROMPT_LENGTH} characters or fewer.`);
@@ -288,7 +335,7 @@ function normalizeItem(item: unknown, index: number, errors: string[], strictExa
     ...(references.length ? { references } : {})
   };
 
-  if (type === 'multiple-choice' || type === 'multi-select') {
+  if (type === 'multiple-choice' || type === 'multi-select' || type === 'dropdown') {
     if (!Array.isArray(item.options)) {
       errors.push(`${label} options must be an array.`);
       return null;
@@ -298,7 +345,8 @@ function normalizeItem(item: unknown, index: number, errors: string[], strictExa
     if (options.length > MAX_OPTIONS) errors.push(`${label} cannot include more than ${MAX_OPTIONS} options.`);
     if (new Set(options.map(normalizeAnswer)).size !== options.length) errors.push(`${label} options must be unique.`);
 
-    if (type === 'multiple-choice') {
+    if (type === 'multiple-choice' || type === 'dropdown') {
+      if (type === 'dropdown' && (prompt.match(/\{\{blank\}\}/g) ?? []).length !== 1) errors.push(`${label} dropdown prompt must contain exactly one {{blank}} marker.`);
       if (!answer) errors.push(`${label} answer is required.`);
       else if (answer.length > MAX_ANSWER_LENGTH) errors.push(`${label} answer must be ${MAX_ANSWER_LENGTH} characters or fewer.`);
       if (!options.some((option) => normalizeAnswer(option) === normalizeAnswer(answer))) errors.push(`${label} options must include the answer.`);
@@ -312,6 +360,29 @@ function normalizeItem(item: unknown, index: number, errors: string[], strictExa
         errors.push(`${label} options must include every correct answer.`);
       }
       if (prompt && answers.length >= 2 && options.length >= 3) return { type, prompt, answers, options, ...metadata };
+    }
+  }
+
+  if (type === 'statement-group') {
+    const answerMode = item.answerMode;
+    const rawStatements = Array.isArray(item.statements) ? item.statements : [];
+    if (answerMode !== 'yes-no' && answerMode !== 'true-false') errors.push(`${label} statement group must use yes-no or true-false answers.`);
+    if (rawStatements.length !== 3) errors.push(`${label} statement group must contain exactly three statements.`);
+    const statements = rawStatements.flatMap((statement, statementIndex) => {
+      if (!isRecord(statement)) {
+        errors.push(`${label} statement ${statementIndex + 1} must be an object.`);
+        return [];
+      }
+      const text = normalizeText(statement.text);
+      if (!text) errors.push(`${label} statement ${statementIndex + 1} text is required.`);
+      if (typeof statement.answer !== 'boolean') errors.push(`${label} statement ${statementIndex + 1} answer must be true or false.`);
+      return text && typeof statement.answer === 'boolean' ? [{ text, answer: statement.answer }] : [];
+    });
+    if (statements.length === 3 && !statements.some((statement) => statement.answer !== statements[0].answer) && strictExam) {
+      errors.push(`${label} statement group must mix affirmative and negative answers.`);
+    }
+    if (prompt && statements.length === 3 && (answerMode === 'yes-no' || answerMode === 'true-false')) {
+      return { type, prompt, answerMode, statements, ...metadata };
     }
   }
 

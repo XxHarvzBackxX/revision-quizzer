@@ -36,4 +36,40 @@ describe('QuizPlayPage study tools', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Save note' }));
     expect(getStudyState().bookmarks['builtin-ai901-paper-1/q1'].note).toBe('Remember the product boundary.');
   });
+
+  it('renders and scores an inline dropdown', async () => {
+    const dropdownDataset: PublicDataset = {
+      ...dataset,
+      id: 'dropdown-paper',
+      items: [{ id: 'drop-1', type: 'dropdown', prompt: 'Use {{blank}} for a private dedicated Azure connection.', answer: 'ExpressRoute', options: ['VPN Gateway', 'ExpressRoute'], domainId: 'domain', objectiveId: 'networking', explanation: 'ExpressRoute provides private dedicated connectivity.' }]
+    };
+    render(<QuizPlayPage dataset={dropdownDataset} navigate={vi.fn()} onAttempt={vi.fn()} />);
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Select the missing text' }), 'ExpressRoute');
+    await userEvent.click(screen.getByRole('button', { name: 'Check answer' }));
+    expect(screen.getByText('Correct')).toBeInTheDocument();
+  });
+
+  it('requires and scores every row in a statement group', async () => {
+    const statementDataset: PublicDataset = {
+      ...dataset,
+      id: 'statement-paper',
+      items: [{
+        id: 'statements-1', type: 'statement-group', prompt: 'Evaluate the statements.', answerMode: 'yes-no', domainId: 'domain', objectiveId: 'architecture', explanation: 'Zones are separate datacenter groups, but availability varies by region.',
+        statements: [
+          { text: 'Availability zones are physically separate.', answer: true },
+          { text: 'Every Azure region has availability zones.', answer: false },
+          { text: 'Zones can improve resiliency.', answer: true }
+        ]
+      }]
+    };
+    render(<QuizPlayPage dataset={statementDataset} navigate={vi.fn()} onAttempt={vi.fn()} />);
+    expect(screen.getByRole('button', { name: 'Check answer' })).toBeDisabled();
+    const yes = screen.getAllByRole('radio', { name: 'Yes' });
+    const no = screen.getAllByRole('radio', { name: 'No' });
+    await userEvent.click(yes[0]);
+    await userEvent.click(no[1]);
+    await userEvent.click(yes[2]);
+    await userEvent.click(screen.getByRole('button', { name: 'Check answer' }));
+    expect(screen.getByText('Correct')).toBeInTheDocument();
+  });
 });

@@ -9,11 +9,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.api.json --noEmit",
-    "content:enrich": "node scripts/enrich-ai901-datasets.mjs",
-    "content:az900": "node scripts/generate-az900-datasets.mjs",
+    "content:generate": "node scripts/generate-curated-datasets.mjs",
     "content:audit": "node scripts/audit-curated-datasets.mjs",
     "revision:audit": "vitest run src/revision/registry.test.ts",
-    "content:build": "node scripts/regenerate-ai901-datasets.mjs && node scripts/harden-ai901-distractors.mjs && node scripts/enrich-ai901-datasets.mjs && node scripts/generate-az900-datasets.mjs && node scripts/audit-curated-datasets.mjs"
+    "content:build": "node scripts/generate-curated-datasets.mjs && node scripts/audit-curated-datasets.mjs"
   },
   "dependencies": {
     "@vercel/node": "^5.0.0",

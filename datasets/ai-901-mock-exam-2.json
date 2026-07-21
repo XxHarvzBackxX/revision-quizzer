@@ -1,1131 +1,18 @@
 {
-  "title": "AI-901 Mock Exam 2: Workloads and Responsible AI",
-  "description": "A 50-question unofficial mock paper aligned to the AI-901 skills measured from April 15, 2026. Includes realistic scenarios, detailed explanations, and official Microsoft Learn references. Original practice content; not official exam questions.",
+  "title": "AI-901 Mock Exam 2: Applied AI Solutions",
+  "description": "A 50-question unofficial mock paper aligned to the AI-901 skills measured from April 15, 2026. Uses realistic dropdown, statement, single-choice, and multiple-answer formats with original questions and official Microsoft Learn references.",
   "tags": [
     "ai-901",
-    "azure",
-    "foundry",
+    "azure-ai",
+    "microsoft-foundry",
     "mock-exam"
   ],
   "shuffleQuestions": true,
-  "items": [
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer creates an AI app that must search enterprise documents, call an inventory API, and decide whether to create a purchase request. Which workload pattern best describes this solution?",
-      "answer": "Agentic AI",
-      "options": [
-        "Agentic AI",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "hard",
-      "id": "ai901-p2-q01",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Agentic AI” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A model answers general questions well but hallucinates current company policy. What should the developer add?",
-      "answer": "Grounding with an approved policy data source",
-      "options": [
-        "Grounding with an approved policy data source",
-        "Azure AI Search vector indexing without field extraction",
-        "A multimodal model prompt without a defined extraction schema",
-        "Document Intelligence-style OCR followed by manual review"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q02",
-      "objectiveId": "model-components",
-      "explanation": "“Grounding with an approved policy data source” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A legal review assistant must cite only the paragraphs it used from uploaded contracts. Which tool is most relevant?",
-      "answer": "File search with grounded retrieval",
-      "options": [
-        "File search with grounded retrieval",
-        "Web search",
-        "Memory",
-        "A custom function or API tool with controlled authentication"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q03",
-      "objectiveId": "foundry-generative",
-      "explanation": "“File search with grounded retrieval” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A support agent must open tickets through an internal REST API. Which tool type is most appropriate?",
-      "answer": "A custom function or API tool with controlled authentication",
-      "options": [
-        "A custom function or API tool with controlled authentication",
-        "Memory",
-        "A connected MCP server with scoped tools",
-        "File search"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q04",
-      "objectiveId": "foundry-generative",
-      "explanation": "“A custom function or API tool with controlled authentication” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer wants Foundry to run a portal-authored agent with no custom compute to manage. Which option should they choose?",
-      "answer": "Prompt agent",
-      "options": [
-        "Prompt agent",
-        "Use a lightweight client that invokes a published agent endpoint",
-        "Hosted agent",
-        "Call the Responses API directly from the existing process"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q05",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Prompt agent” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer packages custom orchestration as a container and wants Foundry to host it with managed identity and observability. Which option should they choose?",
-      "answer": "Hosted agent",
-      "options": [
-        "Hosted agent",
-        "Prompt agent",
-        "Call the Responses API directly from the existing process",
-        "Create a custom tool hosted outside Foundry and call it from a prompt agent"
-      ],
-      "domainId": "foundry",
-      "difficulty": "hard",
-      "id": "ai901-p2-q06",
-      "objectiveId": "foundry-text-speech",
-      "explanation": "“Hosted agent” is the best answer because the selection directly satisfies the scenario’s stated requirement. A text or speech solution must use the capability that matches the requested analysis, recognition, translation, or synthesis flow.",
-      "references": [
-        {
-          "title": "Azure Speech in Foundry Tools",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A user asks: \"Summarize this contract and identify renewal dates.\" The app passes a PDF directly to a document extraction workflow before summarization. Which service area is involved?",
-      "answer": "Content Understanding for documents",
-      "options": [
-        "Content Understanding for documents",
-        "Azure AI Search vector indexing without field extraction",
-        "A multimodal model prompt without a defined extraction schema",
-        "Document Intelligence-style OCR followed by manual review"
-      ],
-      "domainId": "foundry",
-      "difficulty": "hard",
-      "id": "ai901-p2-q07",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Content Understanding for documents” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A project needs to process forms, images, audio recordings, and videos with structured outputs. Which Foundry Tools capability is designed for this?",
-      "answer": "Azure Content Understanding",
-      "options": [
-        "Azure Content Understanding",
-        "A multimodal model prompt without a defined extraction schema",
-        "Document Intelligence-style OCR followed by manual review",
-        "Content Understanding with confidence scores and grounding enabled"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q08",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Azure Content Understanding” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer must create a lightweight app using Foundry SDKs. Which prerequisite is most relevant according to the exam scope?",
-      "answer": "Familiarity with Azure resources and Python syntax or programming techniques",
-      "options": [
-        "Familiarity with Azure resources and Python syntax or programming techniques",
-        "Use Content Understanding when structured extraction from multimodal content is required",
-        "Use tracing and evaluations to diagnose model and tool behavior",
-        "Ground the response with trusted data and validate outputs before use"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q09",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Familiarity with Azure resources and Python syntax or programming techniques” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multi-select",
-      "prompt": "A support team wants to route messages by tone and show the products mentioned in each message. Which TWO text-analysis capabilities are required?",
-      "answers": [
-        "Sentiment analysis",
-        "Entity recognition"
-      ],
-      "options": [
-        "Sentiment analysis",
-        "Entity recognition",
-        "Speech synthesis",
-        "Image generation"
-      ],
-      "domainId": "concepts",
-      "objectiveId": "ai-workloads",
-      "difficulty": "hard",
-      "id": "ai901-p2-q10",
-      "explanation": "“Sentiment analysis” and “Entity recognition” are the required choices because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer wants a chat client to call a deployed model in Foundry. Which API pattern is most aligned with current Foundry docs?",
-      "answer": "Use the project endpoint and Responses API through an SDK or REST",
-      "options": [
-        "Use the project endpoint and Responses API through an SDK or REST",
-        "Prompt agent",
-        "Hosted agent",
-        "Call the Responses API directly from the existing process"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q11",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Use the project endpoint and Responses API through an SDK or REST” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team is deciding whether to use a multimodal model. Which requirement most strongly indicates that they need one?",
-      "answer": "The prompt includes both text and images",
-      "options": [
-        "The prompt includes both text and images",
-        "A text-only chat model with no visual input",
-        "Content Understanding image extraction",
-        "Image generation from a text prompt"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q12",
-      "objectiveId": "foundry-vision",
-      "explanation": "“The prompt includes both text and images” is the best answer because the selection directly satisfies the scenario’s stated requirement. Vision solutions use visual-capable models or services when image content must be interpreted or generated.",
-      "references": [
-        {
-          "title": "Image inputs with Azure OpenAI models",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A voice assistant receives spoken prompts and answers using a deployed multimodal model. Which input processing is still commonly required?",
-      "answer": "Speech audio must be captured and sent in a supported format or transcribed depending on the model/API",
-      "options": [
-        "Speech audio must be captured and sent in a supported format or transcribed depending on the model/API",
-        "Text analysis over manually typed transcripts only",
-        "A multimodal image model with no audio handling",
-        "Speech translation when source and target languages differ"
-      ],
-      "domainId": "foundry",
-      "difficulty": "hard",
-      "id": "ai901-p2-q13",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Speech audio must be captured and sent in a supported format or transcribed depending on the model/API” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "An app must translate spoken phrases from one language to another during a call. Which capability is most relevant?",
-      "answer": "Speech translation",
-      "options": [
-        "Speech translation",
-        "A multimodal image model with no audio handling",
-        "Speech translation when source and target languages differ",
-        "Speech recognition followed by model processing and speech synthesis"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q14",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Speech translation” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A retail app needs to locate each product on a shelf image. Which computer vision task best fits?",
-      "answer": "Object detection",
-      "options": [
-        "Object detection",
-        "OCR or visual text extraction",
-        "A deployed multimodal model that accepts image input",
-        "A text-only chat model with no visual input"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q15",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Object detection” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A mobile app must identify whether an uploaded image is a receipt, invoice, or business card. Which vision task best fits?",
-      "answer": "Image classification",
-      "options": [
-        "Image classification",
-        "A deployed multimodal model that accepts image input",
-        "A text-only chat model with no visual input",
-        "Content Understanding image extraction"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q16",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Image classification” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A vision app needs to describe a photo for a user who cannot see it. Which capability is most relevant?",
-      "answer": "Image captioning or visual description",
-      "options": [
-        "Image captioning or visual description",
-        "A text-only chat model with no visual input",
-        "Content Understanding image extraction",
-        "Image generation from a text prompt"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q17",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Image captioning or visual description” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A prompt asks a model to create an infographic from a text description. Which workload is involved?",
-      "answer": "Image generation",
-      "options": [
-        "Image generation",
-        "Content Understanding image extraction",
-        "Image generation from a text prompt",
-        "OCR or visual text extraction"
-      ],
-      "domainId": "foundry",
-      "difficulty": "easy",
-      "id": "ai901-p2-q18",
-      "objectiveId": "foundry-vision",
-      "explanation": "“Image generation” is the best answer because the selection directly satisfies the scenario’s stated requirement. Vision solutions use visual-capable models or services when image content must be interpreted or generated.",
-      "references": [
-        {
-          "title": "Image inputs with Azure OpenAI models",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A model is asked to rewrite customer emails in a friendlier tone. Which workload is primarily involved?",
-      "answer": "Generative AI for text transformation",
-      "options": [
-        "Generative AI for text transformation",
-        "Change the model deployment and re-test quality, latency, and cost",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q19",
-      "objectiveId": "model-components",
-      "explanation": "“Generative AI for text transformation” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A system extracts \"Seattle\", \"Microsoft\", and \"July 1\" from a news paragraph. Which technique is this?",
-      "answer": "Named entity recognition",
-      "options": [
-        "Named entity recognition",
-        "Language detection",
-        "Entity detection",
-        "Key phrase extraction"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q20",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Named entity recognition” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A system reports the key terms \"refund delay\", \"shipping damage\", and \"missing invoice\" from support cases. Which technique is this?",
-      "answer": "Key phrase extraction",
-      "options": [
-        "Key phrase extraction",
-        "Entity detection",
-        "Sentiment analysis",
-        "Summarization"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q21",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Key phrase extraction” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multi-select",
-      "prompt": "A voice assistant must accept a spoken question and read a text answer aloud. Which TWO speech capabilities are required?",
-      "answers": [
-        "Speech recognition",
-        "Speech synthesis"
-      ],
-      "options": [
-        "Speech recognition",
-        "Speech synthesis",
-        "Object detection",
-        "Document field extraction"
-      ],
-      "domainId": "foundry",
-      "objectiveId": "foundry-text-speech",
-      "difficulty": "hard",
-      "id": "ai901-p2-q22",
-      "explanation": "“Speech recognition” and “Speech synthesis” are the required choices because the selection directly satisfies the scenario’s stated requirement. A text or speech solution must use the capability that matches the requested analysis, recognition, translation, or synthesis flow.",
-      "references": [
-        {
-          "title": "Azure Speech in Foundry Tools",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A system condenses a call transcript into decisions, risks, and action items. Which text technique is central?",
-      "answer": "Summarization",
-      "options": [
-        "Summarization",
-        "Sentiment analysis",
-        "Language detection",
-        "Entity detection"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q23",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Summarization” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team wants users to know when they are interacting with AI and what the AI can and cannot do. Which responsible AI principle is most relevant?",
-      "answer": "Transparency",
-      "options": [
-        "Transparency",
-        "Accountability",
-        "Fairness",
-        "Reliability and safety"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q24",
-      "objectiveId": "responsible-ai",
-      "explanation": "“Transparency” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A model is evaluated against groups of users to ensure comparable error rates. Which responsible AI principle is most relevant?",
-      "answer": "Fairness",
-      "options": [
-        "Fairness",
-        "Reliability and safety",
-        "Privacy and security",
-        "Inclusiveness"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q25",
-      "objectiveId": "responsible-ai",
-      "explanation": "“Fairness” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A service stores prompts containing personal data. Which controls are most relevant?",
-      "answer": "Data minimization, access control, retention policy, and redaction",
-      "options": [
-        "Data minimization, access control, retention policy, and redaction",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "easy",
-      "id": "ai901-p2-q26",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Data minimization, access control, retention policy, and redaction” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "An assistant supports only one language and cannot be used by a large portion of intended users. Which principle is most affected?",
-      "answer": "Inclusiveness",
-      "options": [
-        "Inclusiveness",
-        "Privacy and security",
-        "Transparency",
-        "Accountability"
-      ],
-      "domainId": "concepts",
-      "difficulty": "easy",
-      "id": "ai901-p2-q27",
-      "objectiveId": "responsible-ai",
-      "explanation": "“Inclusiveness” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team documents who approves prompts, monitors failures, and owns incident response. Which principle is addressed?",
-      "answer": "Accountability",
-      "options": [
-        "Accountability",
-        "Inclusiveness",
-        "Transparency",
-        "Fairness"
-      ],
-      "domainId": "foundry",
-      "difficulty": "easy",
-      "id": "ai901-p2-q28",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Accountability” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer wants to reduce harmful generated content. Which should be configured?",
-      "answer": "Content filters, safety instructions, and evaluation",
-      "options": [
-        "Content filters, safety instructions, and evaluation",
-        "Use Content Understanding when structured extraction from multimodal content is required",
-        "Use tracing and evaluations to diagnose model and tool behavior",
-        "Ground the response with trusted data and validate outputs before use"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q29",
-      "objectiveId": "responsible-ai",
-      "explanation": "“Content filters, safety instructions, and evaluation” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "An agent decides between web search and file search. What determines the appropriate tool choice?",
-      "answer": "The user goal, instructions, available tools, and grounding requirements",
-      "options": [
-        "The user goal, instructions, available tools, and grounding requirements",
-        "A connected MCP server with scoped tools",
-        "File search",
-        "Code interpreter"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q30",
-      "objectiveId": "foundry-generative",
-      "explanation": "“The user goal, instructions, available tools, and grounding requirements” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer needs to inspect every decision an agent made during a run. Which feature is most helpful?",
-      "answer": "End-to-end tracing",
-      "options": [
-        "End-to-end tracing",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q31",
-      "objectiveId": "foundry-generative",
-      "explanation": "“End-to-end tracing” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team wants to expose a stable endpoint for an approved agent while developers keep testing changes. What should they use?",
-      "answer": "Published agent versions",
-      "options": [
-        "Published agent versions",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required",
-        "Use Content Understanding when structured extraction from multimodal content is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q32",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Published agent versions” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "An agent must call tools on behalf of a signed-in user. Which authentication concept is most relevant?",
-      "answer": "On-Behalf-Of or delegated authentication for tools",
-      "options": [
-        "On-Behalf-Of or delegated authentication for tools",
-        "Use a hosted agent when custom orchestration code is required",
-        "Use Content Understanding when structured extraction from multimodal content is required",
-        "Use tracing and evaluations to diagnose model and tool behavior"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q33",
-      "objectiveId": "foundry-generative",
-      "explanation": "“On-Behalf-Of or delegated authentication for tools” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A project must govern which users can deploy models and edit agents. Which Azure feature is most relevant?",
-      "answer": "RBAC",
-      "options": [
-        "RBAC",
-        "Change the model deployment and re-test quality, latency, and cost",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q34",
-      "objectiveId": "foundry-generative",
-      "explanation": "“RBAC” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A model produces a correct answer but includes extra text that breaks JSON parsing. What is the best mitigation?",
-      "answer": "Constrain the response format and validate output before parsing",
-      "options": [
-        "Constrain the response format and validate output before parsing",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens",
-        "Use a smaller low-latency model after evaluation"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q35",
-      "objectiveId": "model-components",
-      "explanation": "“Constrain the response format and validate output before parsing” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer needs current product prices in answers. Which approach is most appropriate?",
-      "answer": "Connect a trusted current data source through retrieval or a tool",
-      "options": [
-        "Connect a trusted current data source through retrieval or a tool",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q36",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Connect a trusted current data source through retrieval or a tool” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multi-select",
-      "prompt": "A multimodal client sends a product photograph to a deployed model. Which TWO elements must the request provide?",
-      "answers": [
-        "A deployment that supports image input",
-        "The image content or an accessible image URL in the prompt"
-      ],
-      "options": [
-        "A deployment that supports image input",
-        "The image content or an accessible image URL in the prompt",
-        "A speech-synthesis voice",
-        "A Content Understanding audio analyzer"
-      ],
-      "domainId": "foundry",
-      "objectiveId": "foundry-vision",
-      "difficulty": "hard",
-      "id": "ai901-p2-q37",
-      "explanation": "“A deployment that supports image input” and “The image content or an accessible image URL in the prompt” are the required choices because the selection directly satisfies the scenario’s stated requirement. Vision solutions use visual-capable models or services when image content must be interpreted or generated.",
-      "references": [
-        {
-          "title": "Image inputs with Azure OpenAI models",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A support assistant should answer in the company tone, refuse unsafe requests, and ask for missing account IDs. Where should these persistent rules go?",
-      "answer": "System instructions",
-      "options": [
-        "System instructions",
-        "Use a hosted agent when custom orchestration code is required",
-        "Use Content Understanding when structured extraction from multimodal content is required",
-        "Use tracing and evaluations to diagnose model and tool behavior"
-      ],
-      "domainId": "concepts",
-      "difficulty": "hard",
-      "id": "ai901-p2-q38",
-      "objectiveId": "responsible-ai",
-      "explanation": "“System instructions” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer supplies three examples of correctly classified tickets before asking the model to classify a new ticket. What technique is used?",
-      "answer": "Few-shot prompting",
-      "options": [
-        "Few-shot prompting",
-        "Change the model deployment and re-test quality, latency, and cost",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q39",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Few-shot prompting” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer wants a one-call model interaction that can use tools and return a structured response. Which current Foundry-aligned API concept is most relevant?",
-      "answer": "Responses API",
-      "options": [
-        "Responses API",
-        "Use a lightweight client that invokes a published agent endpoint",
-        "Prompt agent",
-        "Hosted agent"
-      ],
-      "domainId": "foundry",
-      "difficulty": "hard",
-      "id": "ai901-p2-q40",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Responses API” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A Foundry project must support Python and TypeScript developers. What does Foundry provide?",
-      "answer": "SDKs and REST APIs for multiple languages",
-      "options": [
-        "SDKs and REST APIs for multiple languages",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q41",
-      "objectiveId": "foundry-generative",
-      "explanation": "“SDKs and REST APIs for multiple languages” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team asks whether preview capabilities can appear on the exam. What is the most accurate expectation?",
-      "answer": "Most questions cover GA features, but commonly used preview features may appear",
-      "options": [
-        "Most questions cover GA features, but commonly used preview features may appear",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required",
-        "Use Content Understanding when structured extraction from multimodal content is required"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q42",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Most questions cover GA features, but commonly used preview features may appear” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A lightweight chat app returns 401 errors from Foundry. The endpoint is correct. What should be checked next?",
-      "answer": "Credential source, token permissions, and project RBAC",
-      "options": [
-        "Credential source, token permissions, and project RBAC",
-        "A managed identity or DefaultAzureCredential-based app identity",
-        "Anonymous access with tool permissions disabled",
-        "OAuth On-Behalf-Of for user-delegated tool access"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q43",
-      "objectiveId": "foundry-generative",
-      "explanation": "“Credential source, token permissions, and project RBAC” is the best answer because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A developer wants to compare answer quality before selecting a model for production. What should they do?",
-      "answer": "Evaluate candidate models against representative prompts and quality criteria",
-      "options": [
-        "Evaluate candidate models against representative prompts and quality criteria",
-        "Change the model deployment and re-test quality, latency, and cost",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q44",
-      "objectiveId": "model-components",
-      "explanation": "“Evaluate candidate models against representative prompts and quality criteria” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A service needs low latency and can tolerate less reasoning depth. Which model family characteristic is preferred?",
-      "answer": "Smaller or mini model optimized for speed",
-      "options": [
-        "Smaller or mini model optimized for speed",
-        "Use grounding instead of relying only on model pretraining",
-        "Lower temperature and constrain maximum output tokens",
-        "Use a smaller low-latency model after evaluation"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q45",
-      "objectiveId": "model-components",
-      "explanation": "“Smaller or mini model optimized for speed” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A user asks for a medical diagnosis. Which behavior best supports responsible AI for a general assistant?",
-      "answer": "Provide limitations and encourage professional medical advice rather than making unsupported claims",
-      "options": [
-        "Provide limitations and encourage professional medical advice rather than making unsupported claims",
-        "Ground the response with trusted data and validate outputs before use",
-        "Use a prompt agent with configured instructions and tools",
-        "Use a hosted agent when custom orchestration code is required"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q46",
-      "objectiveId": "responsible-ai",
-      "explanation": "“Provide limitations and encourage professional medical advice rather than making unsupported claims” is the best answer because the selection directly satisfies the scenario’s stated requirement. Responsible AI decisions should address the relevant principle in the design and operation of the solution, rather than treating governance as a final UI step.",
-      "references": [
-        {
-          "title": "Responsible AI principles and approach",
-          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
-        }
-      ]
-    },
-    {
-      "type": "multi-select",
-      "prompt": "A production client uses DefaultAzureCredential to call a Foundry project. Which TWO configuration steps support passwordless access?",
-      "answers": [
-        "Assign the application identity an appropriate Azure role",
-        "Use the Foundry project endpoint when creating the client"
-      ],
-      "options": [
-        "Assign the application identity an appropriate Azure role",
-        "Use the Foundry project endpoint when creating the client",
-        "Embed an administrator password in the browser bundle",
-        "Allow anonymous access to every project resource"
-      ],
-      "domainId": "foundry",
-      "objectiveId": "foundry-generative",
-      "difficulty": "hard",
-      "id": "ai901-p2-q47",
-      "explanation": "“Assign the application identity an appropriate Azure role” and “Use the Foundry project endpoint when creating the client” are the required choices because the selection directly satisfies the scenario’s stated requirement. Foundry apps and agents combine an appropriate deployment with instructions, SDK or API calls, tools, identity, and evaluation according to the scenario.",
-      "references": [
-        {
-          "title": "What is Microsoft Foundry?",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A model is connected to tools that can access confidential files. What is the most important principle?",
-      "answer": "Least privilege for identities and tool access",
-      "options": [
-        "Least privilege for identities and tool access",
-        "Use a larger reasoning model for complex multi-step tasks",
-        "Change the model deployment and re-test quality, latency, and cost",
-        "Use grounding instead of relying only on model pretraining"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q48",
-      "objectiveId": "model-components",
-      "explanation": "“Least privilege for identities and tool access” is the best answer because the selection directly satisfies the scenario’s stated requirement. Model capability, deployment choice, and inference settings should be selected against measured quality, latency, cost, and consistency requirements.",
-      "references": [
-        {
-          "title": "Model catalog and collections in Microsoft Foundry",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "An app must extract policy numbers from scanned images and validate them against a database. Which implementation pattern is best?",
-      "answer": "Use image/document extraction, validate extracted values, then call the database tool or API",
-      "options": [
-        "Use image/document extraction, validate extracted values, then call the database tool or API",
-        "Image generation from a text prompt",
-        "OCR or visual text extraction",
-        "A deployed multimodal model that accepts image input"
-      ],
-      "domainId": "foundry",
-      "difficulty": "medium",
-      "id": "ai901-p2-q49",
-      "objectiveId": "foundry-extraction",
-      "explanation": "“Use image/document extraction, validate extracted values, then call the database tool or API” is the best answer because the selection directly satisfies the scenario’s stated requirement. Content Understanding uses analyzers and schemas to turn documents, images, audio, or video into grounded structured output.",
-      "references": [
-        {
-          "title": "Azure Content Understanding documentation",
-          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
-        }
-      ]
-    },
-    {
-      "type": "multiple-choice",
-      "prompt": "A team wants the assistant to remember context during a single multi-turn conversation but not use it for unrelated users. Which design concern is involved?",
-      "answer": "Conversation state and memory scope",
-      "options": [
-        "Conversation state and memory scope",
-        "Code interpreter",
-        "Web search",
-        "Memory"
-      ],
-      "domainId": "concepts",
-      "difficulty": "medium",
-      "id": "ai901-p2-q50",
-      "objectiveId": "ai-workloads",
-      "explanation": "“Conversation state and memory scope” is the best answer because the selection directly satisfies the scenario’s stated requirement. The input, required output, and business task identify the workload; unrelated modalities or generative features do not satisfy that requirement.",
-      "references": [
-        {
-          "title": "Introduction to AI concepts",
-          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
-        }
-      ]
-    }
-  ],
   "kind": "exam",
   "curated": true,
   "examCode": "AI-901",
   "blueprintVersion": "2026-04-15",
+  "contentRevision": "2026-realistic-v1",
   "durationMinutes": 45,
   "readinessTarget": 70,
   "domains": [
@@ -1136,8 +23,1189 @@
     },
     {
       "id": "foundry",
-      "title": "Implement AI solutions using Microsoft Foundry",
+      "title": "Implement AI solutions by using Microsoft Foundry",
       "weight": 56
+    }
+  ],
+  "items": [
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "easy",
+      "prompt": "A public benefits assistant excludes keyboard-only users from completing an application. Which responsible-AI principle is most directly affected?",
+      "answer": "Inclusiveness",
+      "options": [
+        "Inclusiveness",
+        "Model grounding",
+        "Elasticity",
+        "Image generation"
+      ],
+      "explanation": "Inclusiveness requires experiences that work for people with varied abilities and interaction needs. Grounding, elasticity, and image creation do not address the accessibility barrier.",
+      "id": "ai901-r1-p2-q01",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "A model performs well during testing but drifts after customer behavior changes. Which practice best supports reliability and safety?",
+      "answer": "Monitor production quality and define thresholds for intervention",
+      "options": [
+        "Monitor production quality and define thresholds for intervention",
+        "Stop collecting all operational signals",
+        "Assume the original test score remains valid",
+        "Increase output length for every request"
+      ],
+      "explanation": "Reliability is a lifecycle concern, so teams monitor real behavior and respond when quality changes. A historic score cannot guarantee future performance, and output length is unrelated.",
+      "id": "ai901-r1-p2-q02",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "responsible-ai",
+      "difficulty": "easy",
+      "prompt": "{{blank}} is supported by documenting who owns an AI system and approves high-impact changes.",
+      "answer": "accountability",
+      "options": [
+        "accountability",
+        "clustering",
+        "speech recognition",
+        "scalability"
+      ],
+      "explanation": "Accountability assigns responsibility and governance for system decisions and changes. The alternative terms describe technical workloads or infrastructure behavior.",
+      "id": "ai901-r1-p2-q03",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "responsible-ai",
+      "difficulty": "hard",
+      "prompt": "Decide whether each action supports transparent use of AI.",
+      "answerMode": "true-false",
+      "statements": [
+        {
+          "text": "Tell users when they are interacting with an automated system",
+          "answer": true
+        },
+        {
+          "text": "Hide known limitations because users might lose confidence",
+          "answer": false
+        },
+        {
+          "text": "Explain the main factors used for a consequential recommendation",
+          "answer": true
+        }
+      ],
+      "explanation": "Transparency gives people useful notice and understandable information about operation and limitations. Concealing known limitations prevents informed use rather than improving it.",
+      "id": "ai901-r1-p2-q04",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "An overall accuracy score looks acceptable, but the team is concerned about unequal service quality. Which evaluation should it run next?",
+      "answer": "Compare relevant error rates across affected user groups",
+      "options": [
+        "Compare relevant error rates across affected user groups",
+        "Report only the same overall average",
+        "Exclude difficult cases from the test set",
+        "Measure the color contrast of the monitoring dashboard"
+      ],
+      "explanation": "Group-level error rates can reveal performance disparities hidden by one aggregate score. Repeating the aggregate or excluding hard cases conceals evidence, while dashboard styling does not measure model fairness.",
+      "id": "ai901-r1-p2-q05",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "responsible-ai",
+      "difficulty": "hard",
+      "prompt": "Which TWO controls are most appropriate for a high-impact automated decision?",
+      "answers": [
+        "Provide meaningful human review with authority to change the outcome",
+        "Give affected people a clear appeal or correction path"
+      ],
+      "options": [
+        "Provide meaningful human review with authority to change the outcome",
+        "Give affected people a clear appeal or correction path",
+        "Treat the model score as automatically final",
+        "Remove records of how the decision was reached"
+      ],
+      "explanation": "Human oversight and recourse keep consequential decisions accountable and correctable. Automatic finality and missing records reduce the ability to identify or remedy errors.",
+      "id": "ai901-r1-p2-q06",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "model-components",
+      "difficulty": "easy",
+      "prompt": "What is the primary purpose of an embedding model?",
+      "answer": "Represent content as numeric vectors for similarity tasks",
+      "options": [
+        "Represent content as numeric vectors for similarity tasks",
+        "Generate a spoken response",
+        "Assign Azure RBAC roles",
+        "Create availability zones"
+      ],
+      "explanation": "Embeddings encode semantic characteristics as vectors that can support search and comparison. They do not synthesize speech, manage authorization, or create infrastructure.",
+      "id": "ai901-r1-p2-q07",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "model-components",
+      "difficulty": "medium",
+      "prompt": "A model invents facts when it lacks current product information. Which change most directly addresses the missing knowledge?",
+      "answer": "Retrieve approved current content and include it as grounding context",
+      "options": [
+        "Retrieve approved current content and include it as grounding context",
+        "Increase temperature",
+        "Use a longer user name",
+        "Switch the response to audio"
+      ],
+      "explanation": "Grounding supplies relevant current evidence at inference time. Sampling variation, identity text, and output modality do not add trustworthy product knowledge.",
+      "id": "ai901-r1-p2-q08",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "model-components",
+      "difficulty": "hard",
+      "prompt": "A team is comparing two model deployments for a mobile assistant. Which test set is most useful?",
+      "answer": "Representative mobile requests including expected edge cases",
+      "options": [
+        "Representative mobile requests including expected edge cases",
+        "Only the shortest successful demo prompt",
+        "Unrelated benchmark questions from another domain",
+        "One prompt selected by the model vendor"
+      ],
+      "explanation": "Evaluation should reflect real requests, constraints, and failure cases for the intended application. Narrow demos or unrelated benchmarks do not establish production suitability.",
+      "id": "ai901-r1-p2-q09",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "model-components",
+      "difficulty": "medium",
+      "prompt": "Increasing {{blank}} generally allows more variation in generated wording.",
+      "answer": "temperature",
+      "options": [
+        "temperature",
+        "grounding citations",
+        "RBAC scope",
+        "embedding storage"
+      ],
+      "explanation": "Temperature influences the randomness of token sampling and therefore output variation. Citations, authorization scope, and storage do not serve as sampling controls.",
+      "id": "ai901-r1-p2-q10",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "model-components",
+      "difficulty": "medium",
+      "prompt": "Evaluate each statement about model selection.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Latency and cost can matter even when two models have similar quality",
+          "answer": true
+        },
+        {
+          "text": "The largest model is always the correct production choice",
+          "answer": false
+        },
+        {
+          "text": "Regional availability never constrains a deployment decision",
+          "answer": false
+        }
+      ],
+      "explanation": "A deployment choice balances measured quality with latency, cost, and regional availability. Neither model size nor an assumption of universal availability determines the best fit.",
+      "id": "ai901-r1-p2-q11",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "model-components",
+      "difficulty": "hard",
+      "prompt": "Which TWO steps help evaluate a grounded assistant?",
+      "answers": [
+        "Measure whether answers are supported by retrieved sources",
+        "Test retrieval with representative user wording"
+      ],
+      "options": [
+        "Measure whether answers are supported by retrieved sources",
+        "Test retrieval with representative user wording",
+        "Judge only the fluency of one answer",
+        "Disable retrieval during the evaluation"
+      ],
+      "explanation": "Grounded systems require both relevant retrieval and source-supported generation. Fluency alone can hide unsupported claims, and disabling retrieval removes the behavior under test.",
+      "id": "ai901-r1-p2-q12",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Model catalog in Microsoft Foundry",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/model-catalog-overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "A service predicts whether a transaction is fraudulent or legitimate. Which task is this?",
+      "answer": "Binary classification",
+      "options": [
+        "Binary classification",
+        "Regression",
+        "Clustering",
+        "Summarization"
+      ],
+      "explanation": "Binary classification chooses between two labels such as fraud and legitimate. Regression returns a number, clustering discovers groups, and summarization condenses text.",
+      "id": "ai901-r1-p2-q13",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "A retailer groups customers by similar behavior without predefined segment labels. Which technique should it use?",
+      "answer": "Clustering",
+      "options": [
+        "Clustering",
+        "Supervised classification",
+        "Speech synthesis",
+        "OCR"
+      ],
+      "explanation": "Clustering discovers natural groups in unlabeled data. Classification requires known labels, while speech synthesis and OCR process different modalities.",
+      "id": "ai901-r1-p2-q14",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "Which capability identifies the main topics in a document as short phrases?",
+      "answer": "Key phrase extraction",
+      "options": [
+        "Key phrase extraction",
+        "Object detection",
+        "Speech recognition",
+        "Regression"
+      ],
+      "explanation": "Key phrase extraction returns salient words or phrases from text. Detection, speech recognition, and regression solve visual, audio, and numeric tasks.",
+      "id": "ai901-r1-p2-q15",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "A system must identify each pixel that belongs to a road in a satellite image. Which vision task is required?",
+      "answer": "Semantic segmentation",
+      "options": [
+        "Semantic segmentation",
+        "Image classification",
+        "Named entity recognition",
+        "Text generation"
+      ],
+      "explanation": "Semantic segmentation assigns a class to image pixels and can outline regions such as roads. Whole-image labels and language techniques do not provide pixel-level output.",
+      "id": "ai901-r1-p2-q16",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "hard",
+      "prompt": "A legal team needs a short faithful synopsis of each contract while retaining the original documents. Which workload fits?",
+      "answer": "Text summarization",
+      "options": [
+        "Text summarization",
+        "Image generation",
+        "Speech synthesis",
+        "Anomaly detection"
+      ],
+      "explanation": "Summarization condenses source text into a shorter account while the original remains the evidence. The other workloads create media or detect unusual numeric patterns.",
+      "id": "ai901-r1-p2-q17",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "A service must produce a natural-language answer that did not previously exist. Which workload category applies?",
+      "answer": "Generative AI",
+      "options": [
+        "Generative AI",
+        "Optical character recognition",
+        "Clustering",
+        "Anomaly detection"
+      ],
+      "explanation": "Generative AI creates new content such as a response. OCR extracts existing characters, while clustering and anomaly detection analyze patterns in data.",
+      "id": "ai901-r1-p2-q18",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "{{blank}} is the image task that predicts which known plant species appears in a photograph.",
+      "answer": "classification",
+      "options": [
+        "classification",
+        "regression",
+        "translation",
+        "synthesis"
+      ],
+      "explanation": "Image classification assigns a known label to a whole image. Regression predicts a number, translation changes language, and synthesis creates audio.",
+      "id": "ai901-r1-p2-q19",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Decide whether each capability matches the requested output.",
+      "answerMode": "true-false",
+      "statements": [
+        {
+          "text": "OCR can return printed characters from an image",
+          "answer": true
+        },
+        {
+          "text": "Sentiment analysis returns bounding boxes around products",
+          "answer": false
+        },
+        {
+          "text": "Speech synthesis can create audio from text",
+          "answer": true
+        }
+      ],
+      "explanation": "OCR extracts visible text and speech synthesis creates spoken output. Bounding boxes are associated with object detection, not sentiment analysis.",
+      "id": "ai901-r1-p2-q20",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "ai-workloads",
+      "difficulty": "hard",
+      "prompt": "Which TWO characteristics distinguish an agentic solution from a simple text generator?",
+      "answers": [
+        "It can choose among configured tools",
+        "It can take sequenced actions toward a goal"
+      ],
+      "options": [
+        "It can choose among configured tools",
+        "It can take sequenced actions toward a goal",
+        "It must always generate an image",
+        "It requires every step to be manually selected by the user"
+      ],
+      "explanation": "Agentic solutions can reason about available actions and use tools toward a goal. Image generation is optional, and fully manual step selection removes the defining autonomy.",
+      "id": "ai901-r1-p2-q21",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "A retailer wants to label each written review as positive, neutral, or negative without creating new content. Which technique should it use?",
+      "answer": "Sentiment analysis",
+      "options": [
+        "Sentiment analysis",
+        "Speech synthesis",
+        "Speaker diarization",
+        "Optical character recognition"
+      ],
+      "explanation": "Sentiment analysis derives an opinion label from existing text without generating a new response. Speech synthesis and diarization process audio, while optical character recognition reads text from images rather than classifying expressed opinion.",
+      "id": "ai901-r1-p2-q22",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to AI concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/get-started-ai-fundamentals/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "easy",
+      "prompt": "A Python app has authenticated an AIProjectClient. Which method creates a client for calling deployed Azure OpenAI models in the project?",
+      "answer": "get_openai_client()",
+      "options": [
+        "get_openai_client()",
+        "get_storage_client()",
+        "create_analyzer()",
+        "recognize_once_async()"
+      ],
+      "explanation": "AIProjectClient.get_openai_client() returns the project-scoped Azure OpenAI client used for model requests. The alternatives create unrelated clients or invoke Content Understanding or Speech operations.",
+      "id": "ai901-r1-p2-q23",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "An assistant must call an internal ticket API. What should be configured for the agent?",
+      "answer": "A function or API tool with scoped authentication",
+      "options": [
+        "A function or API tool with scoped authentication",
+        "An image-generation deployment",
+        "A public anonymous administrator key",
+        "A speech voice with a matching name"
+      ],
+      "explanation": "A controlled function or API tool exposes the intended operation to the agent with appropriate identity. Image and speech features do not call the ticket system, and anonymous admin access is unsafe.",
+      "id": "ai901-r1-p2-q24",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "A retrieved document contains text telling the agent to ignore its system instructions. How should the application treat that text?",
+      "answer": "As untrusted data that cannot replace higher-priority instructions",
+      "options": [
+        "As untrusted data that cannot replace higher-priority instructions",
+        "As a new system prompt because it came from retrieval",
+        "As proof that every tool call is authorized",
+        "As a reason to disable input validation"
+      ],
+      "explanation": "Retrieved content can contain prompt injection and must remain untrusted context. It does not gain instruction priority or authorize actions, and validation should remain enabled.",
+      "id": "ai901-r1-p2-q25",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "A developer wants the agent to remember a customer’s preferred response language across sessions. Which capability is intended for this?",
+      "answer": "Agent memory",
+      "options": [
+        "Agent memory",
+        "File search over product manuals",
+        "Image classification",
+        "Batch transcription"
+      ],
+      "explanation": "Agent memory can retain relevant user-specific context across interactions. File search grounds knowledge, and vision or speech workloads do not provide conversational persistence.",
+      "id": "ai901-r1-p2-q26",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "What should a team use to inspect the sequence of model calls, retrieval, and tool execution?",
+      "answer": "Tracing",
+      "options": [
+        "Tracing",
+        "Image captions",
+        "Storage redundancy",
+        "Speech pronunciation settings"
+      ],
+      "explanation": "Tracing records the execution path across model and tool steps and supports diagnosis. The other choices concern content or infrastructure rather than orchestration visibility.",
+      "id": "ai901-r1-p2-q27",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "A production app needs stable agent behavior while a new instruction set is tested. Which release practice should be used?",
+      "answer": "Publish and target a specific tested agent version",
+      "options": [
+        "Publish and target a specific tested agent version",
+        "Edit the live instructions without a version",
+        "Randomly alternate every request between drafts",
+        "Let clients choose an unpublished draft by default"
+      ],
+      "explanation": "Versioned publishing separates tested production behavior from ongoing changes. Direct edits, random drafts, or unpublished defaults make releases unpredictable.",
+      "id": "ai901-r1-p2-q28",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-generative",
+      "difficulty": "easy",
+      "prompt": "A custom operation exposed to an agent is configured as a {{blank}}.",
+      "answer": "tool",
+      "options": [
+        "tool",
+        "temperature",
+        "token",
+        "vision label"
+      ],
+      "explanation": "Tools give agents callable capabilities such as application functions. Temperature and tokens are model settings or units, while a vision label is an output.",
+      "id": "ai901-r1-p2-q29",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "The URL used by an SDK to access a specific Foundry project is the project {{blank}}.",
+      "answer": "endpoint",
+      "options": [
+        "endpoint",
+        "tag",
+        "budget",
+        "availability set"
+      ],
+      "explanation": "The project endpoint tells the SDK where to access project resources and services. Tags, budgets, and availability sets are Azure management concepts rather than API locations.",
+      "id": "ai901-r1-p2-q30",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "Evaluate each statement about secure agent tools.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Tool permissions should follow least privilege",
+          "answer": true
+        },
+        {
+          "text": "The model should receive every backend credential in its prompt",
+          "answer": false
+        },
+        {
+          "text": "The application should execute tool arguments without validation",
+          "answer": false
+        }
+      ],
+      "explanation": "Least privilege and input validation constrain what an agent can do. Prompting with backend credentials or executing unvalidated arguments creates unnecessary exposure and authority.",
+      "id": "ai901-r1-p2-q31",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "Which TWO prompt elements improve a request for consistent structured output?",
+      "answers": [
+        "A clearly defined output schema",
+        "An example that follows the required structure"
+      ],
+      "options": [
+        "A clearly defined output schema",
+        "An example that follows the required structure",
+        "A request to be as creative as possible",
+        "An instruction to ignore missing required fields"
+      ],
+      "explanation": "Schemas and representative examples clarify the expected structure. Unbounded creativity and ignoring missing fields work against predictable, valid output.",
+      "id": "ai901-r1-p2-q32",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "What is Microsoft Foundry?",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/what-is-azure-ai-foundry"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "easy",
+      "prompt": "Which capability can identify that a document is written in French?",
+      "answer": "Language detection",
+      "options": [
+        "Language detection",
+        "Text translation",
+        "Object detection",
+        "Image generation"
+      ],
+      "explanation": "Language detection identifies the language without changing the content. Translation changes languages, while detection and generation in the other modalities do not inspect written language.",
+      "id": "ai901-r1-p2-q33",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "medium",
+      "prompt": "A transcript must indicate which participant spoke each segment. Which feature is needed?",
+      "answer": "Speaker diarization",
+      "options": [
+        "Speaker diarization",
+        "Sentiment polarity",
+        "Optical character recognition",
+        "Image segmentation"
+      ],
+      "explanation": "Speaker diarization separates and labels speakers within transcribed audio. Sentiment, OCR, and segmentation do not identify speakers.",
+      "id": "ai901-r1-p2-q34",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "hard",
+      "prompt": "A Speech SDK app must use the en-US-AvaMultilingualNeural voice for text-to-speech. Which configuration property should it set?",
+      "answer": "speech_synthesis_voice_name",
+      "options": [
+        "speech_synthesis_voice_name",
+        "speech_recognition_language",
+        "endpoint_id",
+        "output_format_only"
+      ],
+      "explanation": "speech_synthesis_voice_name selects the synthesis voice used to generate audio. Recognition language configures speech-to-text input, while an endpoint identifier or output format alone does not choose the requested voice.",
+      "id": "ai901-r1-p2-q35",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "easy",
+      "prompt": "Identifying product names in written reviews uses named {{blank}} recognition.",
+      "answer": "entity",
+      "options": [
+        "entity",
+        "speaker",
+        "pixel",
+        "anomaly"
+      ],
+      "explanation": "Named entity recognition locates and categorizes mentions such as products in text. Speaker, pixel, and anomaly processing describe other tasks.",
+      "id": "ai901-r1-p2-q36",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "medium",
+      "prompt": "Evaluate each statement about speech processing.",
+      "answerMode": "true-false",
+      "statements": [
+        {
+          "text": "Speech recognition converts audio into text",
+          "answer": true
+        },
+        {
+          "text": "Speech synthesis identifies sentiment in a transcript",
+          "answer": false
+        },
+        {
+          "text": "Speech translation can change spoken content into another language",
+          "answer": true
+        }
+      ],
+      "explanation": "Recognition transcribes audio and translation changes language. Speech synthesis produces audio from text and does not calculate sentiment.",
+      "id": "ai901-r1-p2-q37",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "medium",
+      "prompt": "Which TWO outputs can text analysis derive from support messages?",
+      "answers": [
+        "Sentiment labels",
+        "Named entities"
+      ],
+      "options": [
+        "Sentiment labels",
+        "Named entities",
+        "Bounding boxes around callers",
+        "Synthesized speech waveforms"
+      ],
+      "explanation": "Text analysis can return sentiment and entities from written messages. Bounding boxes are visual outputs and synthesized waveforms are generated audio.",
+      "id": "ai901-r1-p2-q38",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "A model must label a photograph as indoor or outdoor. Which capability is required?",
+      "answer": "Image classification",
+      "options": [
+        "Image classification",
+        "Object detection",
+        "Speech recognition",
+        "Entity linking"
+      ],
+      "explanation": "Classification assigns a category to the whole image. Detection locates instances, while speech and entity linking work with other inputs.",
+      "id": "ai901-r1-p2-q39",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Image inputs with Azure OpenAI models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "A warehouse app must count pallets and return each pallet’s location in a photo. Which capability fits?",
+      "answer": "Object detection",
+      "options": [
+        "Object detection",
+        "Image classification only",
+        "Sentiment analysis",
+        "Text summarization"
+      ],
+      "explanation": "Object detection can identify multiple instances and their bounding boxes, enabling a count and locations. A whole-image label cannot locate each pallet.",
+      "id": "ai901-r1-p2-q40",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Image inputs with Azure OpenAI models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "A developer builds one user message for visual question answering. Which pair of content parts should the message contain?",
+      "answer": "input_text and input_image",
+      "options": [
+        "input_text and input_image",
+        "input_audio and output_audio",
+        "system and tool_result",
+        "embedding and speech_voice"
+      ],
+      "explanation": "A visual question-answering message supplies the written question as input_text and the visual evidence as input_image. The other pairs represent audio, orchestration, or unrelated configuration rather than the two required inputs.",
+      "id": "ai901-r1-p2-q41",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Image inputs with Azure OpenAI models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "Creating a new logo concept from a text description uses image {{blank}}.",
+      "answer": "generation",
+      "options": [
+        "generation",
+        "recognition",
+        "classification",
+        "extraction"
+      ],
+      "explanation": "Image generation produces new visual content from a prompt. Recognition, classification, and extraction analyze existing content instead.",
+      "id": "ai901-r1-p2-q42",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Image inputs with Azure OpenAI models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "Evaluate each statement about visual workloads.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "OCR is appropriate for reading a serial number in a photo",
+          "answer": true
+        },
+        {
+          "text": "Image generation is the best way to locate existing defects",
+          "answer": false
+        },
+        {
+          "text": "A text-only deployment can always accept an image in its prompt",
+          "answer": false
+        }
+      ],
+      "explanation": "OCR reads visible characters, while locating defects requires analysis such as detection. Image inputs require a deployment with visual capability rather than any text-only model.",
+      "id": "ai901-r1-p2-q43",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Image inputs with Azure OpenAI models",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/gpt-with-vision"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "A Content Understanding analyzer must read printed text before extracting custom document fields. Which analyzer setting enables OCR processing?",
+      "answer": "enableOcr",
+      "options": [
+        "enableOcr",
+        "disableGrounding",
+        "speechVoiceName",
+        "maxOutputTokens"
+      ],
+      "explanation": "enableOcr turns on optical character recognition for applicable analyzer processing. Grounding, speech voices, and generative output limits do not enable the document text-reading step.",
+      "id": "ai901-r1-p2-q44",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "A custom analyzer confuses contract start and renewal dates. Which schema improvement is most useful?",
+      "answer": "Give each field a precise description and expected meaning",
+      "options": [
+        "Give each field a precise description and expected meaning",
+        "Rename both fields to date",
+        "Increase generation randomness",
+        "Remove representative test documents"
+      ],
+      "explanation": "Clear distinct field definitions help the analyzer select the intended evidence. Ambiguous names, more randomness, and less testing make confusion more likely.",
+      "id": "ai901-r1-p2-q45",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "A video archive needs chapter summaries and time-aligned topics. Which Content Understanding input capability applies?",
+      "answer": "Video analysis",
+      "options": [
+        "Video analysis",
+        "Image generation",
+        "Text-only sentiment analysis",
+        "Speaker diarization alone"
+      ],
+      "explanation": "Content Understanding video analysis can produce time-grounded insights. Image generation and text-only sentiment do not process the source, while diarization alone only separates speakers.",
+      "id": "ai901-r1-p2-q46",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "An extracted field is absent from a source document. What should a well-designed result represent?",
+      "answer": "The field as missing rather than inventing a value",
+      "options": [
+        "The field as missing rather than inventing a value",
+        "A plausible value generated from unrelated documents",
+        "The most common value in the training set",
+        "A value copied from a different customer"
+      ],
+      "explanation": "Extraction should remain grounded in the supplied source and represent absent evidence as missing. Guessing or borrowing unrelated values creates unsupported data.",
+      "id": "ai901-r1-p2-q47",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "Why should extraction tests include scans with poor lighting and unusual layouts?",
+      "answer": "They reveal whether the analyzer works on representative variation",
+      "options": [
+        "They reveal whether the analyzer works on representative variation",
+        "They guarantee every future input will succeed",
+        "They increase the Azure subscription quota",
+        "They remove the need for confidence thresholds"
+      ],
+      "explanation": "Representative variation exposes real failure modes and informs thresholds or improvements. A test set cannot guarantee all future inputs or replace operational controls.",
+      "id": "ai901-r1-p2-q48",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "Evaluate each statement about analyzer schemas.",
+      "answerMode": "true-false",
+      "statements": [
+        {
+          "text": "A field description can clarify what evidence should be extracted",
+          "answer": true
+        },
+        {
+          "text": "A schema automatically adds facts that are absent from the input",
+          "answer": false
+        },
+        {
+          "text": "Field types help downstream applications consume structured output",
+          "answer": true
+        }
+      ],
+      "explanation": "Descriptions and types define a useful structured contract. The analyzer should not manufacture values when the input lacks supporting evidence.",
+      "id": "ai901-r1-p2-q49",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "Decide whether each scenario is a Content Understanding use case.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Extract line items and totals from purchase orders",
+          "answer": true
+        },
+        {
+          "text": "Create a new advertising illustration from a slogan",
+          "answer": false
+        },
+        {
+          "text": "Generate a fictional voice recording from a short script",
+          "answer": false
+        }
+      ],
+      "explanation": "Content Understanding extracts grounded structure and insights from supplied content. Creating a new illustration or voice recording is generation rather than extraction.",
+      "id": "ai901-r1-p2-q50",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Content Understanding overview",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        }
+      ]
     }
   ]
 }

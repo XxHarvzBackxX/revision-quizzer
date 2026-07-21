@@ -24,6 +24,8 @@ describe('quiz routes', () => {
   it('parses certification study and drill routes', () => {
     expect(parseRoute('/study')).toEqual({ name: 'study-index', path: '/study' });
     expect(routeClass(parseRoute('/study'))).toBe('study-index');
+    expect(parseRoute('/study/profile')).toEqual({ name: 'study-profile', path: '/study/profile' });
+    expect(parseRoute('/study/ai-901/academy')).toMatchObject({ name: 'study-academy', examCode: 'ai-901' });
     expect(parseRoute('/study/ai-901')).toMatchObject({ name: 'study-hub', examCode: 'ai-901' });
     expect(parseRoute('/study/ai-901/drill')).toMatchObject({ name: 'study-drill-setup', examCode: 'ai-901' });
     expect(parseRoute('/study/ai-901/drill/play')).toMatchObject({ name: 'study-drill-play', examCode: 'ai-901' });

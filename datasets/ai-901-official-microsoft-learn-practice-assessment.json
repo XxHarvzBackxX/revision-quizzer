@@ -1,0 +1,1207 @@
+{
+  "title": "AI-901: Official Microsoft Learn Practice Assessment Questions",
+  "description": "A learner-captured copy of the 50-question Microsoft Learn AI-901 Practice Assessment observed in July 2026. Question wording is transcribed from the supplied screenshots; explanations and Microsoft Learn references were added for study use.",
+  "tags": [
+    "ai-901",
+    "microsoft-learn",
+    "official-practice-assessment",
+    "observed-july-2026"
+  ],
+  "shuffleQuestions": false,
+  "kind": "exam",
+  "curated": true,
+  "examCode": "AI-901",
+  "blueprintVersion": "2026-04-15",
+  "contentRevision": "2026-observed-practice-v1",
+  "durationMinutes": 45,
+  "readinessTarget": 70,
+  "domains": [
+    {
+      "id": "concepts",
+      "title": "Identify AI concepts and capabilities",
+      "weight": 42
+    },
+    {
+      "id": "foundry",
+      "title": "Implement AI solutions by using Microsoft Foundry",
+      "weight": 58
+    }
+  ],
+  "items": [
+    {
+      "type": "multi-select",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "hard",
+      "prompt": "You have a Microsoft Foundry project that analyzes product images. You need Azure Content Understanding in Foundry Tools to provide descriptive text that can be indexed for image search and a structured product category value. Which TWO actions should you perform?",
+      "answers": [
+        "Map the Markdown output to the search index content field",
+        "Add a schema field that uses classify for the product category"
+      ],
+      "options": [
+        "Map the Markdown output to the search index content field",
+        "Add a schema field that uses classify for the product category",
+        "Map source locations to the search index content field",
+        "Configure Azure AI Content Safety image moderation categories"
+      ],
+      "explanation": "Markdown is the searchable descriptive output, while a classify field constrains the product category to a structured value. Source locations provide grounding rather than index content, and moderation does not define extraction output.",
+      "id": "ai901-official-pa-q01",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "You have a Microsoft Foundry project that contains an image-generation model. You need an app to create a new product image by using an existing PNG image and a text prompt. Which capability should the app use?",
+      "answer": "Image-to-image editing",
+      "options": [
+        "Image-to-image editing",
+        "Object detection",
+        "Text embedding",
+        "Text-to-image generation"
+      ],
+      "explanation": "Image-to-image editing uses an existing image together with written instructions to create a modified result. Text-to-image starts without the source PNG, while detection and embeddings analyze rather than edit it.",
+      "id": "ai901-official-pa-q02",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "hard",
+      "prompt": "You have a Python app that stores generated replies in a variable named response_text. You need Azure Speech in Foundry Tools to synthesize response_text by using the en-US-Ava:DragonHDLatestNeural voice and play the audio on the default speaker. Which configuration should the app use?",
+      "answer": "speech_synthesis_voice_name and default speaker output",
+      "options": [
+        "speech_synthesis_voice_name and default speaker output",
+        "speech_synthesis_voice_name and file output",
+        "speech_synthesis_language and default speaker output",
+        "speech_synthesis_language and file output"
+      ],
+      "explanation": "The exact named voice belongs in speech_synthesis_voice_name, and an AudioConfig for the default speaker plays the result locally. A language setting does not select that specific voice, and file output would not play it directly.",
+      "id": "ai901-official-pa-q03",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "For each statement about image-generation models in Microsoft Foundry, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Image-generation models can create images from natural-language descriptions",
+          "answer": true
+        },
+        {
+          "text": "Image-generation models retrieve generated images from a curated image catalog",
+          "answer": false
+        },
+        {
+          "text": "The model catalog can be filtered by inference task to help find text-to-image models",
+          "answer": true
+        }
+      ],
+      "explanation": "Image-generation models synthesize new pixels from prompts instead of retrieving a catalog image. Foundry model discovery supports filtering by task, including image-generation tasks.",
+      "id": "ai901-official-pa-q04",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "You have a Microsoft Foundry project that receives images of retail store shelves. You need to extract product brands, product counts, and shelf condition from each image as structured fields with confidence values. What should you create?",
+      "answer": "An Azure Content Understanding image analyzer with a field schema",
+      "options": [
+        "An Azure Content Understanding image analyzer with a field schema",
+        "An Azure Vision Image Analysis request that uses OCR",
+        "An Azure AI Content Safety image moderation configuration",
+        "An Azure Content Understanding document analyzer with a field schema"
+      ],
+      "explanation": "An image analyzer matches the input modality, and its field schema defines the structured values to return. OCR reads visible text only, moderation identifies safety categories, and a document analyzer targets document content.",
+      "id": "ai901-official-pa-q05",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "easy",
+      "prompt": "You have a Python app that collects short customer feedback comments. You need to write a sentiment label and positive, neutral, and negative confidence scores for each comment without training a custom model. Which Azure Language in Foundry Tools feature should the app call?",
+      "answer": "Sentiment analysis",
+      "options": [
+        "Sentiment analysis",
+        "PII detection",
+        "Key phrase extraction",
+        "Language detection"
+      ],
+      "explanation": "Sentiment analysis returns document or sentence sentiment together with confidence scores for positive, neutral, and negative classes. The other Language features find sensitive data, main phrases, or the language used.",
+      "id": "ai901-official-pa-q06",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "In Microsoft Foundry, generating a natural-language description of an uploaded image in the chat playground requires a deployed {{blank}}.",
+      "answer": "multimodal model",
+      "options": [
+        "multimodal model",
+        "speech-to-text model",
+        "text-embedding model",
+        "image-generation model"
+      ],
+      "explanation": "A multimodal model can interpret an image together with a written instruction and return a text description. Speech models process audio, embeddings create vectors, and image-generation models create rather than describe images.",
+      "id": "ai901-official-pa-q07",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "medium",
+      "prompt": "You have a Python app that processes customer support messages by using Azure Language in Foundry Tools. You need to extract people, locations, and organizations from each message, including the matching text and category. Which client method should the app call?",
+      "answer": "recognize_entities(documents=documents)",
+      "options": [
+        "recognize_entities(documents=documents)",
+        "analyze_sentiment(documents=documents)",
+        "extract_key_phrases(documents=documents)",
+        "recognize_linked_entities(documents=documents)"
+      ],
+      "explanation": "recognize_entities returns named-entity text and categories such as Person, Location, and Organization. Linked entities resolve mentions to external knowledge entries, while sentiment and key phrases return different insights.",
+      "id": "ai901-official-pa-q08",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "easy",
+      "prompt": "Key phrase extraction in Azure Language in Foundry Tools {{blank}}.",
+      "answer": "identifies the main concepts in text",
+      "options": [
+        "identifies the main concepts in text",
+        "detects the language of text",
+        "identifies known entities with links",
+        "identifies whether text is positive or negative"
+      ],
+      "explanation": "Key phrase extraction returns the important words and phrases that represent the main concepts in supplied text. Language detection, entity linking, and sentiment analysis provide different language insights.",
+      "id": "ai901-official-pa-q09",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "hard",
+      "prompt": "For each statement about Azure Content Understanding in Foundry Tools, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "The enableOcr setting is used to extract transcripts from audio and video files",
+          "answer": false
+        },
+        {
+          "text": "Content Understanding can process images, audio recordings, and video content",
+          "answer": true
+        },
+        {
+          "text": "A Content Understanding analyzer defines the content type, extraction settings, and output structure",
+          "answer": true
+        }
+      ],
+      "explanation": "enableOcr extracts text from images and scanned documents rather than producing audio transcripts. Content Understanding supports multiple media types, and the analyzer configuration defines processing and structured output.",
+      "id": "ai901-official-pa-q10",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "You have a Microsoft Foundry project. You need to deploy an Azure OpenAI model for a chat app and apply guardrails. Which deployment option should you use?",
+      "answer": "Standard deployment in Foundry resources",
+      "options": [
+        "Standard deployment in Foundry resources",
+        "Managed compute deployment",
+        "Instant access",
+        "Provisioned deployment type"
+      ],
+      "explanation": "Standard deployment in Foundry resources supports Azure OpenAI models and built-in, customizable content filtering and guardrails. Managed compute targets other open models, while instant access and a throughput type do not match the required deployment path.",
+      "id": "ai901-official-pa-q11",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "hard",
+      "prompt": "You have a Microsoft Foundry resource and recordings of customer support calls. Each recording contains an agent and a customer. You need Azure Content Understanding to return agent/customer-attributed transcripts, summaries, and sentiment insights with minimal analyzer configuration. Which analyzer should you use?",
+      "answer": "prebuilt-callCenter",
+      "options": [
+        "prebuilt-callCenter",
+        "a customized prebuilt-audioSearch analyzer",
+        "prebuilt-audioSearch",
+        "a custom audio analyzer"
+      ],
+      "explanation": "prebuilt-callCenter is tailored to contact-center audio and supplies speaker-attributed transcripts and common call insights with minimal setup. Audio search and custom analyzers require a different focus or additional configuration.",
+      "id": "ai901-official-pa-q12",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "hard",
+      "prompt": "You have a Python app that uses the OpenAI Responses API in Microsoft Foundry with a deployed multimodal model. Users provide two HTTPS image URLs. You need the app to return a text comparison of the two images in a single request. What should the request include?",
+      "answer": "A text instruction and each image URL as an input_image content part",
+      "options": [
+        "A text instruction and each image URL as an input_image content part",
+        "Each image URL sent to an image-generation endpoint",
+        "Each image URL as an image_url content part in Chat Completions format",
+        "A text instruction and both image URLs combined into one input_text value"
+      ],
+      "explanation": "The Responses API represents the instruction as input_text and each image as its own input_image content part. A text string cannot make URLs into visual input, and the Chat Completions image_url shape is not the requested Responses API format.",
+      "id": "ai901-official-pa-q13",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "For each statement about user prompts, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "A user prompt can include an example to guide the model toward a desired style",
+          "answer": true
+        },
+        {
+          "text": "A user prompt can specify the intended audience to tailor response tone and technical depth",
+          "answer": true
+        },
+        {
+          "text": "A user prompt for structured output should omit requested formats such as bullet points, tables, or numbered lists",
+          "answer": false
+        }
+      ],
+      "explanation": "Examples, audience information, and explicit output-format instructions all make a prompt more specific. Omitting the desired structure makes consistent formatting less likely rather than improving it.",
+      "id": "ai901-official-pa-q14",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "You have a Python chat app that uses an OpenAI-compatible client from a Microsoft Foundry project. You need to send a single prompt by using the unified model invocation API. Which method should the app call?",
+      "answer": "responses.create()",
+      "options": [
+        "responses.create()",
+        "deployments.get()",
+        "models.list()",
+        "chat.completions.create()"
+      ],
+      "explanation": "responses.create invokes the unified Responses API for a deployed model. Deployment and model-list operations manage resources, while chat.completions.create uses the older Chat Completions surface.",
+      "id": "ai901-official-pa-q15",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "easy",
+      "prompt": "You have a Microsoft Foundry project that contains a deployed Azure OpenAI model. You need to submit prompts and review generated responses without writing code. Which portal feature should you use?",
+      "answer": "Chat playground",
+      "options": [
+        "Chat playground",
+        "Model catalog",
+        "Monitoring metrics",
+        "Models + endpoints"
+      ],
+      "explanation": "The chat playground provides an interactive interface for sending prompts to a deployed conversational model and inspecting its responses. The catalog and endpoint pages manage models, while metrics show operations rather than prompt experiments.",
+      "id": "ai901-official-pa-q16",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "For each statement about agents in Microsoft Foundry, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Foundry Tools can be used to discover, configure, and add tools to an agent",
+          "answer": true
+        },
+        {
+          "text": "Built-in tools require you to host external code before they can be added to an agent",
+          "answer": false
+        },
+        {
+          "text": "Selecting a model defines how an agent should behave when responding to users",
+          "answer": false
+        }
+      ],
+      "explanation": "Foundry exposes configurable built-in tools that do not require customer-hosted code. The model supplies inference capability, while instructions and prompts define the agent behavior expected by users.",
+      "id": "ai901-official-pa-q17",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "You have a Python app that uses a Microsoft Foundry project containing an existing prompt agent named faq-agent. You need to configure the app to send a user message to the existing agent. What should you do?",
+      "answer": "Call responses.create() with an agent_reference",
+      "options": [
+        "Call responses.create() with an agent_reference",
+        "Generate embeddings for the user message",
+        "Create an ephemeral agent in the app",
+        "Call responses.create() with model set to faq-agent"
+      ],
+      "explanation": "The Foundry Responses API accepts agent_reference to select a stored prompt agent by name and version. A prompt agent is not a model deployment name, and creating another agent or embedding the input does not invoke the existing one.",
+      "id": "ai901-official-pa-q18",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-vision",
+      "difficulty": "hard",
+      "prompt": "For each statement about the OpenAI Responses API in Microsoft Foundry, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "A single request can include both text input and image input",
+          "answer": true
+        },
+        {
+          "text": "Images can be provided as public URLs, but not as base64-encoded image data",
+          "answer": false
+        },
+        {
+          "text": "Application code passes the base model name instead of the deployment name as the model value",
+          "answer": false
+        }
+      ],
+      "explanation": "A multimodal Responses request can combine text and images, and image data can use a public URL or a base64 data URL. In Azure and Foundry calls, the model value identifies the deployed model rather than merely its base catalog name.",
+      "id": "ai901-official-pa-q19",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "You have a Python web app that uses a deployed vision-enabled Azure OpenAI model in Microsoft Foundry. The app receives a user question and an image URL. You need the app to answer questions about visible objects, actions, or scene context. What should the app send to the model?",
+      "answer": "The question as input_text and the image URL as input_image",
+      "options": [
+        "The question as input_text and the image URL as input_image",
+        "The question as an image-generation prompt",
+        "The question and image URL together as input_text",
+        "The question as input_text and the model name as input_image"
+      ],
+      "explanation": "A vision-enabled Responses request supplies the instruction as input_text and the actual URL as input_image so the model receives both modalities. Putting a URL in plain text does not provide image pixels to the model.",
+      "id": "ai901-official-pa-q20",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-generative",
+      "difficulty": "easy",
+      "prompt": "In Microsoft Foundry, a system message is used to {{blank}}.",
+      "answer": "guide role, style, and boundaries",
+      "options": [
+        "guide role, style, and boundaries",
+        "replace safety controls",
+        "change model training data",
+        "evaluate responses after generation"
+      ],
+      "explanation": "System instructions establish the enduring role, behavioral guidance, style, and boundaries for model responses. They do not retrain the model, replace platform safeguards, or perform post-generation evaluation.",
+      "id": "ai901-official-pa-q21",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-vision",
+      "difficulty": "medium",
+      "prompt": "To refine a prompt for an image-generation model in Microsoft Foundry, {{blank}} helps guide the generated image.",
+      "answer": "visual details about the subject, setting, and style",
+      "options": [
+        "visual details about the subject, setting, and style",
+        "a simple list of objects in the scene",
+        "extracted labels from image analysis",
+        "the model deployment name and image size"
+      ],
+      "explanation": "Describing subject appearance, setting, composition, lighting, and style gives an image model useful visual direction. Deployment configuration and labels alone do not express the desired creative result.",
+      "id": "ai901-official-pa-q22",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Use image inputs with the Responses API",
+          "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "After creating an AIProjectClient, a Python chat app should {{blank}} before sending prompts to a deployed model.",
+      "answer": "call get_openai_client()",
+      "options": [
+        "call get_openai_client()",
+        "send prompts by using deployments operations",
+        "create a client from the deployment name only",
+        "use the deployment URL as the project endpoint"
+      ],
+      "explanation": "get_openai_client obtains an OpenAI-compatible client configured for the Foundry project, after which the app can call model APIs. Deployment management operations and a deployment name alone do not create that inference client.",
+      "id": "ai901-official-pa-q23",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "For handwritten or visually complex forms, {{blank}} helps Azure Content Understanding in Foundry Tools extract structured information.",
+      "answer": "schema-defined fields and relationships",
+      "options": [
+        "schema-defined fields and relationships",
+        "exact label matching",
+        "fixed page coordinates",
+        "source file normalization"
+      ],
+      "explanation": "Schema-defined fields and relationships describe the business values to extract even when layouts or handwriting vary. Fixed coordinates and exact labels are brittle, while file normalization does not define the desired information.",
+      "id": "ai901-official-pa-q24",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "medium",
+      "prompt": "For each statement about language detection in Azure Language in Foundry Tools, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "Language detection redacts personally identifiable information from submitted text",
+          "answer": false
+        },
+        {
+          "text": "Language detection identifies sentiment and returns sentiment confidence scores",
+          "answer": false
+        },
+        {
+          "text": "Language detection identifies the primary language of submitted text and returns a confidence score",
+          "answer": true
+        }
+      ],
+      "explanation": "Language detection identifies the language and returns a confidence value. PII detection and sentiment analysis are separate Azure Language capabilities with their own result types.",
+      "id": "ai901-official-pa-q25",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-extraction",
+      "difficulty": "medium",
+      "prompt": "Azure Content Understanding in Foundry Tools uses a schema to {{blank}} for document analysis.",
+      "answer": "define fields for extracted values",
+      "options": [
+        "define fields for extracted values",
+        "assign confidence scores to recognized text",
+        "capture text and layout from pages",
+        "normalize files into supported formats"
+      ],
+      "explanation": "A schema defines the names, types, descriptions, and relationships of structured fields expected from analysis. OCR and layout processing gather source evidence, while confidence is an analyzer result rather than the schema purpose.",
+      "id": "ai901-official-pa-q26",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Content Understanding analyzer reference",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference"
+        }
+      ]
+    },
+    {
+      "type": "statement-group",
+      "objectiveId": "foundry-text-speech",
+      "difficulty": "hard",
+      "prompt": "For each statement about the Speech SDK, select Yes if the statement is true.",
+      "answerMode": "yes-no",
+      "statements": [
+        {
+          "text": "The recognize_once_async() method is used for long-running, multi-utterance speech recognition",
+          "answer": false
+        },
+        {
+          "text": "The recognize_once_async().get() call returns the recognition result for a single spoken utterance",
+          "answer": true
+        },
+        {
+          "text": "An AudioConfig object stores the endpoint or region and key used to connect to Azure Speech",
+          "answer": false
+        }
+      ],
+      "explanation": "Recognize-once handles one utterance, and get waits for and returns that result; continuous recognition handles longer multi-utterance input. SpeechConfig stores service connection details, while AudioConfig identifies input or output audio.",
+      "id": "ai901-official-pa-q27",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Azure Language and Speech in Foundry Tools",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "objectiveId": "foundry-generative",
+      "difficulty": "medium",
+      "prompt": "In Microsoft Foundry, an app that accepts spoken input and an image in the same prompt requires a deployed {{blank}}.",
+      "answer": "multimodal model",
+      "options": [
+        "multimodal model",
+        "Prompt Shield",
+        "embedding model",
+        "image-generation model"
+      ],
+      "explanation": "The deployment must accept multiple input modalities, including audio and images. Prompt Shield is a safety control, embeddings produce vectors, and an image-generation model does not by itself process spoken questions.",
+      "id": "ai901-official-pa-q28",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "foundry-generative",
+      "difficulty": "hard",
+      "prompt": "You have a Microsoft Foundry project that contains a deployed audio-capable Azure OpenAI model. You need a Python app to send a recorded WAV question and receive both text and WAV audio output. What should the app do?",
+      "answer": "Base64-encode the WAV file as input_audio and request text and audio modalities",
+      "options": [
+        "Base64-encode the WAV file as input_audio and request text and audio modalities",
+        "Send the WAV file as input_audio and request only the text modality",
+        "Pass the WAV file name as input_audio and request text and audio modalities",
+        "Send the WAV file content as a text message and request text and audio modalities"
+      ],
+      "explanation": "The audio request carries base64-encoded WAV data in an input_audio item and asks for both output modalities. A local filename or text message is not the audio payload, and requesting text alone cannot return WAV audio.",
+      "id": "ai901-official-pa-q29",
+      "domainId": "foundry",
+      "references": [
+        {
+          "title": "Microsoft Foundry Responses API",
+          "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/aiproject"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "model-components",
+      "difficulty": "easy",
+      "prompt": "Which natural language processing technique assigns values to words such as plant and flower so that they are considered closer to each other than a word such as airplane?",
+      "answer": "Vectorization",
+      "options": [
+        "Vectorization",
+        "Frequency analysis",
+        "Lemmatization",
+        "N-grams"
+      ],
+      "explanation": "Vectorization represents words as numeric vectors whose distances can encode semantic similarity. Frequency analysis counts terms, lemmatization normalizes word forms, and n-grams represent sequences.",
+      "id": "ai901-official-pa-q30",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Introduction to natural language processing concepts",
+          "url": "https://learn.microsoft.com/en-us/training/modules/introduction-language/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "What is the first step in the statistical analysis of terms in a text in the context of natural language processing?",
+      "answer": "Counting the occurrences of each word",
+      "options": [
+        "Counting the occurrences of each word",
+        "Creating a vectorized model",
+        "Encoding words as numeric features",
+        "Removing stop words"
+      ],
+      "explanation": "A basic statistical text analysis starts with term occurrence counts that can then feed frequency measures or vector representations. Stop-word removal can be preprocessing, but it is not the defining first statistical operation.",
+      "id": "ai901-official-pa-q31",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "easy",
+      "prompt": "You are using a generative AI solution. You need to ensure that users understand the purpose of the solution and the potential impact of its outputs. Which responsible AI risk should you identify and mitigate?",
+      "answer": "Lack of transparency",
+      "options": [
+        "Lack of transparency",
+        "Adversarial vulnerability",
+        "Bias or unfair outcomes",
+        "Lack of accessibility"
+      ],
+      "explanation": "Transparency concerns whether people understand that AI is involved, its intended purpose, and important limitations or impacts. The other risks address attacks, unequal outcomes, or exclusion from the experience.",
+      "id": "ai901-official-pa-q32",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which natural language processing technique normalizes words before counting them?",
+      "answer": "Stemming",
+      "options": [
+        "Stemming",
+        "Frequency analysis",
+        "N-grams",
+        "Vectorization"
+      ],
+      "explanation": "Stemming reduces related inflected words toward a common root before their occurrences are counted together. Frequency analysis performs counting, n-grams create sequences, and vectorization encodes features.",
+      "id": "ai901-official-pa-q33",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which feature of Azure Language in Foundry Tools includes functionality that returns links to external websites to disambiguate terms identified in text?",
+      "answer": "Entity recognition",
+      "options": [
+        "Entity recognition",
+        "Key phrase extraction",
+        "Language detection",
+        "Sentiment analysis"
+      ],
+      "explanation": "Entity recognition includes entity-linking capabilities that can associate ambiguous mentions with external knowledge entries. Key phrases, language detection, and sentiment do not return those disambiguation links.",
+      "id": "ai901-official-pa-q34",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which part of speech synthesis in natural language processing involves breaking text into individual words so that each word can be assigned phonetic sounds?",
+      "answer": "Tokenization",
+      "options": [
+        "Tokenization",
+        "Lemmatization",
+        "Key phrase extraction",
+        "Transcribing"
+      ],
+      "explanation": "Tokenization separates text into units that the synthesis pipeline can normalize and map toward pronunciation. Lemmatization changes word forms, key phrases identify concepts, and transcription converts speech to text.",
+      "id": "ai901-official-pa-q35",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "easy",
+      "prompt": "A company is developing driverless agricultural vehicles that will operate alongside people in crop fields and therefore require robust testing. Which responsible AI principle is most important in this case?",
+      "answer": "Reliability and safety",
+      "options": [
+        "Reliability and safety",
+        "Accountability",
+        "Inclusiveness",
+        "Transparency"
+      ],
+      "explanation": "Reliability and safety requires robust validation, predictable operation, and controls for failures where AI interacts with people. The other principles remain relevant but do not most directly address physical operating risk.",
+      "id": "ai901-official-pa-q36",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "What are TWO capabilities of generative AI models?",
+      "answers": [
+        "Summarizing text and generating translations",
+        "Generating new content based on training data"
+      ],
+      "options": [
+        "Summarizing text and generating translations",
+        "Generating new content based on training data",
+        "Detecting patterns in structured datasets for predictive analysis",
+        "Classifying data into predefined categories such as spam and non-spam",
+        "Identifying objects in images"
+      ],
+      "explanation": "Generative models create new content and can transform language through summarization and translation. Predictive pattern detection, fixed-category classification, and conventional object detection are discriminative analytical tasks.",
+      "id": "ai901-official-pa-q37",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "Which computer vision capability provides bounding coordinates as part of its output?",
+      "answer": "Object detection",
+      "options": [
+        "Object detection",
+        "Image analysis",
+        "Image classification",
+        "Semantic segmentation"
+      ],
+      "explanation": "Object detection identifies each object and returns a location such as a bounding box. Classification labels an image, segmentation assigns pixels, and broad image analysis does not necessarily return object boxes.",
+      "id": "ai901-official-pa-q38",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which TWO scenarios are common use cases for generative AI?",
+      "answers": [
+        "Image generation",
+        "Summarization"
+      ],
+      "options": [
+        "Image generation",
+        "Summarization",
+        "Anomaly detection",
+        "Translation"
+      ],
+      "explanation": "Image generation and summarization are canonical generative tasks because they create new visual or condensed textual content. Anomaly detection identifies unusual records, while this assessment distinguishes translation as a language workload.",
+      "id": "ai901-official-pa-q39",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "Which responsible AI principle plays the primary role when implementing an AI solution that makes business loan approval decisions?",
+      "answer": "Fairness",
+      "options": [
+        "Fairness",
+        "Accountability",
+        "Inclusiveness",
+        "Safety"
+      ],
+      "explanation": "Fairness requires teams to identify and reduce unjustified differences in lending outcomes across affected groups. Accountability, inclusion, and safety matter too, but unequal decision quality is the central risk in this scenario.",
+      "id": "ai901-official-pa-q40",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "Which responsible AI principle has the objective of ensuring that AI solutions benefit all parts of society regardless of gender or ethnicity?",
+      "answer": "Inclusiveness",
+      "options": [
+        "Inclusiveness",
+        "Accountability",
+        "Privacy and security",
+        "Reliability and safety"
+      ],
+      "explanation": "Inclusiveness aims to design AI experiences and benefits for people with varied backgrounds, abilities, and circumstances. The other principles address responsibility, data protection, or dependable operation.",
+      "id": "ai901-official-pa-q41",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "According to the responsible generative AI lifecycle based on the NIST AI Risk Management Framework, what is the first stage to consider?",
+      "answer": "Identify potential harms",
+      "options": [
+        "Identify potential harms",
+        "Measure the presence of potential harms",
+        "Mitigate potential harms",
+        "Operate the solution"
+      ],
+      "explanation": "The lifecycle begins by identifying the potential harms that are relevant to the system and its use. Teams can then measure those harms, implement mitigations, and operate the solution with monitoring.",
+      "id": "ai901-official-pa-q42",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "A bank is developing an AI system to support accepting or rejecting mortgage applications. Which TWO issues should be considered under the responsible AI principle of fairness to avoid biased decision-making?",
+      "answers": [
+        "Ethnicity",
+        "Gender"
+      ],
+      "options": [
+        "Ethnicity",
+        "Gender",
+        "Credit utilization",
+        "Current salary",
+        "Payment history"
+      ],
+      "explanation": "Ethnicity and gender are protected characteristics that require explicit fairness analysis so the model does not create discriminatory outcomes. Credit utilization, salary, and payment history may be legitimate lending signals subject to applicable policy.",
+      "id": "ai901-official-pa-q43",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multi-select",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which TWO Azure AI capabilities allow you to identify issues from support-question data and identify people and products that are mentioned?",
+      "answers": [
+        "Key phrase extraction",
+        "Named entity recognition"
+      ],
+      "options": [
+        "Key phrase extraction",
+        "Named entity recognition",
+        "Azure AI Bot Service",
+        "Conversational Language Understanding",
+        "Azure Speech in Foundry Tools"
+      ],
+      "explanation": "Key phrase extraction surfaces the main issues discussed, while named entity recognition identifies people, products, and other entity categories. The other services orchestrate conversations, classify utterances, or process speech.",
+      "id": "ai901-official-pa-q44",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which artificial intelligence workload classifies individual pixels in an image according to the object they represent?",
+      "answer": "Semantic segmentation",
+      "options": [
+        "Semantic segmentation",
+        "Image analysis",
+        "Image classification",
+        "Object detection"
+      ],
+      "explanation": "Semantic segmentation assigns a class to each image pixel. Image classification labels the whole image, while object detection locates object instances with regions or boxes rather than classifying every pixel.",
+      "id": "ai901-official-pa-q45",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "Which process is a use of optical character recognition (OCR)?",
+      "answer": "Digitizing medical records",
+      "options": [
+        "Digitizing medical records",
+        "Identifying access control for a laptop",
+        "Identifying wildlife in an image",
+        "Translating speech to text"
+      ],
+      "explanation": "OCR converts printed or handwritten text in scanned medical records into machine-readable characters. Access control, wildlife recognition, and speech transcription use identity, vision classification, or speech capabilities.",
+      "id": "ai901-official-pa-q46",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "What allows you to identify different vehicle types in traffic-monitoring images?",
+      "answer": "Object detection",
+      "options": [
+        "Object detection",
+        "Image classification",
+        "Linear regression",
+        "Optical character recognition (OCR)"
+      ],
+      "explanation": "Traffic images can contain several vehicles, so object detection identifies each instance, its type, and location. Whole-image classification, numeric regression, and character recognition do not return multiple vehicle instances.",
+      "id": "ai901-official-pa-q47",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "responsible-ai",
+      "difficulty": "medium",
+      "prompt": "Which responsible AI principle ensures that an AI system meets the legal and ethical standards it must follow?",
+      "answer": "Accountability",
+      "options": [
+        "Accountability",
+        "Fairness",
+        "Inclusiveness",
+        "Privacy and security"
+      ],
+      "explanation": "Accountability keeps the people and organizations that build and operate an AI system responsible for governance, legal obligations, and ethical outcomes. The other principles address narrower outcome or data concerns.",
+      "id": "ai901-official-pa-q48",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "Responsible AI principles and approach",
+          "url": "https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "medium",
+      "prompt": "Which artificial intelligence workload has the primary purpose of making large amounts of data searchable?",
+      "answer": "Knowledge mining",
+      "options": [
+        "Knowledge mining",
+        "Image analysis",
+        "Object detection",
+        "Semantic segmentation"
+      ],
+      "explanation": "Knowledge mining enriches and indexes large collections so users and applications can search the extracted information. The visual workloads analyze images but do not define the end-to-end searchable knowledge process.",
+      "id": "ai901-official-pa-q49",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    },
+    {
+      "type": "multiple-choice",
+      "objectiveId": "ai-workloads",
+      "difficulty": "easy",
+      "prompt": "Which generative AI model is used to generate images based on natural-language prompts?",
+      "answer": "DALL-E",
+      "options": [
+        "DALL-E",
+        "Embeddings",
+        "GPT-3.5",
+        "GPT-4",
+        "Whisper"
+      ],
+      "explanation": "DALL-E is an image-generation model family designed to create images from natural-language prompts. Embeddings create vectors, GPT-3.5 and GPT-4 are general language model families, and Whisper transcribes audio.",
+      "id": "ai901-official-pa-q50",
+      "domainId": "concepts",
+      "references": [
+        {
+          "title": "AI concepts for developers and technology professionals",
+          "url": "https://learn.microsoft.com/en-us/training/paths/ai-concepts/"
+        }
+      ]
+    }
+  ]
+}
