@@ -4,7 +4,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ThemePicker } from './components/ThemePicker';
-import { applyTheme, getStoredTheme, isThemeAvailable, setTheme, THEME_STORAGE_KEY, themeOptions } from './theme';
+import { applyTheme, getStoredTheme, isThemeAvailable, rewardThemeFamilies, setTheme, THEME_STORAGE_KEY, themeOptions } from './theme';
 
 describe('site themes', () => {
   beforeEach(() => {
@@ -19,8 +19,11 @@ describe('site themes', () => {
     expect(getStoredTheme()).toBe('light');
     expect(themeOptions.map((theme) => theme.id)).toEqual([
       'light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint',
-      'pacific-blue', 'arcade-red', 'sunset-orange', 'solar-yellow', 'neon-pink'
+      'pacific-blue', 'dark-pacific-blue', 'arcade-red', 'dark-arcade-red',
+      'sunset-orange', 'dark-sunset-orange', 'solar-yellow', 'dark-solar-yellow',
+      'neon-pink', 'dark-neon-pink'
     ]);
+    expect(rewardThemeFamilies).toHaveLength(5);
   });
 
   it('uses Academy progress only when the administrator requires unlocks', () => {
@@ -41,6 +44,8 @@ describe('site themes', () => {
     expect(document.documentElement.style.colorScheme).toBe('dark');
     applyTheme('mint');
     expect(document.documentElement.style.colorScheme).toBe('light');
+    applyTheme('dark-pacific-blue');
+    expect(document.documentElement.style.colorScheme).toBe('dark');
   });
 
   it('changes theme through the accessible top-bar picker', async () => {
@@ -57,5 +62,20 @@ describe('site themes', () => {
 
     expect(screen.getByText('Earn in Academy')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Pacific blue.*Earn your first campaign star/i })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: 'Use dark mode for Pacific blue' })).toBeDisabled();
+  });
+
+  it('toggles a bonus colour between its light and dark counterparts', async () => {
+    const user = userEvent.setup();
+    render(<ThemePicker themesRequireUnlock={false} />);
+    await user.click(screen.getByText('Theme'));
+
+    const modeSwitch = screen.getByRole('checkbox', { name: 'Use dark mode for Pacific blue' });
+    await user.click(modeSwitch);
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark-pacific-blue');
+    expect(screen.getByLabelText('Choose site theme. Current theme: Pacific blue dark')).toBeInTheDocument();
+
+    await user.click(modeSwitch);
+    expect(document.documentElement).toHaveAttribute('data-theme', 'pacific-blue');
   });
 });

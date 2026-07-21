@@ -46,5 +46,8 @@ describe('AcademyProfilePage', () => {
     await user.click(screen.getByRole('button', { name: /Pacific blue.*Available site-wide.*Available/i }));
 
     expect(document.documentElement).toHaveAttribute('data-theme', 'pacific-blue');
+
+    await user.click(screen.getByRole('checkbox', { name: 'Use dark mode for Pacific blue' }));
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark-pacific-blue');
   });
 });

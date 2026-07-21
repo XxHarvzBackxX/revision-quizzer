@@ -4,7 +4,9 @@ import { describe, expect, it } from 'vitest';
 const css = readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
 const selectableThemes = [
   'light', 'light-contrast', 'dark', 'dark-contrast', 'dark-purple', 'mint',
-  'pacific-blue', 'arcade-red', 'sunset-orange', 'solar-yellow', 'neon-pink'
+  'pacific-blue', 'dark-pacific-blue', 'arcade-red', 'dark-arcade-red',
+  'sunset-orange', 'dark-sunset-orange', 'solar-yellow', 'dark-solar-yellow',
+  'neon-pink', 'dark-neon-pink'
 ];
 
 describe('responsive and theme style contracts', () => {

@@ -28,14 +28,14 @@ export const changelogEntries: ChangelogEntry[] = [
     deployment: 7,
     releasedAt: '2026-07-21',
     title: 'Academy colour collections',
-    summary: 'Five new colour themes turn Academy progress into visible profile rewards, with an administrator-controlled site-wide option.',
+    summary: 'Five light-and-dark colour families turn Academy progress into visible profile rewards, with an administrator-controlled site-wide option.',
     sections: [
       {
-        title: 'Five new palettes',
+        title: 'Five paired colour themes',
         items: [
-          'Added Pacific blue, Arcade red, Sunset orange, Solar yellow, and Neon pink appearances across the entire app.',
-          'Every new palette meets the same automated contrast and semantic-surface checks as the original themes.',
-          'The expanded theme picker separates always-available core themes from bonus colours and remains scrollable on smaller screens.'
+          'Added Pacific blue, Arcade red, Sunset orange, Solar yellow, and Neon pink colour families, each with a complete light and dark appearance.',
+          'Every bonus colour includes its own inline light/dark switch in the header picker and player profile.',
+          'All ten new palettes meet the same automated contrast and semantic-surface checks as the original themes.'
         ]
       },
       {

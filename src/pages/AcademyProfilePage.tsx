@@ -7,7 +7,8 @@ import type { AttemptRecord } from '../storage';
 import { academyCosmetics, buildAcademyCampaign } from '../study/academy';
 import { calculateCertificationMastery } from '../study/mastery';
 import { equipAcademyCosmetic, studyStreak, studyTotals, syncAcademyAchievements, useStudyState } from '../study/storage';
-import { isThemeAvailable, rewardThemeOptions, useTheme } from '../theme';
+import { isThemeAvailable, rewardThemeFamilies, useTheme } from '../theme';
+import { ThemeModeSwitch } from '../components/ThemeModeSwitch';
 import type { Navigate } from '../types';
 
 const achievementCopy = [
@@ -93,20 +94,19 @@ export function AcademyProfilePage({ datasets, attempts, navigate, themesRequire
           <p>{themesRequireUnlock ? 'Build your collection through Academy milestones.' : 'The administrator has made every bonus theme available site-wide.'}</p>
         </div>
         <div className="profile-theme-grid">
-          {rewardThemeOptions.map((option) => {
-            const available = isThemeAvailable(option, themesRequireUnlock, themeProgress);
-            const equipped = theme === option.id;
-            return <button
-              className={equipped ? 'equipped' : available ? '' : 'locked'}
-              disabled={!available}
-              onClick={() => selectTheme(option.id)}
-              key={option.id}
-            >
-              <span className="profile-theme-swatches" aria-hidden="true">{option.swatches.map((color) => <i style={{ background: color }} key={color} />)}</span>
-              <strong>{option.label}</strong>
-              <small>{themesRequireUnlock ? option.unlock?.requirement : 'Available site-wide'}</small>
-              <span className="profile-theme-status">{equipped ? <><Check size={15} /> Equipped</> : available ? <><Sparkles size={15} /> Available</> : <><LockKeyhole size={15} /> Locked</>}</span>
-            </button>;
+          {rewardThemeFamilies.map((family) => {
+            const available = isThemeAvailable(family.light, themesRequireUnlock, themeProgress);
+            const equipped = theme === family.light.id || theme === family.dark.id;
+            const displayOption = theme === family.dark.id ? family.dark : family.light;
+            return <article className={equipped ? 'equipped' : available ? '' : 'locked'} key={family.id}>
+              <button className="profile-theme-select" disabled={!available} onClick={() => selectTheme(family.light.id)}>
+                <span className="profile-theme-swatches" aria-hidden="true">{displayOption.swatches.map((color) => <i style={{ background: color }} key={color} />)}</span>
+                <strong>{family.label}</strong>
+                <small>{themesRequireUnlock ? family.unlock.requirement : 'Available site-wide'}</small>
+                <span className="profile-theme-status">{equipped ? <><Check size={15} /> Equipped</> : available ? <><Sparkles size={15} /> Available</> : <><LockKeyhole size={15} /> Locked</>}</span>
+              </button>
+              <ThemeModeSwitch family={family} theme={theme} disabled={!available} onChange={selectTheme} />
+            </article>;
           })}
         </div>
       </section>
