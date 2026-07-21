@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { curatedDatasets } from '../../api/_curated';
 import type { PublicDataset } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import { buildCertificationPool, createStudyDataset, filterStudyPool, selectDrillQuestionKeys } from './pool';
@@ -15,6 +16,13 @@ function paper(id: string, curated = true): PublicDataset {
 const mastery: ObjectiveMastery[] = [{ objectiveId: 'objective', title: 'Objective', domainId: 'domain', domainTitle: 'Domain', blueprintWeight: 100, score: 25, evidence: 5, confidentWrong: 0, status: 'needs-work' }];
 
 describe('certification question pools', () => {
+  it('includes the observed Microsoft Learn assessment in the AI-901 study pool', () => {
+    const pool = buildCertificationPool('AI-901', curatedDatasets);
+
+    expect(pool).toHaveLength(200);
+    expect(new Set(pool.map((item) => item.datasetId))).toContain('builtin-ai901-official-practice-assessment');
+  });
+
   it('combines curated papers, excludes community content, and preserves source identity', () => {
     const pool = buildCertificationPool('AI-901', [paper('builtin-paper-1'), paper('builtin-paper-2'), paper('community', false)]);
     expect(pool.map((item) => item.key)).toEqual(['builtin-paper-1/q1', 'builtin-paper-2/q1']);

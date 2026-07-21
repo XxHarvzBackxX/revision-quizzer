@@ -10,7 +10,7 @@ type UploadState = {
   dataset: DatasetInput | null;
   errors: string[];
 };
-type FriendlyItemType = Exclude<QuizItemType, 'multi-select'>;
+type FriendlyItemType = Exclude<QuizItemType, 'multi-select' | 'dropdown' | 'statement-group'>;
 type FriendlyItem = {
   type: FriendlyItemType;
   prompt: string;

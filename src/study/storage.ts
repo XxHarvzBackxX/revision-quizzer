@@ -59,6 +59,14 @@ export function saveStudyState(state: StudyState): StudyState {
   return normalized;
 }
 
+export function resetStudyContentProgress(datasetIds: ReadonlySet<string>, examCodes: ReadonlySet<string>): StudyState {
+  const state = getStudyState();
+  const bookmarks = Object.fromEntries(Object.entries(state.bookmarks).filter(([, bookmark]) => !datasetIds.has(bookmark.datasetId)));
+  const activeDrills = Object.fromEntries(Object.entries(state.activeDrills).filter(([examCode]) => !examCodes.has(examCode.toUpperCase())));
+  const challenges = Object.fromEntries(Object.entries(state.academy.challenges).filter(([, challenge]) => !examCodes.has(challenge.examCode.toUpperCase())));
+  return saveStudyState({ ...state, bookmarks, activeDrills, academy: { ...state.academy, challenges } });
+}
+
 export function updateStudySettings(settings: Partial<StudySettings>): StudyState {
   const state = getStudyState();
   return saveStudyState({ ...state, settings: { ...state.settings, ...settings } });

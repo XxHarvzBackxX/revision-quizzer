@@ -13,6 +13,7 @@ export type StudyPoolItem = {
   domainTitle?: string;
   domainWeight?: number;
   blueprintVersion?: string;
+  contentRevision?: string;
   questionId: string;
   item: QuizItem;
 };
@@ -29,7 +30,7 @@ export function buildCertificationPool(examCode: string, datasets: PublicDataset
       seen.add(identity.key);
       seenPrompts.add(promptKey);
       const domain = dataset.domains?.find((entry) => entry.id === item.domainId);
-      return [{ ...identity, datasetTitle: dataset.title, domainTitle: domain?.title, domainWeight: domain?.weight, blueprintVersion: dataset.blueprintVersion, item }];
+      return [{ ...identity, datasetTitle: dataset.title, domainTitle: domain?.title, domainWeight: domain?.weight, blueprintVersion: dataset.blueprintVersion, contentRevision: dataset.contentRevision, item }];
     }));
 }
 
@@ -99,6 +100,7 @@ export function createStudyDataset(examCode: string, pool: StudyPoolItem[], conf
     curated: true,
     examCode: examCode.toUpperCase(),
     blueprintVersion: datasetsBlueprintVersion(selected),
+    contentRevision: datasetsContentRevision(selected),
     readinessTarget: 80,
     durationMinutes: Math.max(10, Math.ceil(selected.length * 1.5)),
     shuffleQuestions: false,
@@ -140,6 +142,11 @@ function uniqueDomains(items: StudyPoolItem[]) {
 
 function datasetsBlueprintVersion(items: StudyPoolItem[]): string {
   return [...new Set(items.map((item) => item.blueprintVersion).filter(Boolean))].join(' / ') || 'current';
+}
+
+function datasetsContentRevision(items: StudyPoolItem[]): string | undefined {
+  const revisions = [...new Set(items.map((item) => item.contentRevision).filter(Boolean))];
+  return revisions.length ? revisions.join(' / ') : undefined;
 }
 
 function humanize(value: string): string {

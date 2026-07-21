@@ -4,7 +4,7 @@ import {
   claimAcademyQuest, emptyStudyState, ensureAcademyQuests, getActiveAcademyQuests, getStudyState,
   LEGACY_STUDY_STORAGE_KEY, localDateKey, recordAcademyChallenge, recordGuideReviewed, recordQuestionActivity,
   saveBookmarkNote, saveStudyState, shieldRecoveryDate, studyStreak, studyTotals, toggleStudyBookmark,
-  updateStudySettings, useStreakShield
+  resetStudyContentProgress, updateStudySettings, useStreakShield
 } from './storage';
 
 const bookmark = { key: 'paper/q1', examCode: 'AI-901', datasetId: 'paper', datasetSlug: 'paper', questionId: 'q1', prompt: 'Prompt' };
@@ -52,6 +52,29 @@ describe('smart study local storage', () => {
       settings: { dailyQuestionGoal: 20, showExamConfidence: true },
       academy: { inventory: { rerolls: 0, streakShields: 0 } }
     });
+  });
+
+  it('resets question-linked content while preserving activity, settings, and academy inventory', () => {
+    const state = emptyStudyState();
+    saveStudyState({
+      ...state,
+      settings: { dailyQuestionGoal: 20, showExamConfidence: true },
+      bookmarks: {
+        old: { ...bookmark, key: 'old', datasetId: 'builtin-ai901-paper-1', createdAt: '2026-01-01', updatedAt: '2026-01-01' },
+        keep: { ...bookmark, key: 'keep', examCode: 'OTHER', datasetId: 'community-paper', createdAt: '2026-01-01', updatedAt: '2026-01-01' }
+      },
+      activity: { '2026-07-20': { date: '2026-07-20', questionsAnswered: 4, correctAnswers: 3, examsSubmitted: 0, reviewedGuides: [], xp: 40, goalAwarded: false } },
+      activeDrills: { 'AI-901': { examCode: 'AI-901', filter: 'all', count: 1, questionKeys: [], seed: 'old', createdAt: '2026-01-01' } },
+      academy: { ...state.academy, inventory: { ...state.academy.inventory, rerolls: 2 } }
+    });
+
+    const reset = resetStudyContentProgress(new Set(['builtin-ai901-paper-1']), new Set(['AI-901']));
+
+    expect(Object.keys(reset.bookmarks)).toEqual(['keep']);
+    expect(reset.activeDrills['AI-901']).toBeUndefined();
+    expect(reset.activity['2026-07-20'].xp).toBe(40);
+    expect(reset.settings.dailyQuestionGoal).toBe(20);
+    expect(reset.academy.inventory.rerolls).toBe(2);
   });
 
   it('tracks and claims quests once, then awards the daily sweep reroll', () => {

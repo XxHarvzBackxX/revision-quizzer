@@ -118,16 +118,17 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
               <article className="review-item" key={item.id ?? answer.questionIndex}>
                 <button className="review-item-heading" onClick={() => setExpanded((current) => current.includes(answer.questionIndex) ? current.filter((index) => index !== answer.questionIndex) : [...current, answer.questionIndex])}>
                   <span className={answer.correct ? 'review-status correct' : 'review-status wrong'}>{answer.correct ? <Check size={17} /> : <X size={17} />}</span>
-                  <span><small>Question {answer.questionIndex + 1}</small><strong>{item.prompt}</strong></span>
+                  <span><small>Question {answer.questionIndex + 1}</small><strong>{reviewPrompt(item)}</strong></span>
                   {answer.flagged && <Flag size={16} fill="currentColor" />}
                   <ChevronDown className={isOpen ? 'rotated' : ''} size={19} />
                 </button>
                 {isOpen && (
                   <div className="review-detail">
                     <div className="answer-comparison">
-                      <div><span>Your answer{answer.confidence ? ` · ${humanize(answer.confidence)}` : ''}</span><strong>{answer.response.filter(Boolean).join(', ') || 'No answer'}</strong></div>
-                      <div><span>Correct answer</span><strong>{getCorrectAnswers(item).join(', ')}</strong></div>
+                      <div><span>Your answer{answer.confidence ? ` · ${humanize(answer.confidence)}` : ''}</span><strong>{formatReviewResponse(item, answer.response)}</strong></div>
+                      <div><span>Correct answer</span><strong>{formatReviewResponse(item, getCorrectAnswers(item))}</strong></div>
                     </div>
+                    {item.type === 'statement-group' && <div className="statement-review-list">{item.statements.map((statement, statementIndex) => <p key={statement.text}><strong>{statementIndex + 1}.</strong> {statement.text}</p>)}</div>}
                     <h3>Explanation</h3>
                     <p>{item.explanation || 'No extended explanation was supplied for this community question.'}</p>
                     <QuestionStudyTools dataset={dataset} item={item} questionIndex={answer.questionIndex} />
@@ -166,4 +167,13 @@ function resolveAttemptItem(dataset: PublicDataset, answer: AttemptRecord['answe
       ? item.sourceDatasetId === answer.sourceDatasetId && item.sourceQuestionId === (answer.sourceQuestionId ?? answer.questionId)
       : item.id === answer.questionId
   )) ?? dataset.items[answer.questionIndex];
+}
+
+function reviewPrompt(item: PublicDataset['items'][number]): string {
+  return item.type === 'dropdown' ? item.prompt.replace('{{blank}}', '_____') : item.prompt;
+}
+
+function formatReviewResponse(item: PublicDataset['items'][number], response: string[]): string {
+  const answers = response.map((value, index) => value ? item.type === 'statement-group' ? `${index + 1}. ${value}` : value : '').filter(Boolean);
+  return answers.join(' · ') || 'No answer';
 }
