@@ -1,11 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import type { AdminConfig } from '../../shared/quiz.js';
 import { requireAdmin } from '../_admin.js';
-import { getDatabase } from '../_firebase.js';
-import { readJsonBody, sendJson } from '../_http.js';
-
-const CONFIG_COLLECTION = 'config';
-const CONFIG_DOC = 'app';
+import { getAppConfig, saveAppConfig } from '../_config.js';
+import { readJsonBody, sendJson, sendMethodNotAllowed, sendServerError } from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   if (!requireAdmin(request, response)) {
@@ -14,7 +10,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     if (request.method === 'GET') {
-      const config = await getConfig();
+      const config = await getAppConfig();
       sendJson(response, 200, { config });
       return;
     }
@@ -28,23 +24,13 @@ export default async function handler(request: VercelRequest, response: VercelRe
         ? String(body.uploadKey).trim()
         : '';
       const config = { moderationEnabled, uploadKey };
-      await getDatabase().collection(CONFIG_COLLECTION).doc(CONFIG_DOC).set(config, { merge: true });
+      await saveAppConfig(config);
       sendJson(response, 200, { config });
       return;
     }
 
-    response.setHeader('Allow', 'GET, PUT');
-    sendJson(response, 405, { error: 'Method not allowed.' });
+    sendMethodNotAllowed(response, ['GET', 'PUT']);
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unexpected server error.';
-    sendJson(response, 500, { error: message });
+    sendServerError(response, error);
   }
-}
-
-async function getConfig(): Promise<AdminConfig> {
-  const doc = await getDatabase().collection(CONFIG_COLLECTION).doc(CONFIG_DOC).get();
-  return {
-    moderationEnabled: Boolean(doc.data()?.moderationEnabled),
-    uploadKey: String(doc.data()?.uploadKey ?? process.env.UPLOAD_KEY ?? '')
-  };
 }

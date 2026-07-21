@@ -1,10 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { readJsonBody, sendJson } from '../_http.js';
+import { readJsonBody, sendJson, sendMethodNotAllowed, sendServerError } from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   if (request.method !== 'POST') {
-    response.setHeader('Allow', 'POST');
-    sendJson(response, 405, { error: 'Method not allowed.' });
+    sendMethodNotAllowed(response, ['POST']);
     return;
   }
 
@@ -14,15 +13,19 @@ export default async function handler(request: VercelRequest, response: VercelRe
     return;
   }
 
-  const body = await readJsonBody(request);
-  const password = typeof body === 'object' && body !== null && 'password' in body
-    ? String(body.password)
-    : '';
+  try {
+    const body = await readJsonBody(request);
+    const password = typeof body === 'object' && body !== null && 'password' in body
+      ? String(body.password)
+      : '';
 
-  if (password !== adminPassword) {
-    sendJson(response, 401, { error: 'Incorrect admin password.' });
-    return;
+    if (password !== adminPassword) {
+      sendJson(response, 401, { error: 'Incorrect admin password.' });
+      return;
+    }
+
+    sendJson(response, 200, { ok: true });
+  } catch (error) {
+    sendServerError(response, error);
   }
-
-  sendJson(response, 200, { ok: true });
 }
