@@ -184,7 +184,7 @@ export function App() {
         <QuizMenuPage
           dataset={activeDataset}
           attempts={attempts}
-          canResume={hasResumableExam(activeDataset.id)}
+          canResume={hasResumableExam(activeDataset.id, Date.now(), activeDataset.contentRevision)}
           navigate={navigate}
           onToast={notify}
         />

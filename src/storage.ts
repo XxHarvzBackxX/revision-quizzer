@@ -40,6 +40,7 @@ export type AttemptRecord = {
   answers: AttemptAnswer[];
   domains: DomainResult[];
   examCode?: string;
+  contentRevision?: string;
   studyDrill?: boolean;
   academyChallenge?: {
     challengeId: string;
@@ -50,6 +51,7 @@ export type AttemptRecord = {
 
 export type ActiveExamSession = {
   version: 1;
+  contentRevision?: string;
   datasetId: string;
   slug: string;
   title: string;
@@ -119,8 +121,8 @@ export function getActiveExamSessions(): ActiveExamSession[] {
   return Array.isArray(sessions) ? sessions.filter((session): session is ActiveExamSession => session?.version === 1) : [];
 }
 
-export function getActiveExamSession(datasetId: string): ActiveExamSession | undefined {
-  return getActiveExamSessions().find((session) => session.datasetId === datasetId);
+export function getActiveExamSession(datasetId: string, contentRevision?: string): ActiveExamSession | undefined {
+  return getActiveExamSessions().find((session) => session.datasetId === datasetId && (contentRevision === undefined || session.contentRevision === contentRevision));
 }
 
 export function saveActiveExamSession(session: ActiveExamSession): void {
@@ -132,8 +134,8 @@ export function clearActiveExamSession(datasetId: string): void {
   writeJson(SESSION_KEY, getActiveExamSessions().filter((session) => session.datasetId !== datasetId));
 }
 
-export function hasResumableExam(datasetId: string, now = Date.now()): boolean {
-  const session = getActiveExamSession(datasetId);
+export function hasResumableExam(datasetId: string, now = Date.now(), contentRevision?: string): boolean {
+  const session = getActiveExamSession(datasetId, contentRevision);
   return Boolean(session && new Date(session.expiresAt).getTime() > now);
 }
 

@@ -1,5 +1,5 @@
 import type { PublicDataset, QuizItem } from '../../shared/quiz';
-import { isObjectiveItem, isResponseCorrect } from '../../shared/quiz';
+import { isOptionItem, isResponseCorrect } from '../../shared/quiz';
 import type { ActiveExamSession, AttemptAnswer, AttemptRecord, DomainResult, QuizMode } from '../storage';
 
 export type OrderedQuestion = {
@@ -15,12 +15,13 @@ export function createExamSession(dataset: PublicDataset, now = new Date()): Act
 
   const optionOrders: Record<string, string[]> = {};
   dataset.items.forEach((item, index) => {
-    if (!isObjectiveItem(item)) return;
+    if (!isOptionItem(item)) return;
     optionOrders[String(index)] = seededShuffle([...item.options], `${seed}:options:${index}`);
   });
 
   return {
     version: 1,
+    contentRevision: dataset.contentRevision,
     datasetId: dataset.id,
     slug: dataset.slug,
     title: dataset.title,
@@ -43,7 +44,7 @@ export function getOrderedQuestions(dataset: PublicDataset, session: ActiveExamS
     return [{
       originalIndex,
       item,
-      options: isObjectiveItem(item) ? session.optionOrders[String(originalIndex)] ?? item.options : []
+      options: isOptionItem(item) ? session.optionOrders[String(originalIndex)] ?? item.options : []
     }];
   });
 }
@@ -100,7 +101,8 @@ export function buildAttempt({
     expired,
     answers,
     domains: calculateDomainResults(answers),
-    examCode: dataset.examCode
+    examCode: dataset.examCode,
+    contentRevision: dataset.contentRevision
   };
 }
 
