@@ -1,35 +1,20 @@
 import type { AdminConfig, DatasetInput, DatasetSummary, PublicConfig, PublicDataset } from '../shared/quiz';
 
 export async function fetchDatasets(): Promise<DatasetSummary[]> {
-  const response = await fetch('/api/datasets');
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not load datasets.');
-  }
-
+  const payload = await requestJson<{ datasets: DatasetSummary[] }>('/api/datasets', 'Could not load datasets.');
   return payload.datasets;
 }
 
 export async function fetchPublicConfig(): Promise<PublicConfig> {
-  const response = await fetch('/api/config');
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not load app config.');
-  }
-
+  const payload = await requestJson<{ config: PublicConfig }>('/api/config', 'Could not load app config.');
   return payload.config;
 }
 
 export async function fetchDataset(id: string): Promise<PublicDataset> {
-  const response = await fetch(`/api/datasets/${encodeURIComponent(id)}`);
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not load dataset.');
-  }
-
+  const payload = await requestJson<{ dataset: PublicDataset }>(
+    `/api/datasets/${encodeURIComponent(id)}`,
+    'Could not load dataset.'
+  );
   return payload.dataset;
 }
 
@@ -37,7 +22,7 @@ export async function uploadDataset(
   dataset: DatasetInput,
   credential: { uploadKey?: string; adminPassword?: string }
 ): Promise<PublicDataset> {
-  const response = await fetch('/api/datasets', {
+  const payload = await requestJson<{ dataset: PublicDataset }>('/api/datasets', 'Could not upload dataset.', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,45 +31,29 @@ export async function uploadDataset(
     },
     body: JSON.stringify(dataset)
   });
-
-  const payload = await response.json();
-
-  if (!response.ok) {
-    const errors = Array.isArray(payload.errors) ? payload.errors.join('\n') : payload.error;
-    throw new Error(errors ?? 'Could not upload dataset.');
-  }
-
   return payload.dataset;
 }
 
 export async function loginAdmin(password: string): Promise<void> {
-  const response = await fetch('/api/admin/login', {
+  await requestJson('/api/admin/login', 'Could not log in.', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({ password })
   });
-
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not log in.');
-  }
 }
 
 export async function fetchAdminDatasets(adminPassword: string): Promise<PublicDataset[]> {
-  const response = await fetch('/api/admin/datasets', {
-    headers: {
-      'x-admin-password': adminPassword
+  const payload = await requestJson<{ datasets: PublicDataset[] }>(
+    '/api/admin/datasets',
+    'Could not load admin datasets.',
+    {
+      headers: {
+        'x-admin-password': adminPassword
+      }
     }
-  });
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not load admin datasets.');
-  }
-
+  );
   return payload.datasets;
 }
 
@@ -94,53 +63,40 @@ export async function updateAdminDataset(
   status: 'approved' | 'pending',
   adminPassword: string
 ): Promise<void> {
-  const response = await fetch(`/api/admin/datasets/${encodeURIComponent(id)}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-admin-password': adminPassword
-    },
-    body: JSON.stringify({ dataset, status })
-  });
-  const payload = await response.json();
-
-  if (!response.ok) {
-    const errors = Array.isArray(payload.errors) ? payload.errors.join('\n') : payload.error;
-    throw new Error(errors ?? 'Could not update dataset.');
-  }
+  await requestJson(
+    `/api/admin/datasets/${encodeURIComponent(id)}`,
+    'Could not update dataset.',
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-password': adminPassword
+      },
+      body: JSON.stringify({ dataset, status })
+    }
+  );
 }
 
 export async function deleteAdminDataset(id: string, adminPassword: string): Promise<void> {
-  const response = await fetch(`/api/admin/datasets/${encodeURIComponent(id)}`, {
+  await requestJson(`/api/admin/datasets/${encodeURIComponent(id)}`, 'Could not delete dataset.', {
     method: 'DELETE',
     headers: {
       'x-admin-password': adminPassword
     }
   });
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not delete dataset.');
-  }
 }
 
 export async function fetchAdminConfig(adminPassword: string): Promise<AdminConfig> {
-  const response = await fetch('/api/admin/config', {
+  const payload = await requestJson<{ config: AdminConfig }>('/api/admin/config', 'Could not load admin config.', {
     headers: {
       'x-admin-password': adminPassword
     }
   });
-  const payload = await response.json();
-
-  if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not load admin config.');
-  }
-
   return payload.config;
 }
 
 export async function updateAdminConfig(config: AdminConfig, adminPassword: string): Promise<AdminConfig> {
-  const response = await fetch('/api/admin/config', {
+  const payload = await requestJson<{ config: AdminConfig }>('/api/admin/config', 'Could not update admin config.', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -148,11 +104,36 @@ export async function updateAdminConfig(config: AdminConfig, adminPassword: stri
     },
     body: JSON.stringify(config)
   });
-  const payload = await response.json();
+  return payload.config;
+}
+
+async function requestJson<T = unknown>(
+  url: string,
+  fallbackMessage: string,
+  options?: RequestInit
+): Promise<T> {
+  const response = await fetch(url, options);
+  const payload: unknown = await response.json();
 
   if (!response.ok) {
-    throw new Error(payload.error ?? 'Could not update admin config.');
+    throw new Error(getErrorMessage(payload, fallbackMessage));
   }
 
-  return payload.config;
+  return payload as T;
+}
+
+function getErrorMessage(payload: unknown, fallbackMessage: string): string {
+  if (typeof payload !== 'object' || payload === null) {
+    return fallbackMessage;
+  }
+
+  if ('errors' in payload && Array.isArray(payload.errors) && payload.errors.length > 0) {
+    return payload.errors.map(String).join('\n');
+  }
+
+  if ('error' in payload && typeof payload.error === 'string' && payload.error) {
+    return payload.error;
+  }
+
+  return fallbackMessage;
 }
