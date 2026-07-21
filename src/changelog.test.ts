@@ -17,9 +17,9 @@ describe('versioned changelog state', () => {
     expect(APP_VERSION).toBe(packageMetadata.version);
     expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
     expect(changelogEntries[0]).toBe(currentChangelog);
-    expect(currentChangelog?.version).toBe('0.3.0');
+    expect(currentChangelog?.version).toBe('0.2.0');
     expect(changelogEntries.map((entry) => entry.deployment)).toEqual([5, 4, 3, 2, 1]);
-    expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([3, 2, 1]);
+    expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([4, 3, 2, 1]);
   });
 
   it('shows the newest unread release once and persists its dismissal', () => {

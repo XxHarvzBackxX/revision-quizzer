@@ -39,7 +39,7 @@ describe('changelog experience', () => {
     expect(screen.getByText('Study plans get a proper front door')).toBeInTheDocument();
     expect(screen.getByText('Smart study loop and accessible themes')).toBeInTheDocument();
     expect(screen.getByText('5 releases recorded')).toBeInTheDocument();
-    expect(screen.getAllByText('Previously unversioned')).toHaveLength(3);
+    expect(screen.getAllByText('Previously unversioned')).toHaveLength(4);
   });
 
   it('dismisses the popup with Escape and records the release as read', async () => {

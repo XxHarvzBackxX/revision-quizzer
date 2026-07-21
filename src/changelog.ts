@@ -24,7 +24,7 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
-    version: '0.3.0',
+    version: '0.2.0',
     deployment: 5,
     releasedAt: '2026-07-21',
     title: 'Official-first library and historical deployment archive',
@@ -47,20 +47,26 @@ export const changelogEntries: ChangelogEntry[] = [
         ]
       },
       {
+        title: 'Release visibility',
+        items: [
+          'Quiz Arcade now displays its Semantic Versioning number and automatically introduces the newest unread release once.',
+          'Every release remains available from Changelog History in the site footer.'
+        ]
+      },
+      {
         title: 'Versioning',
         items: [
-          'Advanced Quiz Arcade from v0.2.0 to v0.3.0 because official-first discovery and provenance badges add backward-compatible functionality.',
+          'Advanced Quiz Arcade from its longstanding v0.1.0 package version to v0.2.0 because deployment #5 adds backward-compatible functionality.',
           'Deployment numbers and Semantic Versioning are now displayed together for all newly versioned production releases.'
         ]
       }
     ]
   },
   {
-    version: '0.2.0',
     deployment: 4,
     releasedAt: '2026-07-21',
     title: 'Arcade Academy and realistic certification practice',
-    summary: 'A major study upgrade with certification campaigns, more authentic exam formats and content, and a visible release history.',
+    summary: 'A major study upgrade with certification campaigns and more authentic exam formats and content.',
     sections: [
       {
         title: 'Arcade Academy',
@@ -84,13 +90,6 @@ export const changelogEntries: ChangelogEntry[] = [
           'Study recommendations, RevisionWiki reviews, targeted drills, bookmarks, exams, quests, and Academy progress now share the same evidence.',
           'AI-901 certification-wide study now draws from 200 built-in questions, including the observed practice assessment.',
           'Rewritten question banks automatically clear incompatible saved sessions while preserving unrelated community and study activity.'
-        ]
-      },
-      {
-        title: 'Release visibility',
-        items: [
-          'Quiz Arcade now displays its Semantic Versioning number and automatically introduces the newest unread release once.',
-          'Every release remains available from Changelog History in the site footer.'
         ]
       }
     ]
