@@ -16,6 +16,14 @@ function paper(id: string, curated = true): PublicDataset {
 const mastery: ObjectiveMastery[] = [{ objectiveId: 'objective', title: 'Objective', domainId: 'domain', domainTitle: 'Domain', blueprintWeight: 100, score: 25, evidence: 5, confidentWrong: 0, status: 'needs-work' }];
 
 describe('certification question pools', () => {
+  it('registers trusted official content before the curated mock papers', () => {
+    expect(curatedDatasets[0]).toMatchObject({
+      id: 'builtin-ai901-official-practice-assessment',
+      official: true
+    });
+    expect(curatedDatasets.slice(1).every((dataset) => !dataset.official)).toBe(true);
+  });
+
   it('includes the observed Microsoft Learn assessment in the AI-901 study pool', () => {
     const pool = buildCertificationPool('AI-901', curatedDatasets);
 

@@ -1,6 +1,6 @@
-import { ArrowRight, BookOpenCheck, BookOpenText, Clock3, Copy, FileJson, Gamepad2, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
+import { ArrowRight, BadgeCheck, BookOpenCheck, BookOpenText, Clock3, Copy, FileJson, Gamepad2, Library, Loader2, RotateCcw, Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import type { DatasetSummary } from '../../shared/quiz';
+import { officialDatasetsFirst, type DatasetSummary } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
 import type { Navigate, ToastKind } from '../types';
 import { copyShareLink } from '../utils/quizUi';
@@ -19,13 +19,13 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
   const [status, setStatus] = useState<'all' | 'new' | 'attempted'>('all');
   const [certification, setCertification] = useState('all');
   const certificationCodes = [...new Set(datasets.filter((dataset) => dataset.curated && dataset.examCode).map((dataset) => dataset.examCode as string))];
-  const visible = useMemo(() => datasets.filter((dataset) => {
+  const visible = useMemo(() => officialDatasetsFirst(datasets.filter((dataset) => {
     const belongs = section === 'curated' ? dataset.curated : !dataset.curated;
     const matchesQuery = `${dataset.title} ${dataset.description ?? ''} ${(dataset.tags ?? []).join(' ')}`.toLowerCase().includes(query.toLowerCase());
     const matchesCertification = section === 'community' || certification === 'all' || dataset.examCode === certification;
     const attempted = attempts.some((attempt) => attempt.datasetId === dataset.id);
     return belongs && matchesQuery && matchesCertification && (status === 'all' || (status === 'attempted' ? attempted : !attempted));
-  }), [datasets, section, query, certification, status, attempts]);
+  })), [datasets, section, query, certification, status, attempts]);
 
   return (
     <section className="library-page">
@@ -56,7 +56,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
             const revisionPath = getCoursePath(dataset.examCode);
             return (
               <article className={`library-card ${dataset.curated ? 'curated' : ''}`} key={dataset.id}>
-                <div className="library-card-top"><span>{dataset.curated ? `${dataset.examCode} · Mock paper ${paperNumber(dataset.title, index)}` : 'Community quiz'}</span>{dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
+                <div className="library-card-top"><span>{dataset.official ? `${dataset.examCode} · Practice assessment` : dataset.curated ? `${dataset.examCode} · Mock paper ${paperNumber(dataset.title, index)}` : 'Community quiz'}</span>{dataset.official ? <span className="official-pill"><BadgeCheck size={14} /> Official</span> : dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
                 <h2>{dataset.title}</h2>
                 <p>{dataset.description || 'A community revision set.'}</p>
                 <div className="tag-row">{(dataset.tags ?? []).slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
