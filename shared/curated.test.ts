@@ -30,4 +30,14 @@ describe('built-in curated papers', () => {
       'AZ-900': { papers: 3, questions: 150 }
     });
   });
+
+  it('uses the realistic content revision and target format split on every paper', () => {
+    papers.forEach((paper, index) => {
+      const formats = paper.items.reduce<Record<string, number>>((counts, item) => ({ ...counts, [item.type]: (counts[item.type] ?? 0) + 1 }), {});
+      expect(paper.contentRevision).toBe('2026-realistic-v1');
+      expect(formats).toEqual(index % 3 === 1
+        ? { 'multiple-choice': 28, dropdown: 7, 'statement-group': 8, 'multi-select': 7 }
+        : { 'multiple-choice': 28, dropdown: 8, 'statement-group': 7, 'multi-select': 7 });
+    });
+  });
 });
