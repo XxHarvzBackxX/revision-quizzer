@@ -10,7 +10,7 @@ export async function getAppConfig(): Promise<AdminConfig> {
 
   return {
     moderationEnabled: Boolean(data.moderationEnabled),
-    uploadKey: String(data.uploadKey ?? process.env.UPLOAD_KEY ?? '')
+    uploadKey: String(data.uploadKey ?? process.env.UPLOAD_KEY ?? '').trim()
   };
 }
 

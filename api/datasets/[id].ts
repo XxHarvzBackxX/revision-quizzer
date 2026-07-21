@@ -1,78 +1,47 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import type { PublicDataset } from '../../shared/quiz.js';
 import { findCuratedDataset } from '../_curated.js';
-import { getDatabase } from '../_firebase.js';
-import { sendJson } from '../_http.js';
-
-const COLLECTION = 'datasets';
+import { getDatasetsCollection, isPublicDataset, toPublicDataset } from '../_datasets.js';
+import { getQueryParam, sendJson, sendMethodNotAllowed, sendServerError } from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   if (request.method !== 'GET') {
-    response.setHeader('Allow', 'GET');
-    sendJson(response, 405, { error: 'Method not allowed.' });
+    sendMethodNotAllowed(response, ['GET']);
     return;
   }
 
   try {
-    const id = getRouteId(request);
+    const id = getQueryParam(request, 'id');
     const curated = findCuratedDataset(id);
     if (curated) {
       sendJson(response, 200, { dataset: curated });
       return;
     }
-    const database = getDatabase();
-    const directDoc = await database.collection(COLLECTION).doc(id).get();
+    const datasets = getDatasetsCollection();
+    const directDoc = await datasets.doc(id).get();
 
     if (directDoc.exists) {
-      sendJson(response, 200, { dataset: toPublicDataset(directDoc.id, directDoc.data() ?? {}) });
+      sendPublicDataset(response, toPublicDataset(directDoc.id, directDoc.data() ?? {}));
       return;
     }
 
-    const slugSnapshot = await database.collection(COLLECTION).where('slug', '==', id).limit(1).get();
+    const slugSnapshot = await datasets.where('slug', '==', id).limit(1).get();
     if (slugSnapshot.empty) {
       sendJson(response, 404, { error: 'Dataset not found.' });
       return;
     }
 
     const slugDoc = slugSnapshot.docs[0];
-    sendJson(response, 200, { dataset: toPublicDataset(slugDoc.id, slugDoc.data()) });
+    sendPublicDataset(response, toPublicDataset(slugDoc.id, slugDoc.data()));
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unexpected server error.';
-    sendJson(response, 500, { error: message });
+    sendServerError(response, error);
   }
 }
 
-function getRouteId(request: VercelRequest): string {
-  const value = request.query.id;
-  if (Array.isArray(value)) {
-    return value[0] ?? '';
+function sendPublicDataset(response: VercelResponse, dataset: ReturnType<typeof toPublicDataset>): void {
+  if (!isPublicDataset(dataset)) {
+    sendJson(response, 404, { error: 'Dataset not found.' });
+    return;
   }
 
-  return value ?? '';
-}
-
-function toPublicDataset(id: string, data: FirebaseFirestore.DocumentData): PublicDataset {
-  const createdAt = typeof data.createdAt?.toDate === 'function'
-    ? data.createdAt.toDate().toISOString()
-    : new Date().toISOString();
-
-  return {
-    id,
-    slug: data.slug,
-    title: data.title,
-    description: data.description ?? '',
-    tags: data.tags ?? [],
-    shuffleQuestions: Boolean(data.shuffleQuestions),
-    kind: data.kind ?? 'quiz',
-    curated: Boolean(data.curated),
-    examCode: data.examCode,
-    blueprintVersion: data.blueprintVersion,
-    durationMinutes: data.durationMinutes,
-    readinessTarget: data.readinessTarget,
-    domains: data.domains,
-    itemCount: data.itemCount ?? data.items?.length ?? 0,
-    createdAt,
-    status: data.status ?? 'approved',
-    items: data.items ?? []
-  };
+  sendJson(response, 200, { dataset });
 }
