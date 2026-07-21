@@ -35,6 +35,13 @@ describe('responsive and theme style contracts', () => {
     expect(css).toContain('RevisionWiki semantic foregrounds');
     expect(css).toContain('--course-text-accent:color-mix');
   });
+
+  it('provides responsive changelog history and a visible version footer', () => {
+    expect(css).toContain('.site-footer');
+    expect(css).toContain('.changelog-dialog');
+    expect(css).toContain('.changelog-scroll');
+    expect(css).toMatch(/@media \(max-width:640px\)[\s\S]*\.changelog-dialog/);
+  });
 });
 
 function themeVariables(theme: string): Record<string, string> {

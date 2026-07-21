@@ -3,6 +3,7 @@ import type { DatasetSummary, PublicConfig, PublicDataset } from '../shared/quiz
 import { fetchDataset, fetchDatasets, fetchPublicConfig } from './api';
 import { Topbar } from './components/Topbar';
 import { ToastHost } from './components/ToastHost';
+import { ChangelogExperience } from './components/ChangelogExperience';
 import { AdminPage } from './pages/AdminPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { HomePage } from './pages/HomePage';
@@ -129,9 +130,11 @@ export function App() {
     notify('success', `"${dataset.title}" is live in the public gallery.`);
   }
 
+  const showSiteChrome = route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && route.name !== 'study-drill-play';
+
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
-      {route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && route.name !== 'study-drill-play' && <Topbar route={route} navigate={navigate} />}
+      {showSiteChrome && <Topbar route={route} navigate={navigate} />}
       <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {route.name === 'home' && <HomePage datasets={datasets} attempts={attempts} activeSessions={getActiveExamSessions()} isLoading={isLoading} navigate={navigate} />}
@@ -205,6 +208,8 @@ export function App() {
       {route.name === 'quiz-result' && activeDataset && (
         <ResultPage dataset={activeDataset} attempt={attempts.find((attempt) => attempt.id === route.attemptId)} navigate={navigate} />
       )}
+
+      {showSiteChrome && <ChangelogExperience />}
     </main>
   );
 }
