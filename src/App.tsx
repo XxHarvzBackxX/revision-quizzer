@@ -22,6 +22,7 @@ import { StudyIndexPage } from './pages/StudyIndexPage';
 import { AcademyPage } from './pages/AcademyPage';
 import { AcademyProfilePage } from './pages/AcademyProfilePage';
 import { parseRoute, routeClass } from './routing';
+import { migrateCuratedContentRevision } from './contentMigration';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
 
@@ -29,7 +30,10 @@ export function App() {
   const [route, setRoute] = useState<AppRoute>(() => parseRoute());
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [activeDataset, setActiveDataset] = useState<PublicDataset | null>(null);
-  const [attempts, setAttempts] = useState<AttemptRecord[]>(() => getAttempts());
+  const [attempts, setAttempts] = useState<AttemptRecord[]>(() => {
+    migrateCuratedContentRevision();
+    return getAttempts();
+  });
   const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true });
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
