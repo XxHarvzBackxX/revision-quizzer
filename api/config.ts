@@ -11,7 +11,10 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     const appConfig = await getAppConfig();
-    const config: PublicConfig = { uploadKeyRequired: appConfig.uploadKey.length > 0 };
+    const config: PublicConfig = {
+      uploadKeyRequired: appConfig.uploadKey.length > 0,
+      themesRequireUnlock: appConfig.themesRequireUnlock
+    };
     sendJson(response, 200, { config });
   } catch (error) {
     sendServerError(response, error);

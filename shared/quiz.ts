@@ -109,10 +109,12 @@ export function officialDatasetsFirst<T extends { official?: boolean }>(datasets
 export type AdminConfig = {
   moderationEnabled: boolean;
   uploadKey: string;
+  themesRequireUnlock: boolean;
 };
 
 export type PublicConfig = {
   uploadKeyRequired: boolean;
+  themesRequireUnlock: boolean;
 };
 
 export type ValidationResult =

@@ -24,6 +24,45 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.3.0',
+    deployment: 7,
+    releasedAt: '2026-07-21',
+    title: 'Academy colour collections',
+    summary: 'Five light-and-dark colour families turn Academy progress into visible profile rewards, with an administrator-controlled site-wide option.',
+    sections: [
+      {
+        title: 'Five paired colour themes',
+        items: [
+          'Added Pacific blue, Arcade red, Sunset orange, Solar yellow, and Neon pink colour families, each with a complete light and dark appearance.',
+          'Every bonus colour includes its own inline light/dark switch in the header picker and player profile.',
+          'All ten new palettes meet the same automated contrast and semantic-surface checks as the original themes.'
+        ]
+      },
+      {
+        title: 'Academy rewards',
+        items: [
+          'Bonus themes can unlock through a first campaign star, Academy level 3, ten campaign stars, a domain boss, and a final certification boss.',
+          'The player profile now displays the complete colour collection with each requirement, availability state, and equipped theme.',
+          'Locked selections explain the next milestone, while previously earned achievements and XP grant their matching colours automatically.'
+        ]
+      },
+      {
+        title: 'Administrator control',
+        items: [
+          'The admin console can switch bonus colours between Academy unlocks and immediate site-wide availability.',
+          'Theme availability is part of public site configuration, so the header picker and profile always apply the same rule.',
+          'Changing the setting takes effect in the current admin session without discarding anyone’s Academy progress.'
+        ]
+      },
+      {
+        title: 'Versioning',
+        items: [
+          'Advanced Quiz Arcade to v0.3.0 for this backward-compatible feature expansion.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.2.1',
     deployment: 6,
     releasedAt: '2026-07-21',

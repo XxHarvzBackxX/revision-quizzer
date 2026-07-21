@@ -23,7 +23,10 @@ export default async function handler(request: VercelRequest, response: VercelRe
       const uploadKey = typeof body === 'object' && body !== null && 'uploadKey' in body
         ? String(body.uploadKey).trim()
         : '';
-      const config = { moderationEnabled, uploadKey };
+      const themesRequireUnlock = typeof body === 'object' && body !== null && 'themesRequireUnlock' in body
+        ? Boolean(body.themesRequireUnlock)
+        : true;
+      const config = { moderationEnabled, uploadKey, themesRequireUnlock };
       await saveAppConfig(config);
       sendJson(response, 200, { config });
       return;
