@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Quiz Arcade reads and writes Firestore only through authenticated Vercel Functions.
+    // The Admin SDK is controlled by IAM and bypasses these client rules.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

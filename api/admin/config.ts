@@ -1,12 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { requireAdmin } from '../_admin.js';
+import { requireAdmin, requireProtectedRequest } from '../_auth.js';
 import { getAppConfig, saveAppConfig } from '../_config.js';
 import { readJsonBody, sendJson, sendMethodNotAllowed, sendServerError } from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
-  if (!requireAdmin(request, response)) {
-    return;
-  }
+  if (!await requireAdmin(request, response)) return;
 
   try {
     if (request.method === 'GET') {
@@ -16,17 +14,15 @@ export default async function handler(request: VercelRequest, response: VercelRe
     }
 
     if (request.method === 'PUT') {
+      if (!await requireProtectedRequest(request, response)) return;
       const body = await readJsonBody(request);
       const moderationEnabled = typeof body === 'object' && body !== null && 'moderationEnabled' in body
         ? Boolean(body.moderationEnabled)
         : false;
-      const uploadKey = typeof body === 'object' && body !== null && 'uploadKey' in body
-        ? String(body.uploadKey).trim()
-        : '';
       const themesRequireUnlock = typeof body === 'object' && body !== null && 'themesRequireUnlock' in body
         ? Boolean(body.themesRequireUnlock)
         : true;
-      const config = { moderationEnabled, uploadKey, themesRequireUnlock };
+      const config = { moderationEnabled, themesRequireUnlock };
       await saveAppConfig(config);
       sendJson(response, 200, { config });
       return;

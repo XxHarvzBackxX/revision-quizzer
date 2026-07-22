@@ -8,13 +8,12 @@ export async function getAppConfig(): Promise<AdminConfig> {
   const document = await getConfigDocument().get();
   const data = document.data() ?? {};
 
-  return normalizeAppConfig(data, process.env.UPLOAD_KEY);
+  return normalizeAppConfig(data);
 }
 
-export function normalizeAppConfig(data: Record<string, unknown>, environmentUploadKey?: string): AdminConfig {
+export function normalizeAppConfig(data: Record<string, unknown>): AdminConfig {
   return {
     moderationEnabled: Boolean(data.moderationEnabled),
-    uploadKey: String(data.uploadKey ?? environmentUploadKey ?? '').trim(),
     themesRequireUnlock: data.themesRequireUnlock === undefined ? true : Boolean(data.themesRequireUnlock)
   };
 }
