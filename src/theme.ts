@@ -78,7 +78,9 @@ const THEME_EVENT = 'quiz-arcade:theme-changed';
 
 export function getStoredTheme(): ThemeId {
   try {
-    const value = readAppStorage(THEME_STORAGE_KEY);
+    const stored = readAppStorage(THEME_STORAGE_KEY);
+    if (isThemeId(stored)) return stored;
+    const value: unknown = JSON.parse(stored ?? 'null');
     return isThemeId(value) ? value : 'light';
   } catch {
     return 'light';
@@ -99,7 +101,7 @@ export function initializeTheme(): ThemeId {
 export function setTheme(theme: ThemeId): ThemeId {
   applyTheme(theme);
   try {
-    writeAppStorage(THEME_STORAGE_KEY, theme);
+    writeAppStorage(THEME_STORAGE_KEY, JSON.stringify(theme));
   } catch {
     // Theme selection still applies for the current page when storage is unavailable.
   }
@@ -113,7 +115,7 @@ export function useTheme(): [ThemeId, (theme: ThemeId) => void] {
     const onChange = () => updateTheme(getStoredTheme());
     const onStorage = (event: StorageEvent) => {
       if (event.key === THEME_STORAGE_KEY) {
-        const next = isThemeId(event.newValue) ? event.newValue : 'light';
+        const next = storedThemeValue(event.newValue);
         applyTheme(next);
         updateTheme(next);
       }
@@ -126,6 +128,16 @@ export function useTheme(): [ThemeId, (theme: ThemeId) => void] {
     };
   }, []);
   return [theme, setTheme];
+}
+
+function storedThemeValue(value: string | null): ThemeId {
+  if (isThemeId(value)) return value;
+  try {
+    const parsed: unknown = JSON.parse(value ?? 'null');
+    return isThemeId(parsed) ? parsed : 'light';
+  } catch {
+    return 'light';
+  }
 }
 
 export function isThemeAvailable(option: ThemeOption, themesRequireUnlock: boolean, progress: ThemeProgress): boolean {

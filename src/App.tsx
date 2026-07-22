@@ -38,6 +38,7 @@ export function App() {
     return getAttempts();
   });
   const [publicConfig, setPublicConfig] = useState<PublicConfig>({ themesRequireUnlock: true });
+  const [publicConfigLoaded, setPublicConfigLoaded] = useState(false);
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -98,6 +99,7 @@ export function App() {
   async function loadPublicConfig() {
     try {
       setPublicConfig(await fetchPublicConfig());
+      setPublicConfigLoaded(true);
     } catch (error) {
       notify('error', error instanceof Error ? error.message : 'Could not load site settings.');
     }
@@ -136,7 +138,7 @@ export function App() {
 
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
-      {showSiteChrome && <Topbar route={route} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} />}
+      {showSiteChrome && <Topbar route={route} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} themeAvailabilityKnown={publicConfigLoaded} />}
       <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {route.name === 'home' && <HomePage datasets={datasets} attempts={attempts} activeSessions={getActiveExamSessions()} isLoading={isLoading} navigate={navigate} />}
@@ -172,9 +174,10 @@ export function App() {
         navigate={navigate}
         onToast={notify}
         onUploaded={handleApprovedUpload}
-        onConfigChanged={(config) => setPublicConfig({
-          themesRequireUnlock: config.themesRequireUnlock
-        })}
+        onConfigChanged={(config) => {
+          setPublicConfig({ themesRequireUnlock: config.themesRequireUnlock });
+          setPublicConfigLoaded(true);
+        }}
       />}
 
       {route.name === 'login' && <AuthPage mode="login" navigate={navigate} />}

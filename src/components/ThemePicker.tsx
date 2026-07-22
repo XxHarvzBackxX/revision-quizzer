@@ -1,19 +1,27 @@
 import { Check, LockKeyhole, Palette, Sparkles } from 'lucide-react';
 import { useEffect } from 'react';
+import { useOptionalAccount } from '../account/AccountContext';
 import { studyTotals, useStudyState } from '../study/storage';
 import { isThemeAvailable, rewardThemeFamilies, themeOptions, useTheme, type RewardThemeFamily, type ThemeOption } from '../theme';
 import { ThemeModeSwitch } from './ThemeModeSwitch';
 
-export function ThemePicker({ themesRequireUnlock = true }: { themesRequireUnlock?: boolean }) {
+export function ThemePicker({
+  themesRequireUnlock = true,
+  themeAvailabilityKnown = true
+}: {
+  themesRequireUnlock?: boolean;
+  themeAvailabilityKnown?: boolean;
+}) {
   const [theme, selectTheme] = useTheme();
+  const account = useOptionalAccount();
   const study = useStudyState();
   const achievementIds = Object.keys(study.academy.achievements);
   const progress = { level: studyTotals(study).level, achievementIds };
   const current = themeOptions.find((option) => option.id === theme) ?? themeOptions[0];
 
   useEffect(() => {
-    if (!isThemeAvailable(current, themesRequireUnlock, progress)) selectTheme('light');
-  }, [current.id, themesRequireUnlock, progress.level, achievementIds.join('|')]);
+    if (themeAvailabilityKnown && !isThemeAvailable(current, themesRequireUnlock, progress)) selectTheme('light');
+  }, [current.id, themeAvailabilityKnown, themesRequireUnlock, progress.level, achievementIds.join('|')]);
 
   function themeButton(option: ThemeOption) {
     const available = isThemeAvailable(option, themesRequireUnlock, progress);
@@ -68,7 +76,7 @@ export function ThemePicker({ themesRequireUnlock = true }: { themesRequireUnloc
     <details className="theme-picker">
       <summary aria-label={`Choose site theme. Current theme: ${current.label}`}><Palette size={17} /><span>Theme</span></summary>
       <div className="theme-menu">
-        <div className="theme-menu-heading"><span>Site appearance</span><small>Saved on this browser</small></div>
+        <div className="theme-menu-heading"><span>Site appearance</span><small>{account ? 'Synced to your account' : 'Temporary for this session'}</small></div>
         <section className="theme-option-group">
           <div className="theme-option-group-heading"><span>Core themes</span><small>Always available</small></div>
           <div className="theme-options">{themeOptions.filter((option) => !option.unlock).map(themeButton)}</div>

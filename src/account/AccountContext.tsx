@@ -29,6 +29,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const revisions = useRef<Record<AccountDomain, number>>({ quiz: 0, study: 0, revision: 0, preferences: 0 });
   const timers = useRef<Partial<Record<AccountDomain, number>>>({});
+  const syncOperations = useRef<Partial<Record<AccountDomain, Promise<void>>>>({});
 
   useEffect(() => {
     void initialize();
@@ -41,7 +42,10 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
       if (!domain) return;
       const currentTimer = timers.current[domain];
       if (currentTimer) window.clearTimeout(currentTimer);
-      timers.current[domain] = window.setTimeout(() => void sync(domain), 700);
+      timers.current[domain] = window.setTimeout(() => {
+        delete timers.current[domain];
+        void sync(domain);
+      }, 700);
     }
     window.addEventListener(ACCOUNT_STORAGE_EVENT, onStorage);
     return () => {
@@ -98,22 +102,43 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
 
   async function sync(domain: AccountDomain): Promise<void> {
     if (!account) return;
-    try {
-      revisions.current[domain] = await syncAccountDomain(domain, getAccountDomainSnapshot(domain), revisions.current[domain]);
-      window.dispatchEvent(new CustomEvent('quiz-arcade:account-sync', { detail: { domain, ok: true } }));
-    } catch (error) {
-      console.error('Account sync failed', { domain, error });
-      window.dispatchEvent(new CustomEvent('quiz-arcade:account-sync', { detail: { domain, ok: false } }));
+    const operation = (async () => {
       try {
-        await reloadData();
-      } catch (reloadError) {
-        console.error('Account conflict reload failed', reloadError);
+        revisions.current[domain] = await syncAccountDomain(domain, getAccountDomainSnapshot(domain), revisions.current[domain]);
+        window.dispatchEvent(new CustomEvent('quiz-arcade:account-sync', { detail: { domain, ok: true } }));
+      } catch (error) {
+        console.error('Account sync failed', { domain, error });
+        window.dispatchEvent(new CustomEvent('quiz-arcade:account-sync', { detail: { domain, ok: false } }));
+        try {
+          await reloadData();
+        } catch (reloadError) {
+          console.error('Account conflict reload failed', reloadError);
+        }
       }
+    })();
+    syncOperations.current[domain] = operation;
+    await operation;
+    if (syncOperations.current[domain] === operation) delete syncOperations.current[domain];
+  }
+
+  async function flushPendingSyncs(): Promise<void> {
+    const domains = [...new Set([
+      ...Object.keys(timers.current),
+      ...Object.keys(syncOperations.current)
+    ] as AccountDomain[])];
+    for (const domain of domains) {
+      const timer = timers.current[domain];
+      if (timer) window.clearTimeout(timer);
+      delete timers.current[domain];
+      const activeSync = syncOperations.current[domain];
+      if (activeSync) await activeSync;
+      await sync(domain);
     }
   }
 
   async function signOut(): Promise<void> {
     const uid = account?.uid;
+    await flushPendingSyncs();
     await signOutSession();
     if (isFirebaseConfigured()) {
       try {

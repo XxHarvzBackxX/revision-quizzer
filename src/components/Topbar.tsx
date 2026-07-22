@@ -3,7 +3,7 @@ import type { AppRoute, Navigate } from '../types';
 import { PlayerQuickNav } from './PlayerQuickNav';
 import { ThemePicker } from './ThemePicker';
 
-export function Topbar({ route, navigate, themesRequireUnlock }: { route: AppRoute; navigate: Navigate; themesRequireUnlock: boolean }) {
+export function Topbar({ route, navigate, themesRequireUnlock, themeAvailabilityKnown = true }: { route: AppRoute; navigate: Navigate; themesRequireUnlock: boolean; themeAvailabilityKnown?: boolean }) {
   return (
     <header className="topbar">
       <button className="brand-button" onClick={() => navigate('/')} aria-label="Open home">
@@ -29,7 +29,7 @@ export function Topbar({ route, navigate, themesRequireUnlock }: { route: AppRou
             <Upload size={17} /> Share a set
           </button>
         </nav>
-        <ThemePicker themesRequireUnlock={themesRequireUnlock} />
+        <ThemePicker themesRequireUnlock={themesRequireUnlock} themeAvailabilityKnown={themeAvailabilityKnown} />
         <PlayerQuickNav route={route} navigate={navigate} />
       </div>
     </header>
