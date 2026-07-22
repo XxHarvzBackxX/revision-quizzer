@@ -35,7 +35,7 @@ export const changelogEntries: ChangelogEntry[] = [
       {
         title: 'Accounts and progress',
         items: [
-          'Added verified email/password and Google sign-in, private handles and preset avatars, five-day sessions, and account access from the player menu.',
+          'Added verified email/password and Google sign-in, private handles and preset avatars, five-day sessions, and a consistent player identity across Home, Study, Academy, results, contributions, and administrator tools.',
           'Signed-in attempts, active exams, Study and Academy progress, RevisionWiki data, themes, and changelog state now sync through the private account API.',
           'Guests can still browse and practise, while learning activity stays temporary and disappears instead of being stored.'
         ]

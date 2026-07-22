@@ -5,6 +5,8 @@ import type { ActiveExamSession, AttemptRecord } from '../storage';
 import type { Navigate } from '../types';
 import { revisionCourses } from '../revision/registry';
 import { revisionPageKey, useRevisionState } from '../revision/storage';
+import { useOptionalAccount } from '../account/AccountContext';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 
 export function HomePage({
   datasets,
@@ -20,6 +22,7 @@ export function HomePage({
   navigate: Navigate;
 }) {
   const revisionState = useRevisionState();
+  const account = useOptionalAccount();
   const curated = officialDatasetsFirst(datasets.filter((dataset) => dataset.curated));
   const featured = (curated.length ? curated : datasets).slice(0, 6);
   const resumable = activeSessions.find((session) => datasets.some((dataset) => dataset.id === session.datasetId) && new Date(session.expiresAt).getTime() > Date.now());
@@ -47,7 +50,8 @@ export function HomePage({
           <p className="hero-disclaimer">Unofficial original practice questions, aligned to the published skills outline shown on each certification.</p>
         </div>
         <div className="readiness-card">
-          <div className="readiness-top"><span>Your browser progress</span><Target size={24} /></div>
+          <PlayerIdentity account={account} label="Synced progress" actionLabel="Player profile" className="home-player-identity" tone="inverse" onOpen={() => navigate('/study/profile')} />
+          <div className="readiness-top"><span>{account ? 'Your account readiness' : 'Current session progress'}</span><Target size={24} /></div>
           <div className="readiness-score"><strong>{examAttempts.length ? `${best}%` : '—'}</strong><span>best mock result</span></div>
           <div className="readiness-stats">
             <div><strong>{completedExams}</strong><span>Mock exams</span></div>

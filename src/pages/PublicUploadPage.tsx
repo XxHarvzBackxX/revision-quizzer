@@ -3,6 +3,7 @@ import type { PublicConfig, PublicDataset } from '../../shared/quiz';
 import { UploadPanel } from '../components/UploadPanel';
 import type { ToastKind } from '../types';
 import { useAccount } from '../account/AccountContext';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 import type { Navigate } from '../types';
 
 export function PublicUploadPage({
@@ -25,10 +26,8 @@ export function PublicUploadPage({
         <h1>Upload</h1>
       </div>
       <div className="upload-intro">
-        <strong>Public submissions</strong>
-        <span>
-          Submissions are linked privately to your account and may wait for moderator approval. Public attribution follows your account setting.
-        </span>
+        <div className="upload-intro-copy"><strong>Public submissions</strong><span>Submissions are linked privately to your account and may wait for moderator approval.</span></div>
+        <PlayerIdentity account={account} label={account.attributionEnabled ? 'Public attribution enabled' : 'Submitting privately'} actionLabel="Profile settings" className="upload-player-identity" onOpen={() => navigate('/account')} />
       </div>
       <UploadPanel mode="public" publicConfig={config} onUploaded={onUploaded} onToast={onToast} />
       <p className="upload-policy-note">Submit only original or licensed material. Do not upload real exam dumps or personal information. See the Community Guidelines.</p>

@@ -68,6 +68,12 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/\.account-panel \.ghost-button,\.account-guest-card \.ghost-button\s*\{[^}]*background:var\(--theme-soft\)[^}]*border:1px solid var\(--theme-line\)[^}]*color:var\(--theme-ink\)/);
   });
 
+  it('provides responsive identity chips on light and strong surfaces', () => {
+    expect(css).toMatch(/\.player-identity\s*\{[^}]*background:var\(--theme-paper\)[^}]*min-width:0/);
+    expect(css).toMatch(/\.player-identity\.inverse\s*\{[^}]*background:rgba\(255,255,255,\.09\)[^}]*color:#fff/);
+    expect(css).toMatch(/@media \(max-width:720px\)[\s\S]*\.upload-intro\s*\{[^}]*flex-direction:column/);
+  });
+
   it('defines every referenced theme token and themes inherited-text surfaces', () => {
     const referenced = new Set(Array.from(css.matchAll(/var\((--theme-[\w-]+)/g), (match) => match[1]));
     const defined = new Set(Array.from(css.matchAll(/(--theme-[\w-]+)\s*:/g), (match) => match[1]));

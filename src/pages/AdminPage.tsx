@@ -1,5 +1,6 @@
 import { Check, Loader2, Lock, Palette, RotateCcw, Shield } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import type { AccountProfile } from '../../shared/account';
 import type { AdminConfig, DatasetInput, PublicDataset } from '../../shared/quiz';
 import {
   deleteAdminDataset,
@@ -9,6 +10,7 @@ import {
   updateAdminDataset
 } from '../api';
 import { UploadPanel } from '../components/UploadPanel';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 import type { ToastKind } from '../types';
 import { parseDataset } from '../utils/quizUi';
 import { useAccount } from '../account/AccountContext';
@@ -41,14 +43,18 @@ export function AdminPage({
   }
   if (!account.admin) return <section className="admin-login"><div className="login-panel"><div className="lock-badge"><Shield size={32} /></div><h1>Access denied</h1><p>Your account does not have the administrator claim.</p></div></section>;
 
-  return <AdminConsole onUploaded={onUploaded} onConfigChanged={onConfigChanged} onToast={onToast} />;
+  return <AdminConsole account={account} navigate={navigate} onUploaded={onUploaded} onConfigChanged={onConfigChanged} onToast={onToast} />;
 }
 
 function AdminConsole({
+  account,
+  navigate,
   onUploaded,
   onConfigChanged,
   onToast
 }: {
+  account: AccountProfile;
+  navigate: Navigate;
   onUploaded: (dataset: PublicDataset) => void;
   onConfigChanged: (config: AdminConfig) => void;
   onToast: (kind: ToastKind, message: string) => void;
@@ -130,6 +136,7 @@ function AdminConsole({
           <input type="checkbox" checked={moderationEnabled} onChange={(event) => toggleModeration(event.target.checked)} />
           <span>Require admin approval for upload-key submissions</span>
         </label>
+        <PlayerIdentity account={account} label="Administrator" actionLabel="Account profile" className="admin-profile-identity" onOpen={() => navigate('/account')} />
         <button className="ghost-button" onClick={refreshAdmin}>
           {isLoadingAdmin ? <Loader2 className="spin" size={16} /> : <RotateCcw size={16} />}
           Refresh
