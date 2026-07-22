@@ -1,7 +1,13 @@
 import { FieldValue, Timestamp, type DocumentData } from 'firebase-admin/firestore';
 import type { UserRecord } from 'firebase-admin/auth';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { isAccountAvatar, type AdminAccountProfile, type AdminAccountUpdate } from '../../shared/account.js';
+import {
+  isAccountAvatar,
+  type AdminAccountProfile,
+  type AdminAccountUpdate,
+  type AdminModerationChanges,
+  type AdminModerationEvent
+} from '../../shared/account.js';
 import {
   AccountInputError,
   accountRef,
@@ -21,6 +27,15 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     if (request.method === 'GET') {
+      const historyUid = getQueryParam(request, 'history').trim();
+      if (historyUid) {
+        if (!isFirebaseUid(historyUid)) {
+          sendJson(response, 400, { error: 'A valid account UID is required for moderation history.' });
+          return;
+        }
+        await listModerationHistory(historyUid, getQueryParam(request, 'cursor').trim(), response);
+        return;
+      }
       await listAccounts(request, response);
       return;
     }
@@ -61,6 +76,26 @@ export default async function handler(request: VercelRequest, response: VercelRe
     }
     sendServerError(response, error);
   }
+}
+
+async function listModerationHistory(uid: string, cursor: string, response: VercelResponse) {
+  const collection = accountRef(uid).collection('moderationAudit');
+  let query = collection.orderBy('createdAt', 'desc').limit(PAGE_SIZE + 1);
+  if (cursor && isDocumentId(cursor)) {
+    const cursorDocument = await collection.doc(cursor).get();
+    if (cursorDocument.exists) query = query.startAfter(cursorDocument);
+  }
+  const snapshot = await query.get();
+  const documents = snapshot.docs.slice(0, PAGE_SIZE);
+  const actorUids = [...new Set(documents.flatMap((document) => {
+    const actorUid = document.data().actorUid;
+    return typeof actorUid === 'string' && isFirebaseUid(actorUid) ? [actorUid] : [];
+  }))];
+  const actorDocuments = actorUids.length ? await getDatabase().getAll(...actorUids.map(accountRef)) : [];
+  const actorHandles = new Map(actorDocuments.map((document) => [document.id, typeof document.data()?.handle === 'string' ? document.data()!.handle as string : 'former_admin']));
+  const events = documents.map((document) => toModerationEvent(uid, document.id, document.data(), actorHandles));
+  const nextCursor = snapshot.docs.length > PAGE_SIZE ? snapshot.docs[PAGE_SIZE - 1].id : null;
+  sendJson(response, 200, { events, nextCursor });
 }
 
 async function listAccounts(request: VercelRequest, response: VercelResponse) {
@@ -231,6 +266,37 @@ function toAdminAccountProfile(uid: string, data: DocumentData, user?: UserRecor
   };
 }
 
+function toModerationEvent(targetUid: string, id: string, data: DocumentData, actorHandles: Map<string, string>): AdminModerationEvent {
+  const actorUid = typeof data.actorUid === 'string' ? data.actorUid : 'unknown';
+  const action = isModerationAction(data.action) ? data.action : 'account.profile_updated';
+  const before = moderationChanges(data.before);
+  const after = moderationChanges(data.after);
+  return {
+    id,
+    action,
+    actor: { uid: actorUid, handle: actorHandles.get(actorUid) ?? 'former_admin' },
+    targetUid,
+    reason: typeof data.reason === 'string' ? data.reason : 'No reason recorded.',
+    createdAt: toIso(data.createdAt),
+    ...(Object.keys(before).length ? { before } : {}),
+    ...(Object.keys(after).length ? { after } : {})
+  };
+}
+
+function moderationChanges(value: unknown): AdminModerationChanges {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const source = value as Record<string, unknown>;
+  const changes: AdminModerationChanges = {};
+  if (typeof source.handle === 'string' || source.handle === null) changes.handle = source.handle;
+  if (typeof source.avatar === 'string' || source.avatar === null) changes.avatar = source.avatar;
+  if (typeof source.attributionEnabled === 'boolean' || source.attributionEnabled === null) changes.attributionEnabled = source.attributionEnabled;
+  return changes;
+}
+
+function isModerationAction(value: unknown): value is AdminModerationEvent['action'] {
+  return value === 'account.profile_updated' || value === 'account.revoke-sessions' || value === 'account.suspend' || value === 'account.restore';
+}
+
 function toIso(value: unknown): string {
   if (value && typeof value === 'object' && 'toDate' in value && typeof value.toDate === 'function') return (value.toDate() as Date).toISOString();
   if (typeof value === 'string') {
@@ -242,6 +308,10 @@ function toIso(value: unknown): string {
 
 function isFirebaseUid(value: string): boolean {
   return /^[a-zA-Z0-9_-]{6,128}$/.test(value);
+}
+
+function isDocumentId(value: string): boolean {
+  return value.length > 0 && value.length <= 128 && !value.includes('/');
 }
 
 type AccountDocument = { id: string; data: () => DocumentData | undefined };

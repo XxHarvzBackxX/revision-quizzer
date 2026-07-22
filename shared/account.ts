@@ -47,6 +47,22 @@ export type AdminAccountAction = {
   action: 'revoke-sessions' | 'suspend' | 'restore';
 };
 
+export type AdminModerationChanges = Partial<Record<'handle' | 'avatar' | 'attributionEnabled', string | boolean | null>>;
+
+export type AdminModerationEvent = {
+  id: string;
+  action: 'account.profile_updated' | 'account.revoke-sessions' | 'account.suspend' | 'account.restore';
+  actor: {
+    uid: string;
+    handle: string;
+  };
+  targetUid: string;
+  reason: string;
+  createdAt: string;
+  before?: AdminModerationChanges;
+  after?: AdminModerationChanges;
+};
+
 export type AccountOnboarding = {
   handle: string;
   avatar: AccountAvatar;

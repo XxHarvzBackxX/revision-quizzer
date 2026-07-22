@@ -17,6 +17,14 @@ vi.mock('../account/AccountContext', () => ({
 
 vi.mock('../api', () => ({
   applyAdminAccountAction: vi.fn(),
+  fetchAdminAccountHistory: vi.fn().mockResolvedValue({
+    events: [{
+      id: 'audit-1', action: 'account.profile_updated', targetUid: 'player-user-456',
+      actor: { uid: 'admin-user-123', handle: 'arcade_admin' }, reason: 'Removed impersonating handle',
+      createdAt: '2026-07-22T12:00:00.000Z', before: { handle: 'fake_support' }, after: { handle: 'rude_name' }
+    }],
+    nextCursor: null
+  }),
   fetchAdminAccounts: vi.fn().mockResolvedValue({
     accounts: [{
       uid: 'player-user-456', email: 'player@example.com', handle: 'rude_name', avatar: 'pixel-cat',
@@ -56,6 +64,9 @@ describe('AdminPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Accounts' }));
 
     expect(await screen.findAllByText('@rude_name')).toHaveLength(2);
+    expect(await screen.findByRole('heading', { name: 'Moderation history' })).toBeInTheDocument();
+    expect(screen.getByText('Removed impersonating handle')).toBeInTheDocument();
+    expect(screen.getAllByText('@arcade_admin')).toHaveLength(2);
     await userEvent.clear(screen.getByLabelText('Handle'));
     await userEvent.type(screen.getByLabelText('Handle'), 'safe_name');
     await userEvent.type(screen.getByLabelText(/Moderation reason/), 'Reported offensive handle');

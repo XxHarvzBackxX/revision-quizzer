@@ -72,6 +72,8 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*minmax\(250px, \.72fr\) minmax\(0, 1\.28fr\)/);
     expect(css).toMatch(/@media \(max-width: 820px\)[\s\S]*\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*1fr/);
     expect(css).toMatch(/\.account-manager-item\s*\{[^}]*grid-template-columns:\s*auto minmax\(0, 1fr\) auto/);
+    expect(css).toMatch(/\.moderation-event\s*\{[^}]*background:\s*var\(--theme-soft/);
+    expect(css).toMatch(/@media \(max-width: 600px\)[\s\S]*\.moderation-history-heading\s*\{[^}]*flex-direction:\s*column/);
   });
 
   it('provides responsive identity chips on light and strong surfaces', () => {

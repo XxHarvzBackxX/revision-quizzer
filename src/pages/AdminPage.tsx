@@ -1,10 +1,11 @@
-import { Ban, Check, KeyRound, Loader2, Lock, Palette, RotateCcw, Search, Shield, UserCheck, Users } from 'lucide-react';
+import { Ban, Check, History as HistoryIcon, KeyRound, Loader2, Lock, Palette, RotateCcw, Search, Shield, UserCheck, Users } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { ACCOUNT_AVATARS, type AccountAvatar, type AccountProfile, type AdminAccountProfile } from '../../shared/account';
+import { ACCOUNT_AVATARS, type AccountAvatar, type AccountProfile, type AdminAccountProfile, type AdminModerationEvent } from '../../shared/account';
 import type { AdminConfig, DatasetInput, PublicDataset } from '../../shared/quiz';
 import {
   applyAdminAccountAction,
   deleteAdminDataset,
+  fetchAdminAccountHistory,
   fetchAdminAccounts,
   fetchAdminConfig,
   fetchAdminDatasets,
@@ -204,6 +205,7 @@ function AdminAccountManager({
   const [handle, setHandle] = useState('');
   const [avatar, setAvatar] = useState<AccountAvatar>('quiz-bot');
   const [reason, setReason] = useState('');
+  const [historyRevision, setHistoryRevision] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const selected = accounts.find((account) => account.uid === selectedUid) ?? accounts[0];
@@ -243,6 +245,7 @@ function AdminAccountManager({
     setHandle(account.handle);
     setAvatar(account.avatar);
     setReason('');
+    setHistoryRevision((current) => current + 1);
   }
 
   async function saveProfile() {
@@ -333,6 +336,7 @@ function AdminAccountManager({
           {selected.disabled || selected.status === 'suspended' ? <button className="secondary-button" disabled={isSaving || !reasonValid} onClick={() => void runAction('restore')}><UserCheck size={17} />Restore access</button> : <button className="danger-button" disabled={isSaving || !reasonValid || selected.uid === currentAdministratorUid} title={selected.uid === currentAdministratorUid ? 'You cannot suspend your own administrator account.' : undefined} onClick={() => void runAction('suspend')}><Ban size={17} />Suspend account</button>}
         </div>
         <p className="account-moderation-boundary">Email addresses, administrator claims, and learning records cannot be changed here.</p>
+        <AdminModerationHistory account={selected} onToast={onToast} key={`${selected.uid}:${historyRevision}`} />
       </div>}
     </div>}
   </section>;
@@ -342,6 +346,62 @@ function formatAccountDate(value?: string): string {
   if (!value) return 'Not recorded';
   const date = new Date(value);
   return Number.isNaN(date.getTime()) || date.getUTCFullYear() === 1970 ? 'Not recorded' : date.toLocaleString();
+}
+
+function AdminModerationHistory({ account, onToast }: { account: AdminAccountProfile; onToast: (kind: ToastKind, message: string) => void }) {
+  const [events, setEvents] = useState<AdminModerationEvent[]>([]);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => { void loadHistory(false); }, [account.uid]);
+
+  async function loadHistory(append: boolean) {
+    setIsLoading(true);
+    try {
+      const result = await fetchAdminAccountHistory(account.uid, append ? nextCursor ?? '' : '');
+      setEvents((current) => append ? [...current, ...result.events] : result.events);
+      setNextCursor(result.nextCursor);
+    } catch (error) {
+      onToast('error', error instanceof Error ? error.message : 'Could not load moderation history.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return <section className="account-moderation-history" aria-labelledby={`moderation-history-${account.uid}`}>
+    <div className="moderation-history-heading"><div><HistoryIcon size={19} /><div><h3 id={`moderation-history-${account.uid}`}>Moderation history</h3><p>Private, administrator-only audit records for this account.</p></div></div><button className="ghost-button" disabled={isLoading} onClick={() => void loadHistory(false)}><RotateCcw size={15} />Refresh</button></div>
+    {isLoading && events.length === 0 ? <p className="muted-copy">Loading moderation history...</p> : events.length === 0 ? <p className="muted-copy">No moderation actions recorded.</p> : <div className="moderation-event-list">{events.map((event) => {
+      const changedFields = moderationChangedFields(event);
+      return <article className="moderation-event" key={event.id}>
+        <div className="moderation-event-heading"><strong>{moderationActionLabel(event.action)}</strong><time dateTime={event.createdAt}>{formatAccountDate(event.createdAt)}</time></div>
+        <p>{event.reason}</p>
+        <small>By <strong>@{event.actor.handle}</strong> · <code>{event.actor.uid}</code></small>
+        {changedFields.length > 0 && <dl>{changedFields.map((field) => <div key={field}><dt>{moderationFieldLabel(field)}</dt><dd><del>{moderationValue(field, event.before?.[field])}</del><span aria-hidden="true">→</span><ins>{moderationValue(field, event.after?.[field])}</ins></dd></div>)}</dl>}
+      </article>;
+    })}</div>}
+    {nextCursor && <button className="secondary-button moderation-load-more" disabled={isLoading} onClick={() => void loadHistory(true)}>{isLoading ? <Loader2 className="spin" size={16} /> : null}Load older actions</button>}
+  </section>;
+}
+
+function moderationActionLabel(action: AdminModerationEvent['action']): string {
+  if (action === 'account.suspend') return 'Account suspended';
+  if (action === 'account.restore') return 'Account restored';
+  if (action === 'account.revoke-sessions') return 'Sessions revoked';
+  return 'Profile corrected';
+}
+
+function moderationChangedFields(event: AdminModerationEvent): Array<keyof NonNullable<AdminModerationEvent['after']>> {
+  return [...new Set([...Object.keys(event.before ?? {}), ...Object.keys(event.after ?? {})])] as Array<keyof NonNullable<AdminModerationEvent['after']>>;
+}
+
+function moderationFieldLabel(field: keyof NonNullable<AdminModerationEvent['after']>): string {
+  return field === 'attributionEnabled' ? 'Public attribution' : field === 'avatar' ? 'Avatar' : 'Handle';
+}
+
+function moderationValue(field: keyof NonNullable<AdminModerationEvent['after']>, value: string | boolean | null | undefined): string {
+  if (value === null || value === undefined) return 'Not set';
+  if (field === 'attributionEnabled') return value ? 'Enabled' : 'Off';
+  return String(value).replaceAll('-', ' ');
 }
 
 function AdminDatasetManager({

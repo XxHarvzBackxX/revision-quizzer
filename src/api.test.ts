@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DatasetInput } from '../shared/quiz';
 import {
   deleteAccount,
+  fetchAdminAccountHistory,
   fetchDataset,
   fetchDatasets,
   updateAdminDataset,
@@ -94,6 +95,16 @@ describe('API client', () => {
       },
       credentials: 'same-origin',
       body: JSON.stringify({ approvedContent: 'anonymize' })
+    });
+  });
+
+  it('loads an account moderation audit page through the consolidated admin function', async () => {
+    mockFetch({ events: [], nextCursor: null });
+
+    await expect(fetchAdminAccountHistory('player_user_1', 'audit/one')).resolves.toEqual({ events: [], nextCursor: null });
+    expect(fetch).toHaveBeenCalledWith('/api/admin/accounts?history=player_user_1&cursor=audit%2Fone', {
+      credentials: 'same-origin',
+      headers: {}
     });
   });
 });

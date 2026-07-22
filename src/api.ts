@@ -5,7 +5,8 @@ import type {
   AccountProfile,
   AdminAccountAction,
   AdminAccountProfile,
-  AdminAccountUpdate
+  AdminAccountUpdate,
+  AdminModerationEvent
 } from '../shared/account';
 import type { AdminConfig, DatasetInput, DatasetSummary, PublicConfig, PublicDataset } from '../shared/quiz';
 import { resetCsrfToken, secureRequestHeaders } from './security';
@@ -92,6 +93,12 @@ export async function fetchAdminAccounts(query = '', cursor = ''): Promise<{ acc
   if (cursor) params.set('cursor', cursor);
   const suffix = params.size ? `?${params.toString()}` : '';
   return requestJson(`/api/admin/accounts${suffix}`, 'Could not load account profiles.');
+}
+
+export async function fetchAdminAccountHistory(uid: string, cursor = ''): Promise<{ events: AdminModerationEvent[]; nextCursor: string | null }> {
+  const params = new URLSearchParams({ history: uid });
+  if (cursor) params.set('cursor', cursor);
+  return requestJson(`/api/admin/accounts?${params.toString()}`, 'Could not load moderation history.');
 }
 
 export async function updateAdminAccount(update: AdminAccountUpdate): Promise<AdminAccountProfile> {

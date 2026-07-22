@@ -52,7 +52,7 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Security and transparency',
         items: [
           'Replaced shared administrator and upload passwords with individual verified sessions, protected administrator permissions, request safeguards, and server-only database access.',
-          'Administrators can now search private accounts, correct inappropriate handles or avatars, remove public attribution, revoke sessions, and suspend or restore access, with a required private reason for every action.',
+          'Administrators can now search private accounts, correct inappropriate handles or avatars, remove public attribution, revoke sessions, and suspend or restore access, with a required reason and reviewable private history for every action.',
           'Account features now deploy reliably on the free hosting tier without reducing their security checks.',
           'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.'
         ]
