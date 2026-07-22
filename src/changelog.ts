@@ -24,6 +24,34 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.4.0',
+    deployment: 8,
+    releasedAt: '2026-07-22',
+    title: 'Player shortcuts from every page',
+    summary: 'A new player icon keeps Study & Academy and the player profile one quick menu away throughout Quiz Arcade.',
+    sections: [
+      {
+        title: 'Faster player navigation',
+        items: [
+          'Added a player icon to the top-right corner with direct shortcuts to Study & Academy and the player profile.',
+          'The icon and menu highlight the current study or profile destination and close automatically after a selection.'
+        ]
+      },
+      {
+        title: 'Responsive and accessible',
+        items: [
+          'The compact control and its menu adapt to mobile headers while keeping clear labels, focus states, and current-page cues.'
+        ]
+      },
+      {
+        title: 'Versioning',
+        items: [
+          'Advanced Quiz Arcade to v0.4.0 for this backward-compatible navigation feature.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.3.0',
     deployment: 7,
     releasedAt: '2026-07-21',

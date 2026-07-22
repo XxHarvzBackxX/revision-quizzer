@@ -1,5 +1,6 @@
 import { BookOpenText, BrainCircuit, Gamepad2, Library, Upload } from 'lucide-react';
 import type { AppRoute, Navigate } from '../types';
+import { PlayerQuickNav } from './PlayerQuickNav';
 import { ThemePicker } from './ThemePicker';
 
 export function Topbar({ route, navigate, themesRequireUnlock }: { route: AppRoute; navigate: Navigate; themesRequireUnlock: boolean }) {
@@ -29,6 +30,7 @@ export function Topbar({ route, navigate, themesRequireUnlock }: { route: AppRou
           </button>
         </nav>
         <ThemePicker themesRequireUnlock={themesRequireUnlock} />
+        <PlayerQuickNav route={route} navigate={navigate} />
       </div>
     </header>
   );
