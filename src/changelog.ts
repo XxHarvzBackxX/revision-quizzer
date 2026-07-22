@@ -1,4 +1,5 @@
 import packageMetadata from '../package.json';
+import { readAppStorage, writeAppStorage } from './persistence';
 
 export type ChangelogSection = {
   title: string;
@@ -23,6 +24,39 @@ export const APP_VERSION = packageMetadata.version;
 export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
+  {
+    version: '0.5.0',
+    deployment: 9,
+    releasedAt: '2026-07-22',
+    title: 'Private accounts and secure progress sync',
+    summary: 'Verified accounts can now carry Quiz Arcade progress across devices, with transparent privacy controls and no persistent guest learning history.',
+    sections: [
+      {
+        title: 'Accounts and progress',
+        items: [
+          'Added verified email/password and Google sign-in, private handles and preset avatars, five-day sessions, and account access from the player menu.',
+          'Signed-in attempts, active exams, Study and Academy progress, RevisionWiki data, themes, and changelog state now sync through the private account API.',
+          'Guests can still browse and practise, while learning activity stays temporary and disappears instead of being stored.'
+        ]
+      },
+      {
+        title: 'Control and continuity',
+        items: [
+          'Existing browser progress can be claimed safely or downloaded as JSON without being removed before a confirmed import.',
+          'Account holders can export their information, control approved-set attribution, manage submissions, and delete their account with a choice for approved content.',
+          'Inactive accounts receive a warning before automatic deletion after two years.'
+        ]
+      },
+      {
+        title: 'Security and transparency',
+        items: [
+          'Replaced shared administrator and upload secrets with revocation-checked Firebase sessions, administrator claims, CSRF and origin checks, App Check support, and server-only Firestore access.',
+          'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.',
+          'Advanced Quiz Arcade to v0.5.0 for the backward-compatible account foundation.'
+        ]
+      }
+    ]
+  },
   {
     version: '0.4.0',
     deployment: 8,
@@ -290,7 +324,7 @@ export function markChangelogRead(releaseKey: string): void {
     readVersions: changelogEntries.map(changelogEntryKey).filter((entryKey) => read.has(entryKey))
   };
   try {
-    localStorage.setItem(CHANGELOG_STORAGE_KEY, JSON.stringify(next));
+    writeAppStorage(CHANGELOG_STORAGE_KEY, JSON.stringify(next));
   } catch {
     // The changelog remains usable for this visit when browser storage is unavailable.
   }
@@ -303,7 +337,7 @@ export function formatChangelogDate(value: string): string {
 
 function readChangelogState(): ChangelogReadState {
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(CHANGELOG_STORAGE_KEY) ?? 'null');
+    const value: unknown = JSON.parse(readAppStorage(CHANGELOG_STORAGE_KEY) ?? 'null');
     if (!isRecord(value) || value.version !== 1 || !Array.isArray(value.readVersions)) return emptyReadState();
     const known = new Set(changelogEntries.map(changelogEntryKey));
     return {
