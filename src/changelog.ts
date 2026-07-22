@@ -45,7 +45,7 @@ export const changelogEntries: ChangelogEntry[] = [
         items: [
           'Existing browser progress can be claimed safely or downloaded as JSON without being removed before a confirmed import.',
           'Account holders can export their information, control approved-set attribution, manage submissions, and delete their account with a choice for approved content.',
-          'Inactive accounts receive a warning before automatic deletion after two years.'
+          'Inactive accounts receive a warning and at least 30 days to return before automatic deletion; deletion pauses if that warning cannot be delivered.'
         ]
       },
       {

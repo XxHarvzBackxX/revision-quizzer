@@ -15,6 +15,7 @@ describe('account transparency pages', () => {
     expect(screen.getByRole('link', { name: 'harvey.wells.07@gmail.com' })).toHaveAttribute('href', 'mailto:harvey.wells.07@gmail.com');
     expect(screen.getByText(/Guests can browse and practise/)).toBeInTheDocument();
     expect(screen.getByText(/23 months of inactivity/)).toBeInTheDocument();
+    expect(screen.getByText(/Automatic deletion pauses if warning delivery is unavailable/)).toBeInTheDocument();
   });
 
   it('publishes account terms and separate contribution guidelines', () => {

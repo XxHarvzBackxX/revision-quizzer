@@ -8,6 +8,8 @@ Arcade Academy turns that evidence into an open certification campaign for both 
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are part of signed-in account sync and remain exportable as JSON.
 
+Signed-in players keep the same private avatar and handle across Home, Study, Academy, results, contributions, and administrator tools. These identity surfaces link back to player or account settings without creating a public profile page.
+
 The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth. Each feature branch gets one matching entry in `src/changelog.ts`; follow-up commits and deployment fixes update that entry rather than creating new versions. Changelog copy is written for users, describes observable outcomes in plain language, and omits technical implementation detail unless it explains an impact, limitation, risk, or required action.
 
 The top-bar appearance picker provides light, light-contrast, dark, dark-contrast, dark-purple, and light-mint themes. The selected palette applies across exams, RevisionWiki, uploads, and admin views and follows a signed-in account across devices.
@@ -20,8 +22,8 @@ _Last reviewed: 22 July 2026._
 
 | Horizon | Initiative | Outcome | State |
 | --- | --- | --- | --- |
-| Now | Secure hosted accounts | Add verified email/Google sign-in, private profiles, server sessions, cross-device progress, self-service data controls, and transparent legal pages. | In development — `feature/secure-accounts` |
-| Now | Progress migration and portability | Let existing players claim or export frozen browser-local attempts, Study and Academy progress, RevisionWiki data, and preferences. | In development with accounts |
+| Now | Secure hosted accounts | Add verified email/Google sign-in, private profiles, server sessions, cross-device progress, self-service data controls, and transparent legal pages. | Ready for review — `feature/secure-accounts` |
+| Now | Progress migration and portability | Let existing players claim or export frozen browser-local attempts, Study and Academy progress, RevisionWiki data, and preferences. | Ready for review with accounts |
 | Next | Another certification campaign | Add a complete Microsoft Fundamentals track spanning mock papers, RevisionWiki, smart study, and Arcade Academy. | Candidate |
 | Later | Broader certification catalogue | Make adding and maintaining blueprint-aligned certification content more repeatable. | Exploratory |
 | Later | Public player profiles | Explore opt-in public profile pages and discovery; v0.5 keeps profiles private except optional approved-set attribution. | Exploratory |
@@ -66,7 +68,7 @@ npm run admin:grant -- <exact-firebase-uid>
 Remove-Item Env:FIREBASE_SERVICE_ACCOUNT_JSON_BASE64
 ```
 
-The command verifies that the email is confirmed, preserves unrelated custom claims, adds `admin: true`, and revokes existing sessions. Sign out and sign in again afterwards. Never grant administrator access by matching an email address or expose the service-account file to the browser.
+If PowerShell blocks `npm.ps1`, use `npm.cmd run admin:grant -- <exact-firebase-uid>`. On a Windows network that inserts a locally trusted TLS certificate, run `node --use-system-ca .\scripts\set-admin-claim.mjs <exact-firebase-uid>` instead. The command verifies that the email is confirmed, preserves unrelated custom claims, adds `admin: true`, and revokes existing sessions. Sign out and sign in again afterwards. Never grant administrator access by matching an email address or expose the service-account file to the browser.
 
 `firebase-admin` is intentionally pinned to `13.10.0`: its supported `jwks-rsa` 3 dependency graph loads in Vercel’s CommonJS function wrapper, while the Admin 14.2 dependency graph currently fails during function startup before request handling. `tests/api/runtime-compatibility.test.ts` guards the server-runtime loading path; reassess the pin after the upstream ESM interoperability issue is fixed.
 

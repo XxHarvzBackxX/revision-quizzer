@@ -44,12 +44,14 @@ export default async function handler(request: VercelRequest, response: VercelRe
         const data = document.data();
         const lastActive = data.lastActiveAt?.toDate?.() as Date | undefined;
         if (!lastActive) continue;
-        if (lastActive <= deleteCutoff) {
+        const warningSentAt = data.inactivityWarningSentAt?.toDate?.() as Date | undefined;
+        const action = retentionAction(now, lastActive, warningSentAt);
+        if (action === 'delete') {
           await deleteAccount(document.id, 'anonymize');
           deleted += 1;
           continue;
         }
-        if (!data.inactivityWarningSentAt) {
+        if (action === 'warn') {
           const user = await getFirebaseAuth().getUser(document.id);
           if (user.email) {
             await sendRetentionWarning(user.email, typeof data.handle === 'string' ? data.handle : 'player');
@@ -67,6 +69,19 @@ export default async function handler(request: VercelRequest, response: VercelRe
   } catch (error) {
     sendServerError(response, error);
   }
+}
+
+export function retentionAction(now: Date, lastActive: Date, warningSentAt?: Date): 'none' | 'warn' | 'delete' {
+  const deleteCutoff = new Date(now);
+  deleteCutoff.setUTCFullYear(deleteCutoff.getUTCFullYear() - 2);
+  const warningCutoff = new Date(deleteCutoff.getTime() + 30 * 24 * 60 * 60 * 1000);
+  if (lastActive > warningCutoff) return 'none';
+
+  const warningCoversCurrentInactivity = Boolean(warningSentAt && warningSentAt > lastActive);
+  if (!warningCoversCurrentInactivity) return 'warn';
+
+  const warningMaturesAt = new Date(warningSentAt!.getTime() + 30 * 24 * 60 * 60 * 1000);
+  return lastActive <= deleteCutoff && warningMaturesAt <= now ? 'delete' : 'none';
 }
 
 async function sendRetentionWarning(email: string, handle: string): Promise<void> {
