@@ -1,76 +1,54 @@
-import { Check, KeyRound, Loader2, Lock, Palette, RotateCcw, Shield } from 'lucide-react';
+import { Check, Loader2, Lock, Palette, RotateCcw, Shield } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import type { AdminConfig, DatasetInput, PublicDataset } from '../../shared/quiz';
 import {
   deleteAdminDataset,
   fetchAdminConfig,
   fetchAdminDatasets,
-  loginAdmin,
   updateAdminConfig,
   updateAdminDataset
 } from '../api';
 import { UploadPanel } from '../components/UploadPanel';
 import type { ToastKind } from '../types';
 import { parseDataset } from '../utils/quizUi';
+import { useAccount } from '../account/AccountContext';
+import type { Navigate } from '../types';
 
 export function AdminPage({
   onUploaded,
   onConfigChanged,
-  onToast
+  onToast,
+  navigate
 }: {
   onUploaded: (dataset: PublicDataset) => void;
   onConfigChanged: (config: AdminConfig) => void;
   onToast: (kind: ToastKind, message: string) => void;
+  navigate: Navigate;
 }) {
-  const [password, setPassword] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const { account } = useAccount();
 
-  async function submitLogin(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoggingIn(true);
-    try {
-      await loginAdmin(password);
-      setAdminPassword(password);
-      setPassword('');
-      onToast('success', 'Admin unlocked.');
-    } catch (error) {
-      onToast('error', error instanceof Error ? error.message : 'Could not log in.');
-    } finally {
-      setIsLoggingIn(false);
-    }
-  }
-
-  if (!adminPassword) {
+  if (!account) {
     return (
       <section className="admin-login">
-        <form className="login-panel" onSubmit={submitLogin}>
+        <div className="login-panel">
           <div className="lock-badge"><Shield size={32} /></div>
           <h1>Admin access</h1>
-          <p>This page is intentionally hidden from navigation.</p>
-          <label className="field">
-            <span>Admin password</span>
-            <input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoFocus />
-          </label>
-          <button className="primary-button big" disabled={!password || isLoggingIn}>
-            {isLoggingIn ? <Loader2 className="spin" size={18} /> : <KeyRound size={18} />}
-            Unlock uploader
-          </button>
-        </form>
+          <p>Sign in with an account that has the server-managed administrator claim.</p>
+          <button className="primary-button big" onClick={() => navigate('/login')}>Sign in securely</button>
+        </div>
       </section>
     );
   }
+  if (!account.admin) return <section className="admin-login"><div className="login-panel"><div className="lock-badge"><Shield size={32} /></div><h1>Access denied</h1><p>Your account does not have the administrator claim.</p></div></section>;
 
-  return <AdminConsole adminPassword={adminPassword} onUploaded={onUploaded} onConfigChanged={onConfigChanged} onToast={onToast} />;
+  return <AdminConsole onUploaded={onUploaded} onConfigChanged={onConfigChanged} onToast={onToast} />;
 }
 
 function AdminConsole({
-  adminPassword,
   onUploaded,
   onConfigChanged,
   onToast
 }: {
-  adminPassword: string;
   onUploaded: (dataset: PublicDataset) => void;
   onConfigChanged: (config: AdminConfig) => void;
   onToast: (kind: ToastKind, message: string) => void;
@@ -78,7 +56,6 @@ function AdminConsole({
   const [tab, setTab] = useState<'upload' | 'datasets'>('upload');
   const [adminDatasets, setAdminDatasets] = useState<PublicDataset[]>([]);
   const [moderationEnabled, setModerationEnabled] = useState(false);
-  const [uploadKey, setUploadKey] = useState('');
   const [themesRequireUnlock, setThemesRequireUnlock] = useState(true);
   const [isLoadingAdmin, setIsLoadingAdmin] = useState(true);
   const [isSavingThemeAvailability, setIsSavingThemeAvailability] = useState(false);
@@ -91,11 +68,10 @@ function AdminConsole({
     setIsLoadingAdmin(true);
     try {
       const [config, datasets] = await Promise.all([
-        fetchAdminConfig(adminPassword),
-        fetchAdminDatasets(adminPassword)
+        fetchAdminConfig(),
+        fetchAdminDatasets()
       ]);
       setModerationEnabled(config.moderationEnabled);
-      setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
       onConfigChanged(config);
       setAdminDatasets(datasets);
@@ -109,9 +85,8 @@ function AdminConsole({
   async function toggleModeration(value: boolean) {
     setModerationEnabled(value);
     try {
-      const config = await updateAdminConfig({ moderationEnabled: value, uploadKey, themesRequireUnlock }, adminPassword);
+      const config = await updateAdminConfig({ moderationEnabled: value, themesRequireUnlock });
       setModerationEnabled(config.moderationEnabled);
-      setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
       onConfigChanged(config);
       onToast('success', config.moderationEnabled ? 'Approval gate enabled.' : 'Approval gate disabled.');
@@ -121,28 +96,14 @@ function AdminConsole({
     }
   }
 
-  async function saveUploadKey() {
-    try {
-      const config = await updateAdminConfig({ moderationEnabled, uploadKey, themesRequireUnlock }, adminPassword);
-      setModerationEnabled(config.moderationEnabled);
-      setUploadKey(config.uploadKey);
-      setThemesRequireUnlock(config.themesRequireUnlock);
-      onConfigChanged(config);
-      onToast('success', config.uploadKey ? 'Upload key saved.' : 'Upload key cleared; public uploads are open.');
-    } catch (error) {
-      onToast('error', error instanceof Error ? error.message : 'Could not save upload key.');
-    }
-  }
-
   async function setThemeAvailability(requireUnlock: boolean) {
     if (requireUnlock === themesRequireUnlock) return;
     const previous = themesRequireUnlock;
     setThemesRequireUnlock(requireUnlock);
     setIsSavingThemeAvailability(true);
     try {
-      const config = await updateAdminConfig({ moderationEnabled, uploadKey, themesRequireUnlock: requireUnlock }, adminPassword);
+      const config = await updateAdminConfig({ moderationEnabled, themesRequireUnlock: requireUnlock });
       setModerationEnabled(config.moderationEnabled);
-      setUploadKey(config.uploadKey);
       setThemesRequireUnlock(config.themesRequireUnlock);
       onConfigChanged(config);
       onToast('success', config.themesRequireUnlock ? 'Bonus themes now require Academy rewards.' : 'Bonus themes are now available site-wide.');
@@ -169,11 +130,6 @@ function AdminConsole({
           <input type="checkbox" checked={moderationEnabled} onChange={(event) => toggleModeration(event.target.checked)} />
           <span>Require admin approval for upload-key submissions</span>
         </label>
-        <label className="admin-key-field">
-          <span>Upload key</span>
-          <input value={uploadKey} onChange={(event) => setUploadKey(event.target.value)} placeholder="Leave blank for open uploads" />
-        </label>
-        <button className="ghost-button" onClick={saveUploadKey}>Save key</button>
         <button className="ghost-button" onClick={refreshAdmin}>
           {isLoadingAdmin ? <Loader2 className="spin" size={16} /> : <RotateCcw size={16} />}
           Refresh
@@ -203,13 +159,12 @@ function AdminConsole({
       </section>
 
       {tab === 'upload' ? (
-        <UploadPanel adminPassword={adminPassword} mode="admin" onUploaded={(dataset) => {
+        <UploadPanel mode="admin" onUploaded={(dataset) => {
           onUploaded(dataset);
           void refreshAdmin();
         }} onToast={onToast} />
       ) : (
         <AdminDatasetManager
-          adminPassword={adminPassword}
           datasets={adminDatasets}
           isLoading={isLoadingAdmin}
           onChanged={refreshAdmin}
@@ -221,13 +176,11 @@ function AdminConsole({
 }
 
 function AdminDatasetManager({
-  adminPassword,
   datasets,
   isLoading,
   onChanged,
   onToast
 }: {
-  adminPassword: string;
   datasets: PublicDataset[];
   isLoading: boolean;
   onChanged: () => Promise<void>;
@@ -272,7 +225,7 @@ function AdminDatasetManager({
     if (!selected || !parsed.dataset) return;
     setIsSaving(true);
     try {
-      await updateAdminDataset(selected.id, parsed.dataset, status, adminPassword);
+      await updateAdminDataset(selected.id, parsed.dataset, status);
       onToast('success', `"${parsed.dataset.title}" saved.`);
       await onChanged();
     } catch (error) {
@@ -289,7 +242,7 @@ function AdminDatasetManager({
 
     setIsSaving(true);
     try {
-      await deleteAdminDataset(selected.id, adminPassword);
+      await deleteAdminDataset(selected.id);
       onToast('success', 'Dataset deleted.');
       setSelectedId('');
       await onChanged();

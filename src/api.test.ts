@@ -3,10 +3,11 @@ import type { DatasetInput } from '../shared/quiz';
 import {
   fetchDataset,
   fetchDatasets,
-  loginAdmin,
   updateAdminDataset,
   uploadDataset
 } from './api';
+
+vi.mock('./security', () => ({ secureRequestHeaders: vi.fn(async () => ({ 'X-CSRF-Token': 'csrf-test' })) }));
 
 const dataset: DatasetInput = {
   title: 'Cloud basics',
@@ -27,7 +28,7 @@ describe('API client', () => {
     mockFetch({ datasets });
 
     await expect(fetchDatasets()).resolves.toEqual(datasets);
-    expect(fetch).toHaveBeenCalledWith('/api/datasets', undefined);
+    expect(fetch).toHaveBeenCalledWith('/api/datasets', { credentials: 'same-origin', headers: {} });
   });
 
   it('URL-encodes dataset identifiers', async () => {
@@ -35,20 +36,21 @@ describe('API client', () => {
 
     await fetchDataset('quiz/one');
 
-    expect(fetch).toHaveBeenCalledWith('/api/datasets/quiz%2Fone', undefined);
+    expect(fetch).toHaveBeenCalledWith('/api/datasets/quiz%2Fone', { credentials: 'same-origin', headers: {} });
   });
 
-  it('sends upload credentials and the JSON dataset', async () => {
+  it('sends the JSON dataset with the request security token', async () => {
     mockFetch({ dataset: { id: 'quiz-1' } });
 
-    await uploadDataset(dataset, { uploadKey: 'upload-secret' });
+    await uploadDataset(dataset);
 
     expect(fetch).toHaveBeenCalledWith('/api/datasets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-upload-key': 'upload-secret'
+        'X-CSRF-Token': 'csrf-test'
       },
+      credentials: 'same-origin',
       body: JSON.stringify(dataset)
     });
   });
@@ -56,28 +58,23 @@ describe('API client', () => {
   it('joins server validation errors into one actionable message', async () => {
     mockFetch({ errors: ['Title is required.', 'At least one item is required.'] }, false);
 
-    await expect(uploadDataset(dataset, {})).rejects.toThrow(
+    await expect(uploadDataset(dataset)).rejects.toThrow(
       'Title is required.\nAt least one item is required.'
     );
-  });
-
-  it('uses the operation fallback when an error response has no message', async () => {
-    mockFetch({}, false);
-
-    await expect(loginAdmin('secret')).rejects.toThrow('Could not log in.');
   });
 
   it('sends admin dataset updates through the authenticated route', async () => {
     mockFetch({ ok: true });
 
-    await updateAdminDataset('quiz/one', dataset, 'pending', 'admin-secret');
+    await updateAdminDataset('quiz/one', dataset, 'pending');
 
     expect(fetch).toHaveBeenCalledWith('/api/admin/datasets/quiz%2Fone', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'x-admin-password': 'admin-secret'
+        'X-CSRF-Token': 'csrf-test'
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ dataset, status: 'pending' })
     });
   });

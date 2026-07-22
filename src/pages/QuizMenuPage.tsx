@@ -24,6 +24,7 @@ export function QuizMenuPage({ dataset, attempts, canResume, navigate, onToast }
         <div className="overview-copy">
           <div className="overview-badges">{dataset.curated && <span className="curated-badge"><CheckCircle2 size={15} /> Curated mock exam</span>}<span>{dataset.examCode ?? 'Community set'}</span>{dataset.blueprintVersion && <span>Blueprint {dataset.blueprintVersion}</span>}</div>
           <h1>{dataset.title}</h1>
+          {dataset.creator && <span className="creator-byline">Shared by @{dataset.creator.handle}</span>}
           <p>{dataset.description || 'A community revision set.'}</p>
           <div className="overview-facts"><span><BookOpen size={18} /><strong>{dataset.itemCount}</strong> questions</span><span><Clock3 size={18} /><strong>{dataset.durationMinutes ?? 'No'}</strong> {dataset.durationMinutes ? 'minutes' : 'timer'}</span><span><Target size={18} /><strong>{dataset.readinessTarget ?? 70}%</strong> practice target</span></div>
           <div className="overview-actions"><button className="icon-text-button" onClick={() => copyShareLink(dataset.slug, onToast)}><Copy size={16} /> Copy share link</button>{revisionPath && <button className="icon-text-button" onClick={() => navigate(revisionPath)}><BookOpenText size={16} /> Open RevisionWiki</button>}{dataset.examCode && <button className="icon-text-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={16} /> Smart study plan</button>}</div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { readAppStorage, writeAppStorage } from './persistence';
 
 export type ThemeId =
   | 'light'
@@ -77,7 +78,7 @@ const THEME_EVENT = 'quiz-arcade:theme-changed';
 
 export function getStoredTheme(): ThemeId {
   try {
-    const value = localStorage.getItem(THEME_STORAGE_KEY);
+    const value = readAppStorage(THEME_STORAGE_KEY);
     return isThemeId(value) ? value : 'light';
   } catch {
     return 'light';
@@ -98,7 +99,7 @@ export function initializeTheme(): ThemeId {
 export function setTheme(theme: ThemeId): ThemeId {
   applyTheme(theme);
   try {
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    writeAppStorage(THEME_STORAGE_KEY, theme);
   } catch {
     // Theme selection still applies for the current page when storage is unavailable.
   }

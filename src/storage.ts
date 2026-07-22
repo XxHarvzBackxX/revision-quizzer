@@ -1,3 +1,5 @@
+import { readAppStorage, writeAppStorage } from './persistence';
+
 export type QuizMode = 'exam' | 'practice';
 
 export type StudyConfidence = 'sure' | 'unsure' | 'guess';
@@ -189,7 +191,7 @@ function isAttemptRecord(value: AttemptRecord): boolean {
 
 function readJson<T>(key: string, fallback: T): T {
   try {
-    const value = localStorage.getItem(key);
+    const value = readAppStorage(key);
     return value ? JSON.parse(value) as T : fallback;
   } catch {
     return fallback;
@@ -198,7 +200,7 @@ function readJson<T>(key: string, fallback: T): T {
 
 function writeJson(key: string, value: unknown): void {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    writeAppStorage(key, JSON.stringify(value));
   } catch {
     // Progress should never prevent a learner from continuing a quiz.
   }

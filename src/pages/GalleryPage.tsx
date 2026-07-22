@@ -58,6 +58,7 @@ export function GalleryPage({ datasets, isLoading, attempts, onRefresh, navigate
               <article className={`library-card ${dataset.curated ? 'curated' : ''}`} key={dataset.id}>
                 <div className="library-card-top"><span>{dataset.official ? `${dataset.examCode} · Practice assessment` : dataset.curated ? `${dataset.examCode} · Mock paper ${paperNumber(dataset.title, index)}` : 'Community quiz'}</span>{dataset.official ? <span className="official-pill"><BadgeCheck size={14} /> Official</span> : dataset.curated && <span className="verified-pill"><BookOpenCheck size={14} /> Curated</span>}</div>
                 <h2>{dataset.title}</h2>
+                {dataset.creator && <span className="creator-byline">By @{dataset.creator.handle}</span>}
                 <p>{dataset.description || 'A community revision set.'}</p>
                 <div className="tag-row">{(dataset.tags ?? []).slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
                 <div className="library-card-meta"><span><Clock3 size={16} /> {dataset.durationMinutes ? `${dataset.durationMinutes} min` : 'Untimed'}</span><span>{dataset.itemCount} questions</span>{latest && <span className="latest-result">Last {latest.percentage}%</span>}</div>
