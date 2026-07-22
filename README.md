@@ -54,6 +54,20 @@ Vercel Hobby deployments are capped at 12 serverless functions. Quiz Arcade curr
 
 Server sessions use a five-day Secure/HttpOnly/SameSite cookie. State-changing APIs additionally require a signed CSRF token, a matching same-origin request, and App Check when enforcement is enabled. Sensitive profile and deletion operations require a Firebase sign-in less than five minutes old.
 
+### Grant administrator access
+
+Create the account normally, verify its email address, then copy its **User UID** from Firebase Console → Authentication → Users. Run the claim command only from a trusted machine with the same Firebase service-account credentials used by the deployment; Vercel environment variables are not automatically available in your local terminal.
+
+```powershell
+$serviceAccountPath = 'C:\path\to\firebase-service-account.json'
+$serviceAccountJson = Get-Content -Raw -LiteralPath $serviceAccountPath
+$env:FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($serviceAccountJson))
+npm run admin:grant -- <exact-firebase-uid>
+Remove-Item Env:FIREBASE_SERVICE_ACCOUNT_JSON_BASE64
+```
+
+The command verifies that the email is confirmed, preserves unrelated custom claims, adds `admin: true`, and revokes existing sessions. Sign out and sign in again afterwards. Never grant administrator access by matching an email address or expose the service-account file to the browser.
+
 `firebase-admin` is intentionally pinned to `13.10.0`: its supported `jwks-rsa` 3 dependency graph loads in Vercel’s CommonJS function wrapper, while the Admin 14.2 dependency graph currently fails during function startup before request handling. `tests/api/runtime-compatibility.test.ts` guards the server-runtime loading path; reassess the pin after the upstream ESM interoperability issue is fixed.
 
 ## Checks

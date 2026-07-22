@@ -58,6 +58,16 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/\.consent-row>span\s*\{[^}]*min-width:0[^}]*overflow-wrap:anywhere/);
   });
 
+  it('keeps the mobile topbar in one row without over-wide navigation', () => {
+    expect(css).toMatch(/\.topbar\s*\{[^}]*flex-direction:row[^}]*min-width:0/);
+    expect(css).toMatch(/@media \(max-width:900px\)[\s\S]*\.topbar \.nav-actions\s*\{[^}]*width:auto/);
+    expect(css).toMatch(/@media \(max-width:480px\)[\s\S]*\.brand-button>span:last-child\s*\{[^}]*display:none/);
+  });
+
+  it('keeps account actions visible on account card surfaces', () => {
+    expect(css).toMatch(/\.account-panel \.ghost-button,\.account-guest-card \.ghost-button\s*\{[^}]*background:var\(--theme-soft\)[^}]*border:1px solid var\(--theme-line\)[^}]*color:var\(--theme-ink\)/);
+  });
+
   it('defines every referenced theme token and themes inherited-text surfaces', () => {
     const referenced = new Set(Array.from(css.matchAll(/var\((--theme-[\w-]+)/g), (match) => match[1]));
     const defined = new Set(Array.from(css.matchAll(/(--theme-[\w-]+)\s*:/g), (match) => match[1]));
