@@ -1,4 +1,12 @@
-import type { AccountDataBundle, AccountDomain, AccountOnboarding, AccountProfile } from '../shared/account';
+import type {
+  AccountDataBundle,
+  AccountDomain,
+  AccountOnboarding,
+  AccountProfile,
+  AdminAccountAction,
+  AdminAccountProfile,
+  AdminAccountUpdate
+} from '../shared/account';
 import type { AdminConfig, DatasetInput, DatasetSummary, PublicConfig, PublicDataset } from '../shared/quiz';
 import { resetCsrfToken, secureRequestHeaders } from './security';
 
@@ -76,6 +84,32 @@ export async function updateAdminConfig(config: AdminConfig): Promise<AdminConfi
     body: JSON.stringify(config)
   });
   return payload.config;
+}
+
+export async function fetchAdminAccounts(query = '', cursor = ''): Promise<{ accounts: AdminAccountProfile[]; nextCursor: string | null }> {
+  const params = new URLSearchParams();
+  if (query.trim()) params.set('q', query.trim());
+  if (cursor) params.set('cursor', cursor);
+  const suffix = params.size ? `?${params.toString()}` : '';
+  return requestJson(`/api/admin/accounts${suffix}`, 'Could not load account profiles.');
+}
+
+export async function updateAdminAccount(update: AdminAccountUpdate): Promise<AdminAccountProfile> {
+  const payload = await requestJson<{ account: AdminAccountProfile }>('/api/admin/accounts', 'Could not update that account.', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(update)
+  });
+  return payload.account;
+}
+
+export async function applyAdminAccountAction(action: AdminAccountAction): Promise<AdminAccountProfile> {
+  const payload = await requestJson<{ account: AdminAccountProfile }>('/api/admin/accounts', 'Could not complete that account action.', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(action)
+  });
+  return payload.account;
 }
 
 export async function createSession(idToken: string, onboarding?: AccountOnboarding): Promise<AccountProfile> {

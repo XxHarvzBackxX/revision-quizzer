@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { issueCsrfToken } from '../../api/_auth';
-import { isReservedHandle, validateOnboarding, validateDomainPayload } from '../../api/_account';
+import { isReservedHandle, validateAdminAccountAction, validateAdminAccountUpdate, validateOnboarding, validateDomainPayload } from '../../api/_account';
 
 describe('account API security contracts', () => {
   afterEach(() => {
@@ -24,6 +24,17 @@ describe('account API security contracts', () => {
     expect(validateDomainPayload('quiz', { attempts: Array.from({ length: 81 }, (_, id) => ({ id })) })).toBeNull();
     expect(validateDomainPayload('unknown', {})).toBeNull();
     expect(validateDomainPayload('preferences', { theme: 'light' })).toEqual({ domain: 'preferences', data: { theme: 'light' } });
+  });
+
+  it('allows only narrow, reasoned administrator account moderation', () => {
+    expect(validateAdminAccountUpdate({ uid: 'user_123', reason: 'Offensive public handle', handle: 'safe_name', attributionEnabled: false })).toEqual({
+      uid: 'user_123', reason: 'Offensive public handle', handle: 'safe_name', attributionEnabled: false
+    });
+    expect(validateAdminAccountUpdate({ uid: 'user_123', reason: 'Nope', handle: 'safe_name' })).toBeNull();
+    expect(validateAdminAccountUpdate({ uid: 'user_123', reason: 'Do not enable this privately', attributionEnabled: true })).toBeNull();
+    expect(validateAdminAccountUpdate({ uid: 'user_123', reason: 'Reserved impersonation', handle: 'admin' })).toBeNull();
+    expect(validateAdminAccountAction({ uid: 'user_123', reason: 'Repeated abuse reports', action: 'suspend' })).toEqual({ uid: 'user_123', reason: 'Repeated abuse reports', action: 'suspend' });
+    expect(validateAdminAccountAction({ uid: 'user_123', reason: 'Repeated abuse reports', action: 'delete' })).toBeNull();
   });
 
   it('issues a signed, HttpOnly, strict same-site CSRF cookie', () => {

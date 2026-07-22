@@ -68,6 +68,12 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/\.account-panel \.ghost-button,\.account-guest-card \.ghost-button\s*\{[^}]*background:var\(--theme-soft\)[^}]*border:1px solid var\(--theme-line\)[^}]*color:var\(--theme-ink\)/);
   });
 
+  it('keeps account moderation searchable and responsive', () => {
+    expect(css).toMatch(/\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*minmax\(250px, \.72fr\) minmax\(0, 1\.28fr\)/);
+    expect(css).toMatch(/@media \(max-width: 820px\)[\s\S]*\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*1fr/);
+    expect(css).toMatch(/\.account-manager-item\s*\{[^}]*grid-template-columns:\s*auto minmax\(0, 1fr\) auto/);
+  });
+
   it('provides responsive identity chips on light and strong surfaces', () => {
     expect(css).toMatch(/\.player-identity\s*\{[^}]*background:var\(--theme-paper\)[^}]*min-width:0/);
     expect(css).toMatch(/\.player-identity\.inverse\s*\{[^}]*background:rgba\(255,255,255,\.09\)[^}]*color:#fff/);

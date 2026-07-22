@@ -13,6 +13,7 @@ describe('Vercel function layout', () => {
 
     expect(functions).toEqual([
       'account/[action].ts',
+      'admin/accounts.ts',
       'admin/config.ts',
       'admin/datasets/[id].ts',
       'admin/datasets/index.ts',

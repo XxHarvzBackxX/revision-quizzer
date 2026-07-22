@@ -10,7 +10,9 @@ import {
   type AccountDomain,
   type AccountDomainState,
   type AccountOnboarding,
-  type AccountProfile
+  type AccountProfile,
+  type AdminAccountAction,
+  type AdminAccountUpdate
 } from '../shared/account.js';
 import { getDatabase, getFirebaseAuth } from './_firebase.js';
 
@@ -47,6 +49,32 @@ export function validateOnboarding(value: unknown): { ok: true; value: AccountOn
 
 export function isReservedHandle(handle: string): boolean {
   return RESERVED_HANDLES.has(handle);
+}
+
+export function validateAdminAccountUpdate(value: unknown): AdminAccountUpdate | null {
+  if (!isRecord(value) || !isUid(value.uid) || !isModerationReason(value.reason)) return null;
+  const update: AdminAccountUpdate = { uid: value.uid, reason: value.reason.trim() };
+  if ('handle' in value) {
+    const handle = normalizeHandle(value.handle);
+    if (!handle || isReservedHandle(handle)) return null;
+    update.handle = handle;
+  }
+  if ('avatar' in value) {
+    if (!isAccountAvatar(value.avatar)) return null;
+    update.avatar = value.avatar;
+  }
+  if ('attributionEnabled' in value) {
+    if (value.attributionEnabled !== false) return null;
+    update.attributionEnabled = false;
+  }
+  if (update.handle === undefined && update.avatar === undefined && update.attributionEnabled === undefined) return null;
+  return update;
+}
+
+export function validateAdminAccountAction(value: unknown): AdminAccountAction | null {
+  if (!isRecord(value) || !isUid(value.uid) || !isModerationReason(value.reason)) return null;
+  if (value.action !== 'revoke-sessions' && value.action !== 'suspend' && value.action !== 'restore') return null;
+  return { uid: value.uid, reason: value.reason.trim(), action: value.action };
 }
 
 export async function createAccount(uid: string, email: string, onboarding: AccountOnboarding): Promise<void> {
@@ -201,6 +229,14 @@ function toIso(value: unknown): string {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isUid(value: unknown): value is string {
+  return typeof value === 'string' && /^[a-zA-Z0-9_-]{6,128}$/.test(value);
+}
+
+function isModerationReason(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length >= 5 && value.trim().length <= 300;
 }
 
 function isFirebaseUserMissing(error: unknown): boolean {

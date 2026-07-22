@@ -16,6 +16,7 @@ describe('account transparency pages', () => {
     expect(screen.getByText(/Guests can browse and practise/)).toBeInTheDocument();
     expect(screen.getByText(/23 months of inactivity/)).toBeInTheDocument();
     expect(screen.getByText(/Automatic deletion pauses if warning delivery is unavailable/)).toBeInTheDocument();
+    expect(screen.getByText(/Each change requires a reason and is recorded in a private audit log/)).toBeInTheDocument();
   });
 
   it('publishes account terms and separate contribution guidelines', () => {
@@ -25,5 +26,6 @@ describe('account transparency pages', () => {
     rerender(<LegalPage kind="community-guidelines" navigate={vi.fn()} />);
     expect(screen.getByRole('heading', { name: 'Community Guidelines' })).toBeInTheDocument();
     expect(screen.getByText(/Do not upload real exam dumps/)).toBeInTheDocument();
+    expect(screen.getByText(/Offensive, harassing, impersonating, or misleading handles may be corrected/)).toBeInTheDocument();
   });
 });

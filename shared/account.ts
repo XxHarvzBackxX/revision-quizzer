@@ -24,6 +24,29 @@ export type AccountProfile = {
   handleChangedAt?: string;
 };
 
+export type AdminAccountProfile = AccountProfile & {
+  status: 'active' | 'suspended' | 'deleting';
+  disabled: boolean;
+  emailVerified: boolean;
+  providers: string[];
+  lastActiveAt?: string;
+  lastSignInAt?: string;
+};
+
+export type AdminAccountUpdate = {
+  uid: string;
+  reason: string;
+  handle?: string;
+  avatar?: AccountAvatar;
+  attributionEnabled?: false;
+};
+
+export type AdminAccountAction = {
+  uid: string;
+  reason: string;
+  action: 'revoke-sessions' | 'suspend' | 'restore';
+};
+
 export type AccountOnboarding = {
   handle: string;
   avatar: AccountAvatar;

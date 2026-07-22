@@ -570,6 +570,121 @@ p {
 .admin-theme-options button { background: transparent; border: 0; border-radius: 6px; color: var(--theme-muted, #667085); font-size: .68rem; font-weight: 800; padding: 8px 10px; }
 .admin-theme-options button.active { background: var(--theme-paper, #ffffff); color: var(--theme-ink, #172033); box-shadow: 0 2px 7px var(--theme-shadow, rgba(26,34,57,.09)); }
 
+.admin-account-manager {
+  background: var(--theme-paper, #ffffff);
+  border: 1px solid var(--theme-line, #d8dde8);
+  border-radius: 12px;
+  color: var(--theme-ink, #172033);
+  padding: 18px;
+}
+
+.admin-accounts-heading,
+.admin-accounts-heading > div,
+.admin-accounts-heading form,
+.admin-accounts-heading label {
+  align-items: center;
+  display: flex;
+}
+
+.admin-accounts-heading {
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.admin-accounts-heading > div { gap: 12px; }
+.admin-accounts-heading h2 { font-size: .95rem; margin: 0 0 3px; }
+.admin-accounts-heading p { color: var(--theme-muted, #667085); font-size: .68rem; margin: 0; }
+.admin-accounts-heading form { flex-wrap: wrap; gap: 7px; justify-content: flex-end; }
+.admin-accounts-heading label { background: var(--theme-soft, #f1f3f7); border: 1px solid var(--theme-line, #d8dde8); border-radius: 8px; color: var(--theme-muted, #667085); gap: 7px; padding: 0 9px; }
+.admin-accounts-heading label input { background: transparent; border: 0; min-width: 220px; padding-left: 0; }
+.admin-accounts-heading label input:focus { box-shadow: none; }
+.admin-accounts-heading button { min-height: 38px; }
+
+.account-manager-layout {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(250px, .72fr) minmax(0, 1.28fr);
+}
+
+.account-sidebar {
+  align-content: start;
+  background: var(--theme-soft, #f1f3f7);
+  border: 1px solid var(--theme-line, #d8dde8);
+  border-radius: 10px;
+  display: grid;
+  gap: 7px;
+  max-height: 760px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.account-manager-item {
+  align-items: center;
+  background: var(--theme-paper, #ffffff);
+  border: 1px solid var(--theme-line, #d8dde8);
+  border-radius: 9px;
+  color: var(--theme-ink, #172033);
+  display: grid;
+  gap: 9px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.account-manager-item:hover,
+.account-manager-item.active { background: var(--theme-accent-soft, #eeeafd); border-color: var(--theme-accent, #6d5ce8); }
+.account-manager-item > span { display: grid; gap: 2px; min-width: 0; }
+.account-manager-item strong,
+.account-manager-item small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-manager-item strong { font-size: .72rem; }
+.account-manager-item small { color: var(--theme-muted, #667085); font-size: .57rem; }
+.account-manager-item em,
+.account-status { border-radius: 999px; font-size: .52rem; font-style: normal; font-weight: 900; padding: 4px 7px; text-transform: uppercase; }
+.account-manager-item em.active,
+.account-status.active { background: var(--theme-success-bg, #e7f7ef); color: var(--theme-success-text, #17633b); }
+.account-manager-item em.suspended,
+.account-status.suspended { background: var(--theme-danger-bg, #ffedf0); color: var(--theme-danger-text, #9d2537); }
+.account-manager-item em.deleting,
+.account-status.deleting { background: var(--theme-warning-bg, #fff6db); color: var(--theme-warning-text, #76530a); }
+.account-load-more { margin-top: 3px; width: 100%; }
+
+.account-manager-editor {
+  border: 1px solid var(--theme-line, #d8dde8);
+  border-radius: 10px;
+  min-width: 0;
+  padding: 18px;
+}
+
+.account-manager-editor header { align-items: center; border-bottom: 1px solid var(--theme-line, #d8dde8); display: flex; gap: 14px; margin-bottom: 16px; padding-bottom: 16px; }
+.account-manager-editor header > div { display: grid; gap: 2px; min-width: 0; }
+.account-manager-editor header h2 { font-size: 1.05rem; margin: 0; }
+.account-manager-editor header p,
+.account-manager-editor header span { color: var(--theme-muted, #667085); font-size: .62rem; margin: 0; overflow-wrap: anywhere; }
+.account-manager-editor header > strong { flex: none; margin-left: auto; }
+
+.account-metadata { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 16px; }
+.account-metadata div { background: var(--theme-soft, #f1f3f7); border: 1px solid var(--theme-line, #d8dde8); border-radius: 8px; min-width: 0; padding: 9px; }
+.account-metadata dt { color: var(--theme-muted, #667085); font-size: .54rem; font-weight: 850; text-transform: uppercase; }
+.account-metadata dd { font-size: .63rem; margin: 3px 0 0; overflow-wrap: anywhere; }
+.account-moderation-fields { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr); }
+.account-manager-editor .field textarea { min-height: 76px; resize: vertical; }
+.account-moderation-summary { color: var(--theme-muted, #667085); display: flex; flex-wrap: wrap; font-size: .62rem; gap: 8px 18px; margin: 12px 0; }
+.account-profile-actions,
+.account-security-actions { align-items: stretch; margin-top: 9px; }
+.account-moderation-boundary { border-top: 1px solid var(--theme-line, #d8dde8); color: var(--theme-muted, #667085); font-size: .6rem; margin: 15px 0 0; padding-top: 12px; }
+.sr-only { height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .account-manager-editor header { align-items: flex-start; flex-wrap: wrap; }
+  .account-manager-editor header > strong { margin-left: 0; }
+  .account-metadata,
+  .account-moderation-fields { grid-template-columns: 1fr; }
+  .account-profile-actions > button,
+  .account-security-actions > button { flex: 1 1 100%; }
+}
+
 .upload-intro {
   align-items: center;
   background: rgba(255, 255, 255, 0.86);
@@ -1208,6 +1323,12 @@ textarea {
   .admin-theme-setting { align-items: start; grid-template-columns: auto minmax(0, 1fr); }
   .admin-theme-options { grid-column: 1 / -1; width: 100%; }
   .admin-theme-options button { flex: 1; }
+  .admin-accounts-heading { align-items: stretch; flex-direction: column; }
+  .admin-accounts-heading form { justify-content: stretch; }
+  .admin-accounts-heading form label { flex: 1 1 100%; }
+  .admin-accounts-heading label input { min-width: 0; width: 100%; }
+  .account-manager-layout { grid-template-columns: 1fr; }
+  .account-sidebar { max-height: 330px; }
 
   .nav-actions,
   .card-actions,
