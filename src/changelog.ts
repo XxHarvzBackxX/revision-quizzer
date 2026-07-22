@@ -36,7 +36,7 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Accounts and progress',
         items: [
           'Added verified email/password and Google sign-in, private handles and preset avatars, five-day sessions, and a consistent player identity across Home, Study, Academy, results, contributions, and administrator tools.',
-          'Signed-in attempts, active exams, Study and Academy progress, RevisionWiki data, themes, and changelog state now sync through the private account API.',
+          'Signed-in attempts, active exams, Study and Academy progress, RevisionWiki data, themes, and changelog state now sync through the private account API, including when signing out or returning on another device.',
           'Guests can still browse and practise, while learning activity stays temporary and disappears instead of being stored.'
         ]
       },
@@ -52,6 +52,7 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Security and transparency',
         items: [
           'Replaced shared administrator and upload passwords with individual verified sessions, protected administrator permissions, request safeguards, and server-only database access.',
+          'Administrators can now search private accounts, correct inappropriate handles or avatars, remove public attribution, revoke sessions, and suspend or restore access, with a required private reason for every action.',
           'Account features now deploy reliably on the free hosting tier without reducing their security checks.',
           'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.'
         ]

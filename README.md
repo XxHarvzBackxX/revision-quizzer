@@ -8,7 +8,7 @@ Arcade Academy turns that evidence into an open certification campaign for both 
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are part of signed-in account sync and remain exportable as JSON.
 
-Signed-in players keep the same private avatar and handle across Home, Study, Academy, results, contributions, and administrator tools. These identity surfaces link back to player or account settings without creating a public profile page.
+Signed-in players keep the same private avatar and handle across Home, Study, Academy, results, contributions, and administrator tools. These identity surfaces link back to player or account settings without creating a public profile page. Administrators have a claim-protected, audited account-moderation view for correcting inappropriate public identity, removing attribution, revoking sessions, and suspending or restoring access.
 
 The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth. Each feature branch gets one matching entry in `src/changelog.ts`; follow-up commits and deployment fixes update that entry rather than creating new versions. Changelog copy is written for users, describes observable outcomes in plain language, and omits technical implementation detail unless it explains an impact, limitation, risk, or required action.
 
@@ -22,7 +22,7 @@ _Last reviewed: 22 July 2026._
 
 | Horizon | Initiative | Outcome | State |
 | --- | --- | --- | --- |
-| Now | Secure hosted accounts | Add verified email/Google sign-in, private profiles, server sessions, cross-device progress, self-service data controls, and transparent legal pages. | Ready for review — `feature/secure-accounts` |
+| Now | Secure hosted accounts | Add verified email/Google sign-in, private profiles, reliable cross-device preferences, server sessions, self-service data controls, audited account moderation, and transparent legal pages. | Ready for review — `feature/secure-accounts` |
 | Now | Progress migration and portability | Let existing players claim or export frozen browser-local attempts, Study and Academy progress, RevisionWiki data, and preferences. | Ready for review with accounts |
 | Next | Another certification campaign | Add a complete Microsoft Fundamentals track spanning mock papers, RevisionWiki, smart study, and Arcade Academy. | Candidate |
 | Later | Broader certification catalogue | Make adding and maintaining blueprint-aligned certification content more repeatable. | Exploratory |
@@ -42,14 +42,14 @@ The React client is served by Vite. Vercel functions under `api/` own all Firest
 
 ### Vercel Hobby function budget
 
-Vercel Hobby deployments are capped at 12 serverless functions. Quiz Arcade currently deploys nine. Before adding another API entrypoint, extend an existing allow-listed dynamic router or consolidate related handlers so the total remains within the cap. Prefix imported handler and utility files under `api/` with `_` so Vercel does not deploy them as separate functions. `tests/api/function-count.test.ts` records the expected entrypoints and must remain green.
+Vercel Hobby deployments are capped at 12 serverless functions. Quiz Arcade currently deploys ten. Before adding another API entrypoint, extend an existing allow-listed dynamic router or consolidate related handlers so the total remains within the cap. Prefix imported handler and utility files under `api/` with `_` so Vercel does not deploy them as separate functions. `tests/api/function-count.test.ts` records the expected entrypoints and must remain green.
 
 ## Account deployment checklist
 
 1. Use separate Firebase projects for development and production. Enable Email/Password and Google providers, enforce the Firebase password policy and email-enumeration protection, and add only the expected authorized domains.
 2. Register the web app with reCAPTCHA Enterprise App Check. Deploy first with `FIREBASE_APP_CHECK_ENFORCED=false`, verify valid tokens in logs, then enable enforcement.
 3. Deploy `firestore.rules`, confirm the immutable Firestore region, and set `VITE_FIRESTORE_REGION` so the Privacy Policy publishes the correct location.
-4. Generate independent high-entropy `CSRF_SECRET` and `CRON_SECRET` values. Configure Vercel firewall rate limits for session creation, account writes, uploads, and the retention endpoint.
+4. Generate independent high-entropy `CSRF_SECRET` and `CRON_SECRET` values. Configure Vercel firewall rate limits for session creation, account writes, administrator account moderation, uploads, and the retention endpoint.
 5. Verify a Resend sending domain and configure the retention sender. Review Firebase backup retention and deletion behavior before launch.
 6. Create the first verified Firebase account, copy its exact UID, then run `npm run admin:grant -- <uid>` from a trusted operator machine. Claims are never assigned from an email address.
 7. Have the security-sensitive implementation and the Privacy Policy, Terms, and Community Guidelines independently reviewed before production.
