@@ -52,6 +52,12 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/@media \(max-width:640px\)[\s\S]*\.changelog-dialog/);
   });
 
+  it('keeps consent controls and copy inside account cards', () => {
+    expect(css).toMatch(/\.consent-row\s*\{[^}]*grid-template-columns:18px minmax\(0,1fr\)[^}]*width:100%/);
+    expect(css).toMatch(/\.consent-row input\s*\{[^}]*height:18px[^}]*padding:0[^}]*width:18px/);
+    expect(css).toMatch(/\.consent-row>span\s*\{[^}]*min-width:0[^}]*overflow-wrap:anywhere/);
+  });
+
   it('defines every referenced theme token and themes inherited-text surfaces', () => {
     const referenced = new Set(Array.from(css.matchAll(/var\((--theme-[\w-]+)/g), (match) => match[1]));
     const defined = new Set(Array.from(css.matchAll(/(--theme-[\w-]+)\s*:/g), (match) => match[1]));
