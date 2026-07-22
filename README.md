@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-The React client is served by Vite. Vercel functions under `api/` own all Firestore access; checked-in Firestore rules deny direct client access. Copy `.env.example` to your local environment when testing account, community, or admin APIs.
+The React client is served by Vite. Nine deployable Vercel functions under `api/` own all Firestore access, keeping the app below the Hobby plan’s twelve-function limit; authentication and account actions use allow-listed dynamic routers so their individual security policies remain separate. Checked-in Firestore rules deny direct client access. Copy `.env.example` to your local environment when testing account, community, or admin APIs.
 
 ## Account deployment checklist
 

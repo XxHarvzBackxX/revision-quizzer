@@ -131,7 +131,7 @@ export async function updateAccountProfile(changes: Partial<Pick<AccountProfile,
 }
 
 export async function deleteAccount(approvedContent: 'anonymize' | 'delete', idToken: string): Promise<void> {
-  await requestJson('/api/account', 'Could not delete your account.', {
+  await requestJson('/api/account/delete', 'Could not delete your account.', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json', 'X-Firebase-ID-Token': idToken },
     body: JSON.stringify({ approvedContent })

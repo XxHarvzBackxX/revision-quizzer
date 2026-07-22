@@ -25,6 +25,28 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.5.1',
+    deployment: 10,
+    releasedAt: '2026-07-22',
+    title: 'Free-tier account deployment',
+    summary: 'The secure account foundation now deploys within Vercel’s Hobby-plan function allowance.',
+    sections: [
+      {
+        title: 'Deployment compatibility',
+        items: [
+          'Consolidated authentication and account actions behind two allow-listed API routers while retaining each action’s method, session, CSRF, origin, and recent-sign-in checks.',
+          'Reduced Quiz Arcade to nine deployable functions, leaving room below the Hobby plan’s twelve-function limit for future maintenance.'
+        ]
+      },
+      {
+        title: 'Versioning',
+        items: [
+          'Advanced Quiz Arcade to v0.5.1 for the account deployment compatibility fix.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.5.0',
     deployment: 9,
     releasedAt: '2026-07-22',
