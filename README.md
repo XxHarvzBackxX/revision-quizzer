@@ -12,6 +12,23 @@ The current Semantic Versioning number is shown in the site footer. A new releas
 
 The top-bar appearance picker provides light, light-contrast, dark, dark-contrast, dark-purple, and light-mint themes. The selected palette is stored locally under `quiz-arcade:theme:v1` and applies across exams, RevisionWiki, uploads, and admin views.
 
+## What's in Development
+
+This is a directional roadmap rather than a delivery commitment. **Now** covers work actively shipping, **Next** contains the intended follow-on bets, and **Later** holds exploratory ideas. Priorities may move as learner feedback, certification blueprints, and technical discoveries change.
+
+_Last reviewed: 22 July 2026._
+
+| Horizon | Initiative | Outcome | State |
+| --- | --- | --- | --- |
+| Now | Player shortcuts | Ship the top-right player menu for direct access to Study & Academy and the player profile. | [In review — PR #18](https://github.com/XxHarvzBackxX/revision-quizzer/pull/18) |
+| Next | Hosted player accounts | Add registration, sign-in, hosted player profiles, and cross-device progress. Guests can explore and practise, while persistent progress and Academy rewards belong to signed-in profiles. | Intended follow-on |
+| Next | Progress migration and portability | Let existing players claim browser-local attempts, Study and Academy progress, RevisionWiki data, and preferences when registering, while retaining export/import as a user-controlled backup. | Planned with accounts |
+| Next | Another certification campaign | Add a complete Microsoft Fundamentals track spanning mock papers, RevisionWiki, smart study, and Arcade Academy. | Candidate |
+| Later | Broader certification catalogue | Make adding and maintaining blueprint-aligned certification content more repeatable. | Exploratory |
+| Later | Community library improvements | Strengthen discovery, quality signals, creator identity, and moderation for shared quiz sets. | Exploratory |
+| Later | Social challenges | Explore opt-in friends, shared challenges, and private leaderboards. | Exploratory |
+| Later | Offline and mobile | Explore installable offline study and further mobile experience improvements. | Exploratory |
+
 ## Development
 
 ```powershell
