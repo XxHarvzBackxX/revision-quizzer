@@ -30,31 +30,51 @@ export const changelogEntries: ChangelogEntry[] = [
     deployment: 9,
     releasedAt: '2026-07-22',
     title: 'Private accounts and secure progress sync',
-    summary: 'Verified accounts can now carry Quiz Arcade progress across devices, with transparent privacy controls and no persistent guest learning history.',
+    summary: 'Verified accounts can now carry learning progress, preferences, and creator identity across devices, with self-service data controls, audited moderation, and transparent guest behaviour.',
     sections: [
       {
-        title: 'Accounts and progress',
+        title: 'Sign-in and private identity',
         items: [
-          'Added verified email/password and Google sign-in, private handles and preset avatars, five-day sessions, and a consistent player identity across Home, Study, Academy, results, contributions, and administrator tools.',
-          'Signed-in attempts, active exams, Study and Academy progress, RevisionWiki data, themes, and changelog state now sync through the private account API, including when signing out or returning on another device.',
-          'Guests can still browse and practise, while learning activity stays temporary and disappears instead of being stored.'
+          'Added account creation and verified sign-in with email and password or Google, alongside email verification and password recovery.',
+          'Every account has a unique handle and a choice of preset avatars, without exposing private email addresses or account identifiers to other players.',
+          'Player identity now appears consistently across Home, Study, Academy, results, contributions, profiles, and administrator tools, with quicker access from the top navigation.',
+          'Sessions last for up to five days, while sensitive actions such as changing a handle or deleting an account require a recent sign-in.'
         ]
       },
       {
-        title: 'Control and continuity',
+        title: 'Progress and continuity',
         items: [
-          'Existing browser progress can be claimed safely or downloaded as JSON without being removed before a confirmed import.',
-          'Account holders can export their information, control approved-set attribution, manage submissions, and delete their account with a choice for approved content.',
+          'Signed-in attempts, active exams, Study settings, Academy progress, RevisionWiki activity, themes, and changelog state now follow the player between supported devices.',
+          'Theme choices are saved reliably before sign-out and restored after sign-in, including custom palettes and preferences selected on another device.',
+          'Existing browser progress can be claimed safely by a new account or downloaded as JSON, and is not removed until a successful import is confirmed.',
+          'Guests can still browse and practise without an account, while their learning activity remains temporary and disappears instead of being stored.'
+        ]
+      },
+      {
+        title: 'Data choices and contributions',
+        items: [
+          'Account holders can download a JSON copy of their account information, learning progress, preferences, and contribution records whenever they choose.',
+          'Signed-in contributors can manage their own pending submissions and choose whether approved quiz sets show their public handle and avatar.',
+          'Deleting an account removes private data and pending submissions, with a clear choice to delete approved contributions or keep them without personal attribution.',
           'Inactive accounts receive a warning and at least 30 days to return before automatic deletion; deletion pauses if that warning cannot be delivered.'
+        ]
+      },
+      {
+        title: 'Safer administration',
+        items: [
+          'Administrator access now belongs to individually authorised accounts instead of relying on shared passwords.',
+          'Administrators can search account profiles, review relevant account status, correct inappropriate handles or avatars, and remove public contribution attribution.',
+          'Moderation tools can revoke sessions, suspend access, or restore an account without allowing administrators to rewrite private learning progress or sign-in details.',
+          'Every account action requires a reason and is recorded in a private, reviewable moderation history shown alongside the profile.'
         ]
       },
       {
         title: 'Security and transparency',
         items: [
-          'Replaced shared administrator and upload passwords with individual verified sessions, protected administrator permissions, request safeguards, and server-only database access.',
-          'Administrators can now search private accounts, correct inappropriate handles or avatars, remove public attribution, revoke sessions, and suspend or restore access, with a required reason and reviewable private history for every action.',
-          'Account features now deploy reliably on the free hosting tier without reducing their security checks.',
-          'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.'
+          'Private account and progress information is now handled through protected account services, with database access kept on the server and safeguards around signed-in requests.',
+          'Registration clearly records the age confirmation and acceptance of the Terms and Privacy Policy required to create an account.',
+          'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer, account screens, and other relevant touchpoints.',
+          'Account services have been organised to deploy reliably within the free hosting plan while keeping their authentication and privacy protections intact.'
         ]
       }
     ]
