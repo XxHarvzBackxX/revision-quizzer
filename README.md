@@ -50,6 +50,8 @@ The React client is served by Vite. Nine deployable Vercel functions under `api/
 
 Server sessions use a five-day Secure/HttpOnly/SameSite cookie. State-changing APIs additionally require a signed CSRF token, a matching same-origin request, and App Check when enforcement is enabled. Sensitive profile and deletion operations require a Firebase sign-in less than five minutes old.
 
+`firebase-admin` is intentionally pinned to `13.10.0`: its supported `jwks-rsa` 3 dependency graph loads in Vercel’s CommonJS function wrapper, while the Admin 14.2 dependency graph currently fails during function startup before request handling. `tests/api/runtime-compatibility.test.ts` guards the server-runtime loading path; reassess the pin after the upstream ESM interoperability issue is fixed.
+
 ## Checks
 
 ```powershell

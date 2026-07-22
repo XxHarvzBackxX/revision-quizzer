@@ -1,6 +1,6 @@
 {
   "name": "quiz-arcade",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "type": "module",
   "engines": {
@@ -22,7 +22,7 @@
     "@vercel/node": "^5.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "firebase": "^12.16.0",
-    "firebase-admin": "^14.2.0",
+    "firebase-admin": "13.10.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

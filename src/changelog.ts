@@ -25,6 +25,28 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.5.2',
+    deployment: 11,
+    releasedAt: '2026-07-22',
+    title: 'Reliable account API startup',
+    summary: 'Account and administrator APIs now start reliably in Vercel’s serverless Node.js runtime.',
+    sections: [
+      {
+        title: 'Runtime compatibility',
+        items: [
+          'Selected the supported Firebase Admin dependency line whose authentication modules load correctly in Vercel’s CommonJS function wrapper.',
+          'Added a server-runtime regression check that loads the Firebase authentication dependency graph the same way before deployment.'
+        ]
+      },
+      {
+        title: 'Versioning',
+        items: [
+          'Advanced Quiz Arcade to v0.5.2 for the serverless account startup fix.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.5.1',
     deployment: 10,
     releasedAt: '2026-07-22',
