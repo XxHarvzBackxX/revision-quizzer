@@ -8,7 +8,7 @@ Arcade Academy turns that evidence into an open certification campaign for both 
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are part of signed-in account sync and remain exportable as JSON.
 
-The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth. Each feature branch gets one matching entry in `src/changelog.ts`; follow-up commits and deployment fixes update that entry rather than creating new versions, and changelog copy describes outcomes instead of announcing the version increase itself.
+The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth. Each feature branch gets one matching entry in `src/changelog.ts`; follow-up commits and deployment fixes update that entry rather than creating new versions. Changelog copy is written for users, describes observable outcomes in plain language, and omits technical implementation detail unless it explains an impact, limitation, risk, or required action.
 
 The top-bar appearance picker provides light, light-contrast, dark, dark-contrast, dark-purple, and light-mint themes. The selected palette applies across exams, RevisionWiki, uploads, and admin views and follows a signed-in account across devices.
 

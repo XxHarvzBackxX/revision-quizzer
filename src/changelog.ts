@@ -1,6 +1,7 @@
 import packageMetadata from '../package.json';
 import { readAppStorage, writeAppStorage } from './persistence';
 
+/** User-facing release copy. Prefer observable outcomes over implementation details. */
 export type ChangelogSection = {
   title: string;
   items: string[];
@@ -50,8 +51,8 @@ export const changelogEntries: ChangelogEntry[] = [
       {
         title: 'Security and transparency',
         items: [
-          'Replaced shared administrator and upload secrets with revocation-checked Firebase sessions, administrator claims, CSRF and origin checks, App Check support, and server-only Firestore access.',
-          'Kept secure account APIs deployable on the free Vercel plan through allow-listed consolidated routes and a server-runtime compatibility check.',
+          'Replaced shared administrator and upload passwords with individual verified sessions, protected administrator permissions, request safeguards, and server-only database access.',
+          'Account features now deploy reliably on the free hosting tier without reducing their security checks.',
           'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.'
         ]
       }
@@ -76,12 +77,6 @@ export const changelogEntries: ChangelogEntry[] = [
         items: [
           'The compact control and its menu adapt to mobile headers while keeping clear labels, focus states, and current-page cues.'
         ]
-      },
-      {
-        title: 'Versioning',
-        items: [
-          'Advanced Quiz Arcade to v0.4.0 for this backward-compatible navigation feature.'
-        ]
       }
     ]
   },
@@ -97,7 +92,7 @@ export const changelogEntries: ChangelogEntry[] = [
         items: [
           'Added Pacific blue, Arcade red, Sunset orange, Solar yellow, and Neon pink colour families, each with a complete light and dark appearance.',
           'Every bonus colour includes its own inline light/dark switch in the header picker and player profile.',
-          'All ten new palettes meet the same automated contrast and semantic-surface checks as the original themes.'
+          'All ten new palettes maintain the same readable contrast and consistent surfaces as the original themes.'
         ]
       },
       {
@@ -115,12 +110,6 @@ export const changelogEntries: ChangelogEntry[] = [
           'Theme availability is part of public site configuration, so the header picker and profile always apply the same rule.',
           'Changing the setting takes effect in the current admin session without discarding anyone’s Academy progress.'
         ]
-      },
-      {
-        title: 'Versioning',
-        items: [
-          'Advanced Quiz Arcade to v0.3.0 for this backward-compatible feature expansion.'
-        ]
       }
     ]
   },
@@ -134,7 +123,7 @@ export const changelogEntries: ChangelogEntry[] = [
       {
         title: 'Dark-theme consistency',
         items: [
-          'Fixed changelog cards that combined a light fallback surface with dark-theme text.',
+          'Fixed changelog cards that could show mismatched backgrounds and text in dark themes.',
           'The exam question navigator, submission dialog, option markers, result filters, and empty states now use the selected theme’s surfaces and foregrounds.',
           'Hover, selected, answered, correct, warning, and incorrect states remain visually distinct without switching back to light-only colours.'
         ]
@@ -143,14 +132,14 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Badges and feedback',
         items: [
           'Official, curated, result, question-type, and upload badges now adapt their colour treatment to every light and dark theme.',
-          'Success, warning, and error messages share semantic theme tokens for consistent contrast across practice, exams, results, and administration.'
+          'Success, warning, and error messages now keep consistent, readable colours across practice, exams, results, and administration.'
         ]
       },
       {
         title: 'Theme safeguards',
         items: [
-          'Added automated checks that reject undefined theme tokens before their fallback colours can leak into another palette.',
-          'Expanded contrast checks to cover button and accent-badge foregrounds in all six selectable themes.'
+          'Added automated checks that catch missing theme colours before they can create an inconsistent screen.',
+          'Expanded readability checks to cover buttons and accent badges in all six selectable themes.'
         ]
       }
     ]
@@ -167,29 +156,22 @@ export const changelogEntries: ChangelogEntry[] = [
         items: [
           'Official datasets now appear before other curated papers on the home page and in the certification library.',
           'A dedicated purple Official seal distinguishes trusted built-in assessment content from Quiz Arcade-curated mock exams.',
-          'Official provenance is assigned by the built-in dataset registry and cannot be claimed by public uploads.'
+          'Only built-in content can display the Official seal; community uploads cannot claim it.'
         ]
       },
       {
         title: 'Complete release history',
         items: [
-          'Added net changelogs for production deployments #1, #2, and #3 based on their exact master-branch merge ranges.',
-          'Legacy deployments are identified as previously unversioned instead of being assigned fictional Semantic Versioning numbers.',
+          'Reconstructed clear summaries for production updates #1, #2, and #3 from the changes that were actually released.',
+          'Older updates appear as Previously unversioned rather than being given made-up release numbers.',
           'Changelog History now follows the production sequence from the first numbered deployment through the current release.'
         ]
       },
       {
         title: 'Release visibility',
         items: [
-          'Quiz Arcade now displays its Semantic Versioning number and automatically introduces the newest unread release once.',
+          'Quiz Arcade now displays its release number and automatically introduces the newest unread release once.',
           'Every release remains available from Changelog History in the site footer.'
-        ]
-      },
-      {
-        title: 'Versioning',
-        items: [
-          'Advanced Quiz Arcade from its longstanding v0.1.0 package version to v0.2.0 because deployment #5 adds backward-compatible functionality.',
-          'Deployment numbers and Semantic Versioning are now displayed together for all newly versioned production releases.'
         ]
       }
     ]
@@ -230,7 +212,7 @@ export const changelogEntries: ChangelogEntry[] = [
     deployment: 3,
     releasedAt: '2026-07-15',
     title: 'Quiz Arcade identity and safer releases',
-    summary: 'A small production update that established the app icon and automated post-release branch synchronization.',
+    summary: 'A small production update that established the app icon and made follow-up development safer after releases.',
     sections: [
       {
         title: 'Brand identity',
@@ -241,8 +223,8 @@ export const changelogEntries: ChangelogEntry[] = [
       {
         title: 'Release reliability',
         items: [
-          'Added an automated workflow to synchronize dev after a production release reaches master.',
-          'The workflow uses fast-forward or merge-based synchronization checks so release history is retained across branches.'
+          'Added an automated safeguard that keeps ongoing development aligned after each production release.',
+          'Release history is preserved while future work continues from the latest production changes.'
         ]
       }
     ]
@@ -287,7 +269,7 @@ export const changelogEntries: ChangelogEntry[] = [
       {
         title: 'Learning evidence',
         items: [
-          'Added answer-confidence ratings, saved questions, personal question notes, missed-question retries, and provenance-aware drill results.',
+          'Added answer-confidence ratings, saved questions, personal question notes, missed-question retries, and drill results that remember where each question came from.',
           'Added local XP, levels, daily question goals, activity streaks, and study settings.',
           'Added responsive study dashboards and controls across desktop and mobile layouts.'
         ]
@@ -296,7 +278,7 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Accessibility',
         items: [
           'Improved text, accent, surface, and highlighted-note contrast across all selectable themes.',
-          'Added automated WCAG contrast validation to protect theme readability.'
+          'Added automated accessibility checks to protect readable colour contrast.'
         ]
       }
     ]

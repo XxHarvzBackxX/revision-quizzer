@@ -40,3 +40,12 @@ Every completed feature, including internal tooling and refactoring work, must p
 5. Add or update tests that verify the package version, newest changelog entry, unread-release behavior, and visible version label remain aligned.
 6. Before declaring a feature complete, verify the version bump and changelog entry are included in the final branch diff, committed, and pushed with the rest of the feature.
 7. Keep commit subjects focused on the actual product or engineering change. Do not use generic subjects such as `release <feature> as v<version>`; record the version in package metadata and the changelog instead.
+
+### Changelog audience and schema
+
+`src/changelog.ts` is generally user-facing product copy. Titles, summaries, section headings, and items should explain observable outcomes in language a learner can understand.
+
+- Do not add `Versioning` sections or prose that merely repeats the version or deployment metadata already shown by the interface.
+- Avoid commit, branch, package, dependency, framework, runtime, CI, and hosting implementation details unless users need them to understand an impact, risk, limitation, or required action.
+- For internal engineering changes, describe the resulting reliability, security, accessibility, maintainability, or delivery improvement in plain language.
+- Apply this standard to historical entries when they are edited; do not preserve highly technical wording solely because it is already published.

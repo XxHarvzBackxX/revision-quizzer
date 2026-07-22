@@ -25,6 +25,12 @@ describe('versioned changelog state', () => {
     expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([4, 3, 2, 1]);
   });
 
+  it('keeps changelog sections focused on user-facing outcomes', () => {
+    const sections = changelogEntries.flatMap((entry) => entry.sections);
+    expect(sections.some((section) => section.title.toLowerCase() === 'versioning')).toBe(false);
+    expect(sections.flatMap((section) => section.items).some((item) => /Advanced Quiz Arcade to v\d/i.test(item))).toBe(false);
+  });
+
   it('shows the newest unread release once and persists its dismissal', () => {
     expect(getLatestUnreadChangelog()?.version).toBe(APP_VERSION);
 
