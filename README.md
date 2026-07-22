@@ -8,7 +8,7 @@ Arcade Academy turns that evidence into an open certification campaign for both 
 
 RevisionWiki currently provides 7 AI-901 and 11 AZ-900 objective guides. Pages include blueprint checklists, teaching notes, comparisons, exam traps, quick recall, and official Microsoft Learn references. Reviewed pages, highlights, and notes are part of signed-in account sync and remain exportable as JSON.
 
-The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth; each feature release adds a matching newest entry to `src/changelog.ts`.
+The current Semantic Versioning number is shown in the site footer. A new release opens its changelog once per browser, and every release remains available through **Changelog History**. `package.json` is the version source of truth. Each feature branch gets one matching entry in `src/changelog.ts`; follow-up commits and deployment fixes update that entry rather than creating new versions, and changelog copy describes outcomes instead of announcing the version increase itself.
 
 The top-bar appearance picker provides light, light-contrast, dark, dark-contrast, dark-purple, and light-mint themes. The selected palette applies across exams, RevisionWiki, uploads, and admin views and follows a signed-in account across devices.
 
@@ -36,7 +36,11 @@ npm install
 npm run dev
 ```
 
-The React client is served by Vite. Nine deployable Vercel functions under `api/` own all Firestore access, keeping the app below the Hobby plan’s twelve-function limit; authentication and account actions use allow-listed dynamic routers so their individual security policies remain separate. Checked-in Firestore rules deny direct client access. Copy `.env.example` to your local environment when testing account, community, or admin APIs.
+The React client is served by Vite. Vercel functions under `api/` own all Firestore access; checked-in Firestore rules deny direct client access. Copy `.env.example` to your local environment when testing account, community, or admin APIs.
+
+### Vercel Hobby function budget
+
+Vercel Hobby deployments are capped at 12 serverless functions. Quiz Arcade currently deploys nine. Before adding another API entrypoint, extend an existing allow-listed dynamic router or consolidate related handlers so the total remains within the cap. Prefix imported handler and utility files under `api/` with `_` so Vercel does not deploy them as separate functions. `tests/api/function-count.test.ts` records the expected entrypoints and must remain green.
 
 ## Account deployment checklist
 

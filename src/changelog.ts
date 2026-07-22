@@ -25,50 +25,6 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
-    version: '0.5.2',
-    deployment: 11,
-    releasedAt: '2026-07-22',
-    title: 'Reliable account API startup',
-    summary: 'Account and administrator APIs now start reliably in Vercel’s serverless Node.js runtime.',
-    sections: [
-      {
-        title: 'Runtime compatibility',
-        items: [
-          'Selected the supported Firebase Admin dependency line whose authentication modules load correctly in Vercel’s CommonJS function wrapper.',
-          'Added a server-runtime regression check that loads the Firebase authentication dependency graph the same way before deployment.'
-        ]
-      },
-      {
-        title: 'Versioning',
-        items: [
-          'Advanced Quiz Arcade to v0.5.2 for the serverless account startup fix.'
-        ]
-      }
-    ]
-  },
-  {
-    version: '0.5.1',
-    deployment: 10,
-    releasedAt: '2026-07-22',
-    title: 'Free-tier account deployment',
-    summary: 'The secure account foundation now deploys within Vercel’s Hobby-plan function allowance.',
-    sections: [
-      {
-        title: 'Deployment compatibility',
-        items: [
-          'Consolidated authentication and account actions behind two allow-listed API routers while retaining each action’s method, session, CSRF, origin, and recent-sign-in checks.',
-          'Reduced Quiz Arcade to nine deployable functions, leaving room below the Hobby plan’s twelve-function limit for future maintenance.'
-        ]
-      },
-      {
-        title: 'Versioning',
-        items: [
-          'Advanced Quiz Arcade to v0.5.1 for the account deployment compatibility fix.'
-        ]
-      }
-    ]
-  },
-  {
     version: '0.5.0',
     deployment: 9,
     releasedAt: '2026-07-22',
@@ -95,8 +51,8 @@ export const changelogEntries: ChangelogEntry[] = [
         title: 'Security and transparency',
         items: [
           'Replaced shared administrator and upload secrets with revocation-checked Firebase sessions, administrator claims, CSRF and origin checks, App Check support, and server-only Firestore access.',
-          'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.',
-          'Advanced Quiz Arcade to v0.5.0 for the backward-compatible account foundation.'
+          'Kept secure account APIs deployable on the free Vercel plan through allow-listed consolidated routes and a server-runtime compatibility check.',
+          'Added plain-language Privacy Policy, Terms, and Community Guidelines pages to the footer and account touchpoints.'
         ]
       }
     ]
