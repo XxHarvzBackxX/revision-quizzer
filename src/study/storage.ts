@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { QuizItem, PublicDataset } from '../../shared/quiz';
 import type { AttemptRecord } from '../storage';
+import { readAppStorage, writeAppStorage } from '../persistence';
 import { buildAcademyQuests, buildRerollQuest, localWeekKey, type AcademyQuestContext } from './academy';
 import type {
   AcademyAchievement,
@@ -42,9 +43,9 @@ export function emptyStudyState(): StudyState {
 
 export function getStudyState(): StudyState {
   try {
-    const current = localStorage.getItem(STUDY_STORAGE_KEY);
+    const current = readAppStorage(STUDY_STORAGE_KEY);
     if (current) return normalizeStudyState(JSON.parse(current)) ?? emptyStudyState();
-    const legacy = localStorage.getItem(LEGACY_STUDY_STORAGE_KEY);
+    const legacy = readAppStorage(LEGACY_STUDY_STORAGE_KEY);
     const migrated = legacy ? normalizeStudyState(JSON.parse(legacy)) : null;
     if (migrated) persistStudyState(migrated);
     return migrated ?? emptyStudyState();
@@ -645,7 +646,7 @@ function normalizeRecord<T>(value: unknown, normalize: (entry: unknown) => T | n
 
 function persistStudyState(state: StudyState): void {
   try {
-    localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(state));
+    writeAppStorage(STUDY_STORAGE_KEY, JSON.stringify(state));
     window.dispatchEvent(new CustomEvent(STUDY_EVENT));
   } catch {
     // Study tools remain usable when storage is unavailable.

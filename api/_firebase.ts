@@ -1,4 +1,6 @@
-import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { cert, getApps, initializeApp, type App } from 'firebase-admin/app';
+import { getAppCheck } from 'firebase-admin/app-check';
+import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
 type FirebaseCredentials = {
@@ -8,15 +10,27 @@ type FirebaseCredentials = {
 };
 
 export function getDatabase() {
+  return getFirestore(getAdminApp());
+}
+
+export function getFirebaseAuth() {
+  return getAuth(getAdminApp());
+}
+
+export function getFirebaseAppCheck() {
+  return getAppCheck(getAdminApp());
+}
+
+function getAdminApp(): App {
   if (getApps().length === 0) {
     const credentials = getFirebaseCredentials();
 
-    initializeApp({
+    return initializeApp({
       credential: cert(credentials)
     });
   }
 
-  return getFirestore();
+  return getApps()[0];
 }
 
 function getFirebaseCredentials(): FirebaseCredentials {

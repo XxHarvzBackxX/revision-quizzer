@@ -9,11 +9,14 @@ import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { beginStudyDrill } from '../study/storage';
 import { retryConfigFromAttempt } from '../study/pool';
 import { studyStreak, studyTotals, useStudyState } from '../study/storage';
+import { useOptionalAccount } from '../account/AccountContext';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 
 export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate; studyExamCode?: string }) {
   const [filter, setFilter] = useState<'all' | 'incorrect' | 'flagged'>('all');
   const [expanded, setExpanded] = useState<number[]>([]);
   const study = useStudyState();
+  const account = useOptionalAccount();
 
   if (!attempt) {
     return (
@@ -54,6 +57,7 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
       <div className="results-hero">
         <div className={`result-orb ${metTarget ? 'pass' : 'review'}`}><strong>{attempt.percentage}%</strong><span>{metTarget ? 'Target met' : 'Keep learning'}</span></div>
         <div className="result-summary-copy">
+          <PlayerIdentity account={account} label="Result saved to your profile" actionLabel="View profile" className="result-player-identity" tone="inverse" onOpen={() => navigate('/study/profile')} />
           <span className="result-kicker"><Trophy size={17} /> {academyChallenge ? academyChallenge.kind === 'final-boss' ? 'Final boss complete' : 'Domain boss complete' : attempt.mode === 'exam' ? 'Mock exam complete' : 'Practice complete'}</span>
           <h1>{metTarget ? 'Strong work.' : 'You have a clear next step.'}</h1>
           <p>{attempt.score} of {attempt.total} correct on {dataset.title}. This is an unofficial readiness estimate, not Microsoft’s scaled certification score.</p>

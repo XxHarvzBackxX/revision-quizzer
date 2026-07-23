@@ -22,8 +22,11 @@ import { StudyDrillResultPage } from './pages/StudyDrillResultPage';
 import { StudyIndexPage } from './pages/StudyIndexPage';
 import { AcademyPage } from './pages/AcademyPage';
 import { AcademyProfilePage } from './pages/AcademyProfilePage';
+import { AccountPage } from './pages/AccountPage';
+import { AuthPage } from './pages/AuthPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { LegalPage } from './pages/LegalPage';
 import { parseRoute, routeClass } from './routing';
-import { migrateCuratedContentRevision } from './contentMigration';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
 
@@ -32,10 +35,10 @@ export function App() {
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [activeDataset, setActiveDataset] = useState<PublicDataset | null>(null);
   const [attempts, setAttempts] = useState<AttemptRecord[]>(() => {
-    migrateCuratedContentRevision();
     return getAttempts();
   });
-  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ uploadKeyRequired: true, themesRequireUnlock: true });
+  const [publicConfig, setPublicConfig] = useState<PublicConfig>({ themesRequireUnlock: true });
+  const [publicConfigLoaded, setPublicConfigLoaded] = useState(false);
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +99,7 @@ export function App() {
   async function loadPublicConfig() {
     try {
       setPublicConfig(await fetchPublicConfig());
+      setPublicConfigLoaded(true);
     } catch (error) {
       notify('error', error instanceof Error ? error.message : 'Could not load site settings.');
     }
@@ -134,7 +138,7 @@ export function App() {
 
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
-      {showSiteChrome && <Topbar route={route} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} />}
+      {showSiteChrome && <Topbar route={route} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} themeAvailabilityKnown={publicConfigLoaded} />}
       <ToastHost toasts={toasts} onDismiss={(id) => setToasts((current) => current.filter((toast) => toast.id !== id))} />
 
       {route.name === 'home' && <HomePage datasets={datasets} attempts={attempts} activeSessions={getActiveExamSessions()} isLoading={isLoading} navigate={navigate} />}
@@ -152,6 +156,7 @@ export function App() {
 
       {route.name === 'upload' && (
         <PublicUploadPage
+          navigate={navigate}
           config={publicConfig}
           onToast={notify}
           onUploaded={(dataset) => {
@@ -166,13 +171,22 @@ export function App() {
       )}
 
       {route.name === 'admin' && <AdminPage
+        navigate={navigate}
         onToast={notify}
         onUploaded={handleApprovedUpload}
-        onConfigChanged={(config) => setPublicConfig({
-          uploadKeyRequired: config.uploadKey.length > 0,
-          themesRequireUnlock: config.themesRequireUnlock
-        })}
+        onConfigChanged={(config) => {
+          setPublicConfig({ themesRequireUnlock: config.themesRequireUnlock });
+          setPublicConfigLoaded(true);
+        }}
       />}
+
+      {route.name === 'login' && <AuthPage mode="login" navigate={navigate} />}
+      {route.name === 'register' && <AuthPage mode="register" navigate={navigate} />}
+      {route.name === 'forgot-password' && <ForgotPasswordPage navigate={navigate} />}
+      {route.name === 'account' && <AccountPage navigate={navigate} />}
+      {route.name === 'privacy' && <LegalPage kind="privacy" navigate={navigate} />}
+      {route.name === 'terms' && <LegalPage kind="terms" navigate={navigate} />}
+      {route.name === 'community-guidelines' && <LegalPage kind="community-guidelines" navigate={navigate} />}
 
       {route.name === 'wiki' && <RevisionWikiIndexPage navigate={navigate} onToast={notify} />}
 

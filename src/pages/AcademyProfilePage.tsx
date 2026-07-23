@@ -10,6 +10,8 @@ import { equipAcademyCosmetic, studyStreak, studyTotals, syncAcademyAchievements
 import { isThemeAvailable, rewardThemeFamilies, useTheme } from '../theme';
 import { ThemeModeSwitch } from '../components/ThemeModeSwitch';
 import type { Navigate } from '../types';
+import { useOptionalAccount } from '../account/AccountContext';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 
 const achievementCopy = [
   { id: 'first-star', title: 'First Star', description: 'Earn a campaign star.' },
@@ -25,6 +27,7 @@ export function AcademyProfilePage({ datasets, attempts, navigate, themesRequire
   themesRequireUnlock?: boolean;
 }) {
   const study = useStudyState();
+  const account = useOptionalAccount();
   const [theme, selectTheme] = useTheme();
   const revision = useRevisionState();
   const campaigns = useMemo(() => revisionCourses.map((course) => buildAcademyCampaign({
@@ -51,7 +54,7 @@ export function AcademyProfilePage({ datasets, attempts, navigate, themesRequire
       <button className="academy-back" onClick={() => navigate('/study')}><ArrowLeft size={16} /> Study plans</button>
       <header className="profile-hero">
         <div className={`profile-token ${study.academy.inventory.equippedToken}`}>{tokenIcon(study.academy.inventory.equippedToken)}</div>
-        <div><span className="academy-kicker"><Medal size={17} /> Player profile</span><h1>{title}</h1><p>Your rewards reflect retained learning, completed quests, and cleared certification challenges.</p></div>
+        <div><PlayerIdentity account={account} label={`Level ${totals.level} · ${title}`} actionLabel="Account settings" className="academy-player-identity" tone="inverse" onOpen={() => navigate('/account')} /><span className="academy-kicker"><Medal size={17} /> Player profile</span><h1>{title}</h1><p>Your rewards reflect retained learning, completed quests, and cleared certification challenges.</p></div>
         <div className="profile-level"><span>Level</span><strong>{totals.level}</strong><small>{totals.xp} lifetime XP</small></div>
       </header>
 

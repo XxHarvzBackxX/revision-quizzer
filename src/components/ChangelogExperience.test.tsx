@@ -33,13 +33,15 @@ describe('changelog experience', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Changelog History' }));
 
     expect(screen.getByRole('dialog', { name: 'Changelog History' })).toBeInTheDocument();
+    expect(screen.getByText('Private accounts and secure progress sync')).toBeInTheDocument();
+    expect(screen.getByText('Player shortcuts from every page')).toBeInTheDocument();
     expect(screen.getByText('Theme-safe surfaces across Quiz Arcade')).toBeInTheDocument();
     expect(screen.getByText('Official-first library and historical deployment archive')).toBeInTheDocument();
     expect(screen.getByText('Arcade Academy and realistic certification practice')).toBeInTheDocument();
     expect(screen.getByText('Quiz Arcade identity and safer releases')).toBeInTheDocument();
     expect(screen.getByText('Study plans get a proper front door')).toBeInTheDocument();
     expect(screen.getByText('Smart study loop and accessible themes')).toBeInTheDocument();
-    expect(screen.getByText('7 releases recorded')).toBeInTheDocument();
+    expect(screen.getByText('9 releases recorded')).toBeInTheDocument();
     expect(screen.getAllByText('Previously unversioned')).toHaveLength(4);
   });
 
@@ -50,5 +52,15 @@ describe('changelog experience', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(localStorage.getItem(CHANGELOG_STORAGE_KEY)).toContain(APP_VERSION);
+  });
+
+  it('keeps privacy, terms, and community guidelines in the footer', () => {
+    localStorage.setItem(CHANGELOG_STORAGE_KEY, JSON.stringify({ version: 1, readVersions: [APP_VERSION] }));
+    render(<ChangelogExperience />);
+
+    expect(screen.getByRole('button', { name: 'Privacy' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Terms' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Guidelines' })).toBeInTheDocument();
+    expect(screen.getByText(/Guest progress is not saved/)).toBeInTheDocument();
   });
 });

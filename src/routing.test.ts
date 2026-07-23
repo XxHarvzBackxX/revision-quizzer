@@ -31,4 +31,13 @@ describe('quiz routes', () => {
     expect(parseRoute('/study/ai-901/drill/play')).toMatchObject({ name: 'study-drill-play', examCode: 'ai-901' });
     expect(parseRoute('/study/ai-901/drill/results/run-1')).toMatchObject({ name: 'study-drill-result', attemptId: 'run-1' });
   });
+
+  it('parses account and transparency routes', () => {
+    expect(parseRoute('/login')).toEqual({ name: 'login', path: '/login' });
+    expect(parseRoute('/register')).toEqual({ name: 'register', path: '/register' });
+    expect(parseRoute('/account')).toEqual({ name: 'account', path: '/account' });
+    expect(parseRoute('/privacy')).toEqual({ name: 'privacy', path: '/privacy' });
+    expect(parseRoute('/terms')).toEqual({ name: 'terms', path: '/terms' });
+    expect(parseRoute('/community-guidelines')).toEqual({ name: 'community-guidelines', path: '/community-guidelines' });
+  });
 });

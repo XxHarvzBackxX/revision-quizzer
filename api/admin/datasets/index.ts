@@ -1,12 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { requireAdmin } from '../../_admin.js';
+import { requireAdmin } from '../../_auth.js';
 import { getDatasetsCollection, toPublicDataset } from '../../_datasets.js';
 import { sendJson, sendMethodNotAllowed, sendServerError } from '../../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
-  if (!requireAdmin(request, response)) {
-    return;
-  }
+  if (!await requireAdmin(request, response)) return;
 
   if (request.method !== 'GET') {
     sendMethodNotAllowed(response, ['GET']);

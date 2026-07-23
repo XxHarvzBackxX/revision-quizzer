@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { RevisionHighlight, RevisionStateV1 } from './types';
+import { readAppStorage, writeAppStorage } from '../persistence';
 
 export const REVISION_STORAGE_KEY = 'quiz-arcade:revision:v1';
 const REVISION_EVENT = 'quiz-arcade:revision-changed';
@@ -10,7 +11,7 @@ export function emptyRevisionState(): RevisionStateV1 {
 
 export function getRevisionState(): RevisionStateV1 {
   try {
-    return normalizeRevisionState(JSON.parse(localStorage.getItem(REVISION_STORAGE_KEY) ?? 'null')) ?? emptyRevisionState();
+    return normalizeRevisionState(JSON.parse(readAppStorage(REVISION_STORAGE_KEY) ?? 'null')) ?? emptyRevisionState();
   } catch {
     return emptyRevisionState();
   }
@@ -19,7 +20,7 @@ export function getRevisionState(): RevisionStateV1 {
 export function saveRevisionState(state: RevisionStateV1): RevisionStateV1 {
   const normalized = normalizeRevisionState(state) ?? emptyRevisionState();
   try {
-    localStorage.setItem(REVISION_STORAGE_KEY, JSON.stringify(normalized));
+    writeAppStorage(REVISION_STORAGE_KEY, JSON.stringify(normalized));
     window.dispatchEvent(new CustomEvent(REVISION_EVENT));
   } catch {
     // Revision tools remain usable even if this browser blocks or fills local storage.

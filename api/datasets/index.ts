@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Timestamp } from 'firebase-admin/firestore';
 import { createSlug, type DatasetSummary, validateDataset } from '../../shared/quiz.js';
+import { accountRef } from '../_account.js';
+import { requireProtectedRequest, requireUser } from '../_auth.js';
 import { getAppConfig } from '../_config.js';
 import { getCuratedSummaries, isSupersededCuratedDataset } from '../_curated.js';
 import {
@@ -9,14 +11,7 @@ import {
   toDatasetSummary,
   toPublicDataset
 } from '../_datasets.js';
-import {
-  getAdminPassword,
-  getUploadKey,
-  readJsonBody,
-  sendJson,
-  sendMethodNotAllowed,
-  sendServerError
-} from '../_http.js';
+import { readJsonBody, sendJson, sendMethodNotAllowed, sendServerError } from '../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   try {
@@ -51,16 +46,10 @@ async function listDatasets(response: VercelResponse) {
 }
 
 async function createDataset(request: VercelRequest, response: VercelResponse) {
+  if (!await requireProtectedRequest(request, response)) return;
+  const user = await requireUser(request, response);
+  if (!user) return;
   const config = await getAppConfig();
-
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  const hasUploadKey = config.uploadKey.length === 0 || getUploadKey(request) === config.uploadKey;
-  const hasAdminPassword = Boolean(adminPassword && getAdminPassword(request) === adminPassword);
-
-  if (!hasUploadKey && !hasAdminPassword) {
-    sendJson(response, 401, { error: 'Invalid upload key.' });
-    return;
-  }
 
   const body = await readJsonBody(request);
   const result = validateDataset(body);
@@ -72,14 +61,22 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
 
   const document = getDatasetsCollection().doc();
   const slug = createSlug(result.value.title, document.id);
-  const status = hasAdminPassword || !config.moderationEnabled ? 'approved' : 'pending';
+  const status = user.admin || !config.moderationEnabled ? 'approved' : 'pending';
+  const account = await accountRef(user.uid).get();
+  const accountData = account.data() ?? {};
+  const creator = accountData.attributionEnabled === true && typeof accountData.handle === 'string' && typeof accountData.avatar === 'string'
+    ? { handle: accountData.handle, avatar: accountData.avatar }
+    : undefined;
 
   const dataset = {
     ...result.value,
     slug,
     status,
     itemCount: result.value.items.length,
-    createdAt: Timestamp.now()
+    createdAt: Timestamp.now(),
+    creatorUid: user.uid,
+    attributionEnabled: Boolean(creator),
+    ...(creator ? { creator } : {})
   };
 
   await document.set(dataset);
