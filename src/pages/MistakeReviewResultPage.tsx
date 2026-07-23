@@ -24,4 +24,3 @@ export function MistakeReviewResultPage({ datasets, attempt, isLoading, navigate
   const dataset = createReviewDataset(session, buildReviewPool(Object.values(state.records), datasets));
   return <ResultPage dataset={dataset} attempt={attempt} navigate={navigate} mistakeReview />;
 }
-

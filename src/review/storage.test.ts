@@ -100,4 +100,3 @@ function attempt(id: string, completedAt: string, correct: boolean): AttemptReco
     domains: []
   };
 }
-

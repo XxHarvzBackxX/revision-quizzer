@@ -20,4 +20,3 @@ export function MistakeReviewPlayPage({ datasets, isLoading, navigate, onAttempt
   if (!dataset.items.length) return <section className="result-empty"><Target size={38} /><h1>Questions unavailable</h1><p>The selected source questions could not be loaded.</p><button className="primary-button" onClick={() => navigate('/study/mistakes')}>Back to notebook</button></section>;
   return <QuizPlayPage dataset={dataset} navigate={navigate} onAttempt={onAttempt} mistakeReview />;
 }
-

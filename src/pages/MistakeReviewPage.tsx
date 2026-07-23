@@ -109,4 +109,3 @@ function formatDate(value?: string): string {
 function humanize(value: string): string {
   return value.replace(/-/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase());
 }
-

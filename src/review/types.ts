@@ -38,4 +38,3 @@ export type ReviewState = {
 };
 
 export type ReviewStatus = 'due' | 'scheduled' | 'recovered' | 'unavailable';
-
