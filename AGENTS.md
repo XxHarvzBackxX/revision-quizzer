@@ -31,12 +31,21 @@ Then open or provide a pull request targeting `dev`.
 
 ## Release version workflow
 
-Every completed feature, including internal tooling and refactoring work, must participate in the app's release history. A feature is not ready for handoff until it includes both a new app version and a matching changelog entry:
+Every completed feature, including internal tooling and refactoring work, must participate in the app's release history. A feature is not ready for handoff until it includes both a new app version and a matching changelog entry. Versioning is per feature branch, not per commit, deployment attempt, or review fix: once a branch has selected its feature version, later commits on that branch update the same changelog entry and do not increment the version again.
 
 1. Follow Semantic Versioning for the net change: use a patch increment for compatible fixes, a minor increment for backward-compatible features, and a major increment for breaking changes.
 2. Keep the root versions in `package.json` and `package-lock.json` identical. Do not create a Git tag unless the user explicitly requests a release.
 3. Add the new version to the top of `src/changelog.ts`. Its version must match `package.json`, and its notes must describe only behavior that survives in the final diff.
-4. Treat the in-app changelog as user-facing copy: group related outcomes, avoid commit-level implementation noise, and make the release date and impact clear. For internal work, describe the resulting reliability, maintainability, security, or delivery improvement rather than omitting the entry.
+4. Treat the in-app changelog as user-facing copy: group related outcomes, avoid commit-level implementation noise, and make the release date and impact clear. For internal work, describe the resulting reliability, maintainability, security, or delivery improvement rather than omitting the entry. Do not add a changelog section or bullet whose only purpose is to announce the version increase.
 5. Add or update tests that verify the package version, newest changelog entry, unread-release behavior, and visible version label remain aligned.
 6. Before declaring a feature complete, verify the version bump and changelog entry are included in the final branch diff, committed, and pushed with the rest of the feature.
 7. Keep commit subjects focused on the actual product or engineering change. Do not use generic subjects such as `release <feature> as v<version>`; record the version in package metadata and the changelog instead.
+
+### Changelog audience and schema
+
+`src/changelog.ts` is generally user-facing product copy. Titles, summaries, section headings, and items should explain observable outcomes in language a learner can understand.
+
+- Do not add `Versioning` sections or prose that merely repeats the version or deployment metadata already shown by the interface.
+- Avoid commit, branch, package, dependency, framework, runtime, CI, and hosting implementation details unless users need them to understand an impact, risk, limitation, or required action.
+- For internal engineering changes, describe the resulting reliability, security, accessibility, maintainability, or delivery improvement in plain language.
+- Apply this standard to historical entries when they are edited; do not preserve highly technical wording solely because it is already published.

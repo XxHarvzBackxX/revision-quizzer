@@ -4,6 +4,13 @@ export function parseRoute(pathname = window.location.pathname): AppRoute {
   if (pathname === '/gallery') return { name: 'gallery', path: pathname };
   if (pathname === '/upload') return { name: 'upload', path: pathname };
   if (pathname === '/admin') return { name: 'admin', path: pathname };
+  if (pathname === '/login' || pathname === '/login/') return { name: 'login', path: '/login' };
+  if (pathname === '/register' || pathname === '/register/') return { name: 'register', path: '/register' };
+  if (pathname === '/forgot-password' || pathname === '/forgot-password/') return { name: 'forgot-password', path: '/forgot-password' };
+  if (pathname === '/account' || pathname === '/account/') return { name: 'account', path: '/account' };
+  if (pathname === '/privacy' || pathname === '/privacy/') return { name: 'privacy', path: '/privacy' };
+  if (pathname === '/terms' || pathname === '/terms/') return { name: 'terms', path: '/terms' };
+  if (pathname === '/community-guidelines' || pathname === '/community-guidelines/') return { name: 'community-guidelines', path: '/community-guidelines' };
   if (pathname === '/wiki' || pathname === '/wiki/') return { name: 'wiki', path: '/wiki' };
   if (pathname === '/study' || pathname === '/study/') return { name: 'study-index', path: '/study' };
   if (pathname === '/study/profile' || pathname === '/study/profile/') return { name: 'study-profile', path: '/study/profile' };

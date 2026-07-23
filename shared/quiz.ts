@@ -95,6 +95,11 @@ export type PublicDataset = DatasetInput & {
   status?: 'approved' | 'pending';
   /** Trusted provenance assigned to built-in datasets, never accepted from public uploads. */
   official?: boolean;
+  /** Optional safe creator identity. UIDs and email addresses are never public. */
+  creator?: {
+    handle: string;
+    avatar: string;
+  };
 };
 
 export type DatasetSummary = Omit<PublicDataset, 'items'>;
@@ -108,12 +113,10 @@ export function officialDatasetsFirst<T extends { official?: boolean }>(datasets
 
 export type AdminConfig = {
   moderationEnabled: boolean;
-  uploadKey: string;
   themesRequireUnlock: boolean;
 };
 
 export type PublicConfig = {
-  uploadKeyRequired: boolean;
   themesRequireUnlock: boolean;
 };
 

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ThemePicker } from './components/ThemePicker';
@@ -39,7 +39,7 @@ describe('site themes', () => {
 
   it('applies and persists light and dark colour schemes', () => {
     setTheme('dark-purple');
-    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark-purple');
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('"dark-purple"');
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark-purple');
     expect(document.documentElement.style.colorScheme).toBe('dark');
     applyTheme('mint');
@@ -77,5 +77,15 @@ describe('site themes', () => {
 
     await user.click(modeSwitch);
     expect(document.documentElement).toHaveAttribute('data-theme', 'pacific-blue');
+  });
+
+  it('does not overwrite a synced bonus theme while site availability is still loading', async () => {
+    localStorage.setItem(THEME_STORAGE_KEY, '"neon-pink"');
+    const { rerender } = render(<ThemePicker themesRequireUnlock themeAvailabilityKnown={false} />);
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'neon-pink');
+    rerender(<ThemePicker themesRequireUnlock themeAvailabilityKnown />);
+
+    await waitFor(() => expect(document.documentElement).toHaveAttribute('data-theme', 'light'));
   });
 });

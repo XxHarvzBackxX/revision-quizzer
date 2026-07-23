@@ -20,9 +20,15 @@ describe('versioned changelog state', () => {
     expect(packageLock.packages['']?.version).toBe(APP_VERSION);
     expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
     expect(changelogEntries[0]).toBe(currentChangelog);
-    expect(currentChangelog).toMatchObject({ version: '0.4.0', deployment: 8, title: 'Player shortcuts from every page' });
-    expect(changelogEntries.map((entry) => entry.deployment)).toEqual([8, 7, 6, 5, 4, 3, 2, 1]);
+    expect(currentChangelog).toMatchObject({ version: '0.5.0', deployment: 9, title: 'Private accounts and secure progress sync' });
+    expect(changelogEntries.map((entry) => entry.deployment)).toEqual([9, 8, 7, 6, 5, 4, 3, 2, 1]);
     expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([4, 3, 2, 1]);
+  });
+
+  it('keeps changelog sections focused on user-facing outcomes', () => {
+    const sections = changelogEntries.flatMap((entry) => entry.sections);
+    expect(sections.some((section) => section.title.toLowerCase() === 'versioning')).toBe(false);
+    expect(sections.flatMap((section) => section.items).some((item) => /Advanced Quiz Arcade to v\d/i.test(item))).toBe(false);
   });
 
   it('shows the newest unread release once and persists its dismissal', () => {

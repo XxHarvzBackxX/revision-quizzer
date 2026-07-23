@@ -12,6 +12,13 @@ export type AppRoute =
   | { name: 'gallery'; path: '/gallery' }
   | { name: 'upload'; path: '/upload' }
   | { name: 'admin'; path: '/admin' }
+  | { name: 'login'; path: '/login' }
+  | { name: 'register'; path: '/register' }
+  | { name: 'forgot-password'; path: '/forgot-password' }
+  | { name: 'account'; path: '/account' }
+  | { name: 'privacy'; path: '/privacy' }
+  | { name: 'terms'; path: '/terms' }
+  | { name: 'community-guidelines'; path: '/community-guidelines' }
   | { name: 'wiki'; path: '/wiki' }
   | { name: 'wiki-course'; path: string; examCode: string }
   | { name: 'wiki-page'; path: string; examCode: string; pageSlug: string }

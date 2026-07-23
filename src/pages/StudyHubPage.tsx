@@ -9,6 +9,8 @@ import { calculateCertificationMastery, certificationReadiness, selectStudyRecom
 import { claimAcademyQuest, ensureAcademyQuests, getActiveAcademyQuests, localDateKey, studyStreak, studyTotals, updateStudySettings, useStudyState } from '../study/storage';
 import type { Navigate } from '../types';
 import { studyDatasetId } from '../study/pool';
+import { useOptionalAccount } from '../account/AccountContext';
+import { PlayerIdentity } from '../account/PlayerIdentity';
 
 export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   examCode: string;
@@ -18,6 +20,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
 }) {
   const course = getRevisionCourse(examCode);
   const study = useStudyState();
+  const account = useOptionalAccount();
   const revision = useRevisionState();
   const mastery = course ? calculateCertificationMastery({ examCode: course.examCode, attempts, datasets, course }) : [];
   const weak = [...mastery].filter((item) => item.status !== 'ready').sort((left, right) => left.score - right.score || right.blueprintWeight - left.blueprintWeight)[0];
@@ -72,6 +75,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
     <section className="study-hub-page" style={{ '--course-accent': course.accent } as React.CSSProperties}>
       <header className="study-hub-hero">
         <div>
+          <PlayerIdentity account={account} label={`${playerTitle} · Level ${totals.level}`} actionLabel="Player profile" className="study-player-identity" tone="inverse" onOpen={() => navigate('/study/profile')} />
           <span className="study-kicker"><Gamepad2 size={16} /> {course.examCode} Study Arcade</span>
           <h1>Know what to do <em>next.</em></h1>
           <p>Your mocks, confidence, and RevisionWiki activity combine into one focused plan.</p>

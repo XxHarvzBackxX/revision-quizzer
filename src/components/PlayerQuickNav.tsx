@@ -1,7 +1,10 @@
-import { ChevronRight, Gamepad2, UserRound } from 'lucide-react';
+import { ChevronRight, Gamepad2, LogIn, Settings, UserRound } from 'lucide-react';
+import { useOptionalAccount } from '../account/AccountContext';
+import { AvatarBadge } from '../account/AvatarBadge';
 import type { AppRoute, Navigate } from '../types';
 
 export function PlayerQuickNav({ route, navigate }: { route: AppRoute; navigate: Navigate }) {
+  const account = useOptionalAccount();
   const onStudyRoute = route.name.startsWith('study') && route.name !== 'study-profile';
   const onProfileRoute = route.name === 'study-profile';
 
@@ -11,12 +14,21 @@ export function PlayerQuickNav({ route, navigate }: { route: AppRoute; navigate:
   }
 
   return (
-    <details className={route.name.startsWith('study') ? 'player-quick-nav active' : 'player-quick-nav'}>
-      <summary aria-label="Open player shortcuts" aria-haspopup="true" title="Player shortcuts">
-        <UserRound size={20} aria-hidden="true" />
+    <details className={route.name.startsWith('study') || route.name === 'account' ? 'player-quick-nav active' : 'player-quick-nav'}>
+      <summary aria-label="Open player shortcuts" aria-haspopup="true" title="Player and account shortcuts">
+        {account ? <AvatarBadge avatar={account.avatar} label={`${account.handle} account`} /> : <UserRound size={20} aria-hidden="true" />}
       </summary>
       <nav className="player-quick-menu" aria-label="Player shortcuts">
         <div className="player-quick-heading"><span>Player shortcuts</span><small>Jump back in</small></div>
+        <button
+          className={route.name === 'account' || route.name === 'login' || route.name === 'register' ? 'active' : ''}
+          aria-current={route.name === 'account' ? 'page' : undefined}
+          onClick={(event) => open(account ? '/account' : '/login', event.currentTarget)}
+        >
+          <span className="player-quick-icon">{account ? <Settings size={18} aria-hidden="true" /> : <LogIn size={18} aria-hidden="true" />}</span>
+          <span><strong>{account ? `@${account.handle}` : 'Sign in'}</strong><small>{account ? 'Manage profile, data, and session' : 'Save progress across devices'}</small></span>
+          <ChevronRight size={16} aria-hidden="true" />
+        </button>
         <button
           className={onStudyRoute ? 'active' : ''}
           aria-current={onStudyRoute ? 'location' : undefined}

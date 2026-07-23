@@ -19,13 +19,11 @@ type FriendlyItem = {
 };
 
 export function UploadPanel({
-  adminPassword,
   mode,
   publicConfig,
   onUploaded,
   onToast
 }: {
-  adminPassword?: string;
   mode: 'admin' | 'public';
   publicConfig?: PublicConfig;
   onUploaded: (dataset: PublicDataset) => void;
@@ -40,7 +38,6 @@ export function UploadPanel({
   const [friendlyItems, setFriendlyItems] = useState<FriendlyItem[]>([
     { type: 'multiple-choice', prompt: '', answer: '', options: ['', '', '', ''] }
   ]);
-  const [uploadKey, setUploadKey] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const friendlyDataset = useMemo(() => createFriendlyDataset(friendlyTitle, friendlyDescription, friendlyTags, friendlyShuffle, friendlyItems), [friendlyTitle, friendlyDescription, friendlyTags, friendlyShuffle, friendlyItems]);
   const parsed = useMemo(() => uploadMode === 'json' ? parseDataset(state.raw) : validateFriendlyDataset(friendlyDataset), [friendlyDataset, state.raw, uploadMode]);
@@ -60,8 +57,7 @@ export function UploadPanel({
     if (!dataset) return;
     setIsUploading(true);
     try {
-      const credential = adminPassword ? { adminPassword } : { uploadKey };
-      onUploaded(await uploadDataset(dataset, credential));
+      onUploaded(await uploadDataset(dataset));
     } catch (error) {
       onToast('error', error instanceof Error ? error.message : 'Upload failed.');
     } finally {
@@ -88,15 +84,7 @@ export function UploadPanel({
           <button className={uploadMode === 'friendly' ? 'active' : ''} onClick={() => setUploadMode('friendly')}>Friendly builder</button>
           <button className={uploadMode === 'json' ? 'active' : ''} onClick={() => setUploadMode('json')}>JSON bulk upload</button>
         </div>
-        {mode === 'public' && publicConfig?.uploadKeyRequired && (
-          <label className="field">
-            <span>Upload key</span>
-            <input value={uploadKey} onChange={(event) => setUploadKey(event.target.value)} type="password" />
-          </label>
-        )}
-        {mode === 'public' && !publicConfig?.uploadKeyRequired && (
-          <div className="open-upload-note">Uploads are open; no key is required.</div>
-        )}
+        {mode === 'public' && <div className="open-upload-note">Your account owns this submission. It may wait for moderator approval.</div>}
         {uploadMode === 'friendly' ? (
           <div className="friendly-builder">
             <label className="field">
@@ -178,7 +166,7 @@ export function UploadPanel({
             <p>{parsed.dataset.description || 'No description supplied.'}</p>
             <div className="tag-row">{parsed.dataset.tags?.map((tag) => <span key={tag}>{tag}</span>)}</div>
             <p>{parsed.dataset.items.length} quiz items ready.</p>
-            <button className="primary-button" disabled={isUploading || (mode === 'public' && Boolean(publicConfig?.uploadKeyRequired) && !uploadKey)} onClick={submit}>
+            <button className="primary-button" disabled={isUploading} onClick={submit}>
               {isUploading ? <Loader2 className="spin" size={17} /> : <Upload size={17} />}
               {mode === 'admin' ? 'Publish approved set' : 'Submit set'}
             </button>

@@ -29,7 +29,8 @@ export function toDatasetSummary(id: string, data: DocumentData): DatasetSummary
     domains: data.domains,
     itemCount: data.itemCount ?? data.items?.length ?? 0,
     createdAt,
-    status: data.status ?? 'approved'
+    status: data.status ?? 'approved',
+    ...(isSafeCreator(data.creator) ? { creator: data.creator } : {})
   };
 }
 
@@ -42,4 +43,10 @@ export function toPublicDataset(id: string, data: DocumentData): PublicDataset {
 
 export function isPublicDataset(dataset: Pick<PublicDataset, 'status'>): boolean {
   return dataset.status !== 'pending';
+}
+
+function isSafeCreator(value: unknown): value is { handle: string; avatar: string } {
+  return typeof value === 'object' && value !== null
+    && 'handle' in value && typeof value.handle === 'string'
+    && 'avatar' in value && typeof value.avatar === 'string';
 }

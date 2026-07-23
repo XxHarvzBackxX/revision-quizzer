@@ -52,6 +52,36 @@ describe('responsive and theme style contracts', () => {
     expect(css).toMatch(/@media \(max-width:640px\)[\s\S]*\.changelog-dialog/);
   });
 
+  it('keeps consent controls and copy inside account cards', () => {
+    expect(css).toMatch(/\.consent-row\s*\{[^}]*grid-template-columns:18px minmax\(0,1fr\)[^}]*width:100%/);
+    expect(css).toMatch(/\.consent-row input\s*\{[^}]*height:18px[^}]*padding:0[^}]*width:18px/);
+    expect(css).toMatch(/\.consent-row>span\s*\{[^}]*min-width:0[^}]*overflow-wrap:anywhere/);
+  });
+
+  it('keeps the mobile topbar in one row without over-wide navigation', () => {
+    expect(css).toMatch(/\.topbar\s*\{[^}]*flex-direction:row[^}]*min-width:0/);
+    expect(css).toMatch(/@media \(max-width:900px\)[\s\S]*\.topbar \.nav-actions\s*\{[^}]*width:auto/);
+    expect(css).toMatch(/@media \(max-width:480px\)[\s\S]*\.brand-button>span:last-child\s*\{[^}]*display:none/);
+  });
+
+  it('keeps account actions visible on account card surfaces', () => {
+    expect(css).toMatch(/\.account-panel \.ghost-button,\.account-guest-card \.ghost-button\s*\{[^}]*background:var\(--theme-soft\)[^}]*border:1px solid var\(--theme-line\)[^}]*color:var\(--theme-ink\)/);
+  });
+
+  it('keeps account moderation searchable and responsive', () => {
+    expect(css).toMatch(/\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*minmax\(250px, \.72fr\) minmax\(0, 1\.28fr\)/);
+    expect(css).toMatch(/@media \(max-width: 820px\)[\s\S]*\.account-manager-layout\s*\{[^}]*grid-template-columns:\s*1fr/);
+    expect(css).toMatch(/\.account-manager-item\s*\{[^}]*grid-template-columns:\s*auto minmax\(0, 1fr\) auto/);
+    expect(css).toMatch(/\.moderation-event\s*\{[^}]*background:\s*var\(--theme-soft/);
+    expect(css).toMatch(/@media \(max-width: 600px\)[\s\S]*\.moderation-history-heading\s*\{[^}]*flex-direction:\s*column/);
+  });
+
+  it('provides responsive identity chips on light and strong surfaces', () => {
+    expect(css).toMatch(/\.player-identity\s*\{[^}]*background:var\(--theme-paper\)[^}]*min-width:0/);
+    expect(css).toMatch(/\.player-identity\.inverse\s*\{[^}]*background:rgba\(255,255,255,\.09\)[^}]*color:#fff/);
+    expect(css).toMatch(/@media \(max-width:720px\)[\s\S]*\.upload-intro\s*\{[^}]*flex-direction:column/);
+  });
+
   it('defines every referenced theme token and themes inherited-text surfaces', () => {
     const referenced = new Set(Array.from(css.matchAll(/var\((--theme-[\w-]+)/g), (match) => match[1]));
     const defined = new Set(Array.from(css.matchAll(/(--theme-[\w-]+)\s*:/g), (match) => match[1]));

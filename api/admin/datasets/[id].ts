@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createSlug, validateDataset } from '../../../shared/quiz.js';
-import { requireAdmin } from '../../_admin.js';
+import { requireAdmin, requireProtectedRequest } from '../../_auth.js';
 import { getDatasetsCollection } from '../../_datasets.js';
 import {
   getQueryParam,
@@ -11,9 +11,8 @@ import {
 } from '../../_http.js';
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
-  if (!requireAdmin(request, response)) {
-    return;
-  }
+  if (!await requireAdmin(request, response)) return;
+  if ((request.method === 'PUT' || request.method === 'DELETE') && !await requireProtectedRequest(request, response)) return;
 
   const id = getQueryParam(request, 'id');
   if (!id) {
