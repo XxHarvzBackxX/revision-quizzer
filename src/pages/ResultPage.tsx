@@ -11,12 +11,14 @@ import { retryConfigFromAttempt } from '../study/pool';
 import { studyStreak, studyTotals, useStudyState } from '../study/storage';
 import { useOptionalAccount } from '../account/AccountContext';
 import { PlayerIdentity } from '../account/PlayerIdentity';
+import { isReviewDue, useReviewState } from '../review/storage';
 
-export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate; studyExamCode?: string }) {
+export function ResultPage({ dataset, attempt, navigate, studyExamCode, mistakeReview = false }: { dataset: PublicDataset; attempt?: AttemptRecord; navigate: Navigate; studyExamCode?: string; mistakeReview?: boolean }) {
   const [filter, setFilter] = useState<'all' | 'incorrect' | 'flagged'>('all');
   const [expanded, setExpanded] = useState<number[]>([]);
   const study = useStudyState();
   const account = useOptionalAccount();
+  const review = useReviewState();
 
   if (!attempt) {
     return (
@@ -24,7 +26,7 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
         <AlertCircle size={38} />
         <h1>Attempt not found</h1>
         <p>This result may have been cleared from this browser.</p>
-        <button className="primary-button" onClick={() => navigate(`/quiz/${dataset.slug}`)}>Back to exam</button>
+        <button className="primary-button" onClick={() => navigate(mistakeReview ? '/study/mistakes' : `/quiz/${dataset.slug}`)}>Back to {mistakeReview ? 'mistakes' : 'exam'}</button>
       </section>
     );
   }
@@ -36,6 +38,14 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
   const missedIndexes = attempt.answers.filter((answer) => !answer.correct).map((answer) => answer.questionIndex);
   const coursePath = getCoursePath(dataset.examCode);
   const academyChallenge = attempt.academyChallenge;
+  const reviewRecords = attempt.answers.flatMap((answer) => {
+    const datasetId = answer.sourceDatasetId ?? attempt.datasetId;
+    const questionId = answer.sourceQuestionId ?? answer.questionId;
+    const record = questionId ? review.records[`${datasetId}/${questionId}`] : undefined;
+    return record ? [record] : [];
+  });
+  const recoveredInSession = reviewRecords.filter((record) => record.recoveredAt && record.recoveredAt >= attempt.startedAt).length;
+  const remainingDue = Object.values(review.records).filter((record) => isReviewDue(record)).length;
 
   function retryMissed() {
     if (studyExamCode) {
@@ -58,25 +68,32 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode }: { data
         <div className={`result-orb ${metTarget ? 'pass' : 'review'}`}><strong>{attempt.percentage}%</strong><span>{metTarget ? 'Target met' : 'Keep learning'}</span></div>
         <div className="result-summary-copy">
           <PlayerIdentity account={account} label="Result saved to your profile" actionLabel="View profile" className="result-player-identity" tone="inverse" onOpen={() => navigate('/study/profile')} />
-          <span className="result-kicker"><Trophy size={17} /> {academyChallenge ? academyChallenge.kind === 'final-boss' ? 'Final boss complete' : 'Domain boss complete' : attempt.mode === 'exam' ? 'Mock exam complete' : 'Practice complete'}</span>
-          <h1>{metTarget ? 'Strong work.' : 'You have a clear next step.'}</h1>
-          <p>{attempt.score} of {attempt.total} correct on {dataset.title}. This is an unofficial readiness estimate, not Microsoft’s scaled certification score.</p>
+          <span className="result-kicker"><Trophy size={17} /> {mistakeReview ? 'Mistake review complete' : academyChallenge ? academyChallenge.kind === 'final-boss' ? 'Final boss complete' : 'Domain boss complete' : attempt.mode === 'exam' ? 'Mock exam complete' : 'Practice complete'}</span>
+          <h1>{mistakeReview ? recoveredInSession ? `${recoveredInSession} recovered.` : 'The recovery loop is moving.' : metTarget ? 'Strong work.' : 'You have a clear next step.'}</h1>
+          <p>{attempt.score} of {attempt.total} correct on {dataset.title}. {mistakeReview ? 'Correct due answers move each question toward recovery; wrong answers return on the next review date.' : 'This is an unofficial readiness estimate, not Microsoft’s scaled certification score.'}</p>
           <div className="result-study-reward"><span><Flame size={15} /> {studyStreak(study).current}-day streak</span><span><Star size={15} /> Level {studyTotals(study).level}</span></div>
           <div className="result-actions">
-            {missedIndexes.length > 0 && <button className="primary-button" onClick={retryMissed}><RotateCcw size={17} /> Practice {missedIndexes.length} missed</button>}
-            <button className="secondary-button" onClick={() => navigate(academyChallenge && studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}>{academyChallenge ? 'Campaign map' : studyExamCode ? 'Continue study plan' : 'Exam overview'} <ArrowRight size={17} /></button>
-            {studyExamCode && !academyChallenge && <button className="secondary-button" onClick={() => navigate(`/study/${studyExamCode.toLowerCase()}/academy`)}><Gamepad2 size={17} /> See campaign progress</button>}
-            {coursePath && <button className="secondary-button" onClick={() => navigate(coursePath)}><BookOpenText size={17} /> Open RevisionWiki</button>}
-            {!studyExamCode && dataset.examCode && <button className="secondary-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={17} /> Smart study plan</button>}
+            {mistakeReview ? <>
+              <button className="primary-button" onClick={() => navigate('/study/mistakes')}>Mistake notebook <ArrowRight size={17} /></button>
+              {remainingDue > 0 && <button className="secondary-button" onClick={() => navigate('/study/mistakes')}>{remainingDue} still due</button>}
+              <button className="secondary-button" onClick={() => navigate('/study')}><Gamepad2 size={17} /> Study & Academy</button>
+            </> : <>
+              {missedIndexes.length > 0 && <button className="primary-button" onClick={retryMissed}><RotateCcw size={17} /> Practice {missedIndexes.length} missed</button>}
+              <button className="secondary-button" onClick={() => navigate(academyChallenge && studyExamCode ? `/study/${studyExamCode.toLowerCase()}/academy` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}>{academyChallenge ? 'Campaign map' : studyExamCode ? 'Continue study plan' : 'Exam overview'} <ArrowRight size={17} /></button>
+              {studyExamCode && !academyChallenge && <button className="secondary-button" onClick={() => navigate(`/study/${studyExamCode.toLowerCase()}/academy`)}><Gamepad2 size={17} /> See campaign progress</button>}
+              {coursePath && <button className="secondary-button" onClick={() => navigate(coursePath)}><BookOpenText size={17} /> Open RevisionWiki</button>}
+              {!studyExamCode && dataset.examCode && <button className="secondary-button" onClick={() => navigate(`/study/${dataset.examCode!.toLowerCase()}`)}><Gamepad2 size={17} /> Smart study plan</button>}
+              {remainingDue > 0 && <button className="secondary-button" onClick={() => navigate('/study/mistakes')}><AlertCircle size={17} /> Review {remainingDue} due mistake{remainingDue === 1 ? '' : 's'}</button>}
+            </>}
           </div>
         </div>
       </div>
 
       <div className="result-metrics">
-        <Metric icon={<Target size={20} />} label="Readiness target" value={`${attempt.readinessTarget}%`} />
+        <Metric icon={<Target size={20} />} label={mistakeReview ? 'Recovered now' : 'Readiness target'} value={mistakeReview ? String(recoveredInSession) : `${attempt.readinessTarget}%`} />
         <Metric icon={<Clock3 size={20} />} label="Time used" value={formatDuration(attempt.durationSeconds)} />
-        <Metric icon={<Flag size={20} />} label="Flagged" value={String(attempt.answers.filter((answer) => answer.flagged).length)} />
-        <Metric icon={<AlertCircle size={20} />} label="Unanswered" value={String(attempt.answers.filter((answer) => answer.response.filter(Boolean).length === 0).length)} />
+        <Metric icon={<Flag size={20} />} label={mistakeReview ? 'Rescheduled' : 'Flagged'} value={String(mistakeReview ? missedIndexes.length : attempt.answers.filter((answer) => answer.flagged).length)} />
+        <Metric icon={<AlertCircle size={20} />} label={mistakeReview ? 'Still due' : 'Unanswered'} value={String(mistakeReview ? remainingDue : attempt.answers.filter((answer) => answer.response.filter(Boolean).length === 0).length)} />
       </div>
 
       {attempt.domains.length > 0 && (

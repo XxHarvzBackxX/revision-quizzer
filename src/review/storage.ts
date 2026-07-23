@@ -64,10 +64,12 @@ export function recordReviewResponse({
   const answeredAtIso = answeredAt.toISOString();
   let record: ReviewRecord;
   if (!correct) {
+    const metadata = reviewRecordMetadata(dataset, item, questionIndex);
     record = {
-      ...reviewRecordMetadata(dataset, item, questionIndex),
+      ...metadata,
       ...existing,
-      ...reviewRecordMetadata(dataset, item, questionIndex),
+      ...(!item.sourceDatasetId ? metadata : {}),
+      prompt: item.prompt.slice(0, PROMPT_LIMIT),
       firstWrongAt: existing?.firstWrongAt ?? answeredAtIso,
       lastWrongAt: answeredAtIso,
       wrongCount: (existing?.wrongCount ?? 0) + 1,
@@ -178,11 +180,11 @@ export function importReviewHistory(attempts: AttemptRecord[], datasets: PublicD
   return saveReviewState({ version: 1, records: trimRecords(importedRecords), historyImportedAt: importedAt.toISOString() });
 }
 
-export function setReviewSourceAvailability(availableDatasetIds: Set<string>): ReviewState {
+export function setReviewAvailability(availableQuestionKeys: Set<string>): ReviewState {
   const state = getReviewState();
   let changed = false;
   const records = Object.fromEntries(Object.entries(state.records).map(([key, record]) => {
-    const available = availableDatasetIds.has(record.datasetId);
+    const available = availableQuestionKeys.has(key);
     if (available !== record.available) changed = true;
     return [key, available === record.available ? record : { ...record, available }];
   }));

@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createSlug, validateDataset } from '../../../shared/quiz.js';
 import { requireAdmin, requireProtectedRequest } from '../../_auth.js';
-import { getDatasetsCollection } from '../../_datasets.js';
+import { assignStableQuestionIds, getDatasetsCollection } from '../../_datasets.js';
 import {
   getQueryParam,
   readJsonBody,
@@ -57,11 +57,12 @@ async function updateDataset(id: string, request: VercelRequest, response: Verce
   }
 
   const currentData = current.data() ?? {};
+  const stableDataset = assignStableQuestionIds(result.value, id, Array.isArray(currentData.items) ? currentData.items : []);
   await document.set({
-    ...result.value,
-    slug: currentData.slug ?? createSlug(result.value.title, id),
+    ...stableDataset,
+    slug: currentData.slug ?? createSlug(stableDataset.title, id),
     status,
-    itemCount: result.value.items.length,
+    itemCount: stableDataset.items.length,
     createdAt: currentData.createdAt
   }, { merge: true });
 

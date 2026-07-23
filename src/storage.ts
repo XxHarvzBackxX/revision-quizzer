@@ -44,6 +44,7 @@ export type AttemptRecord = {
   examCode?: string;
   contentRevision?: string;
   studyDrill?: boolean;
+  reviewSession?: boolean;
   academyChallenge?: {
     challengeId: string;
     kind: 'domain-boss' | 'final-boss';

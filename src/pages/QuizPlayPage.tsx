@@ -10,19 +10,22 @@ import { revisionPathForObjective } from '../revision/registry';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
 import { getStudyState, localDateKey, questionIdentity, recordDrillCompleted, recordQuestionActivity, studyTotals } from '../study/storage';
+import { recordReviewResponse } from '../review/storage';
 
 export function QuizPlayPage({
   dataset,
   navigate,
   onAttempt,
-  studyExamCode
+  studyExamCode,
+  mistakeReview = false
 }: {
   dataset: PublicDataset;
   navigate: Navigate;
   onAttempt: (attempt: AttemptRecord) => void;
   studyExamCode?: string;
+  mistakeReview?: boolean;
 }) {
-  const [session, setSession] = useState<ActiveExamSession>(() => studyExamCode ? getActiveExamSession(dataset.id, dataset.contentRevision) ?? createPracticeSession(dataset) : createPracticeSession(dataset));
+  const [session, setSession] = useState<ActiveExamSession>(() => studyExamCode || mistakeReview ? getActiveExamSession(dataset.id, dataset.contentRevision) ?? createPracticeSession(dataset) : createPracticeSession(dataset));
   const [revealed, setRevealed] = useState(false);
   const [typed, setTyped] = useState('');
   const [effect, setEffect] = useState<'correct' | 'wrong' | ''>('');
@@ -36,8 +39,8 @@ export function QuizPlayPage({
   )).length;
 
   useEffect(() => {
-    if (studyExamCode) saveActiveExamSession(session);
-  }, [session, studyExamCode]);
+    if (studyExamCode || mistakeReview) saveActiveExamSession(session);
+  }, [session, studyExamCode, mistakeReview]);
 
   useEffect(() => {
     if (!reward) return;
@@ -71,6 +74,13 @@ export function QuizPlayPage({
       const completedToday = updated.activity[localDateKey()]?.goalAwarded;
       if (!before.activity[localDateKey()]?.goalAwarded && completedToday) setReward('Daily goal complete · +50 XP');
       else if (studyTotals(updated).level > beforeLevel) setReward(`Level ${studyTotals(updated).level} reached!`);
+      recordReviewResponse({
+        dataset,
+        item: current.item,
+        questionIndex: current.originalIndex,
+        correct,
+        confidence: session.confidence?.[String(current.originalIndex)]
+      });
     }
     setSession((existing) => ({
       ...existing,
@@ -97,10 +107,10 @@ export function QuizPlayPage({
     }
     const attempt = buildAttempt({ dataset, mode: 'practice', session });
     clearActiveExamSession(dataset.id);
-    const completed = studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
+    const completed = mistakeReview ? { ...attempt, reviewSession: true } : studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
     if (studyExamCode) recordDrillCompleted(studyExamCode);
     onAttempt(completed);
-    navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
+    navigate(mistakeReview ? `/study/mistakes/results/${attempt.id}` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
 
   if (!current) return null;
@@ -113,7 +123,7 @@ export function QuizPlayPage({
       {reward && <div className="study-reward-pop" role="status"><Flame size={18} /> {reward}</div>}
       {effect === 'correct' && <div className="confetti-burst" aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>}
       <header className="practice-header">
-        <button className="quiet-button light" onClick={() => navigate(studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Exit practice</button>
+        <button className="quiet-button light" onClick={() => navigate(mistakeReview ? '/study/mistakes' : studyExamCode ? `/study/${studyExamCode.toLowerCase()}` : `/quiz/${dataset.slug}`)}><ChevronLeft size={17} /> Exit {mistakeReview ? 'review' : 'practice'}</button>
         <div><strong>{dataset.title}</strong><span>Question {session.currentIndex + 1} of {questions.length}</span></div>
         <div className="practice-score"><Zap size={16} /> {runningScore} correct</div>
       </header>
@@ -177,7 +187,7 @@ export function QuizPlayPage({
           </button>
         )}
       </article>
-      <p className="practice-note"><Sparkles size={15} /> Practice mode shows explanations as you go. Use serious mode when you want exam conditions.</p>
+      <p className="practice-note"><Sparkles size={15} /> {mistakeReview ? 'A correct answer counts only when this question is due. Two spaced correct reviews complete recovery.' : 'Practice mode shows explanations as you go. Use serious mode when you want exam conditions.'}</p>
     </section>
   );
 }

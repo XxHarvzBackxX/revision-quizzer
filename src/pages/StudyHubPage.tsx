@@ -11,6 +11,7 @@ import type { Navigate } from '../types';
 import { studyDatasetId } from '../study/pool';
 import { useOptionalAccount } from '../account/AccountContext';
 import { PlayerIdentity } from '../account/PlayerIdentity';
+import { isReviewDue, useReviewState } from '../review/storage';
 
 export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   examCode: string;
@@ -22,6 +23,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   const study = useStudyState();
   const account = useOptionalAccount();
   const revision = useRevisionState();
+  const review = useReviewState();
   const mastery = course ? calculateCertificationMastery({ examCode: course.examCode, attempts, datasets, course }) : [];
   const weak = [...mastery].filter((item) => item.status !== 'ready').sort((left, right) => left.score - right.score || right.blueprintWeight - left.blueprintWeight)[0];
   const questReviewed = course?.pages.filter((page) => revision.reviewedPages[revisionPageKey(course.examCode, page.id)]).length ?? 0;
@@ -56,6 +58,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
   const recommendationStage = findAcademyStage(campaign, recommendation.objectiveId);
   const claimableQuest = academyQuests.find((quest) => quest.completedAt && !quest.claimedAt);
   const playerTitle = academyTitleLabel(study.academy.inventory.equippedTitle);
+  const dueMistakes = Object.values(review.records).filter((record) => record.examCode === activeCourse.examCode && isReviewDue(record)).length;
 
   function openRecommendation() {
     if (recommendation.kind === 'revision' && recommendation.objectiveId) {
@@ -84,6 +87,7 @@ export function StudyHubPage({ examCode, datasets, attempts, navigate }: {
             {canResumeDrill && <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill/play`)}><Gamepad2 size={18} /> Resume drill</button>}
             <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/drill`)}><Target size={18} /> Build a drill</button>
             <button className="secondary-button large" onClick={() => navigate(`/study/${course.examCode.toLowerCase()}/academy`)}><Map size={18} /> Arcade Academy</button>
+            <button className="secondary-button large" onClick={() => navigate(`/study/mistakes?source=${encodeURIComponent(`exam:${course.examCode}`)}`)}><BrainCircuit size={18} /> Mistakes{dueMistakes ? ` · ${dueMistakes} due` : ''}</button>
           </div>
         </div>
         <div className="study-readiness-orb" aria-label={`${readiness}% readiness`}><strong>{readiness}%</strong><span>objective readiness</span></div>

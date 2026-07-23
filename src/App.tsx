@@ -26,9 +26,14 @@ import { AccountPage } from './pages/AccountPage';
 import { AuthPage } from './pages/AuthPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { LegalPage } from './pages/LegalPage';
+import { MistakeReviewPage } from './pages/MistakeReviewPage';
+import { MistakeReviewPlayPage } from './pages/MistakeReviewPlayPage';
+import { MistakeReviewResultPage } from './pages/MistakeReviewResultPage';
 import { parseRoute, routeClass } from './routing';
 import { getActiveExamSessions, getAttempts, hasResumableExam, saveAttempt, type AttemptRecord } from './storage';
 import type { AppRoute, Toast, ToastKind } from './types';
+import { buildReviewPool } from './review/pool';
+import { getReviewState, importReviewHistory, setReviewAvailability, useReviewState } from './review/storage';
 
 export function App() {
   const [route, setRoute] = useState<AppRoute>(() => parseRoute());
@@ -41,8 +46,11 @@ export function App() {
   const [publicConfigLoaded, setPublicConfigLoaded] = useState(false);
   const [studyDatasets, setStudyDatasets] = useState<PublicDataset[]>([]);
   const [studyDatasetsLoading, setStudyDatasetsLoading] = useState(false);
+  const [reviewDatasets, setReviewDatasets] = useState<PublicDataset[]>([]);
+  const [reviewDatasetsLoading, setReviewDatasetsLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const reviewState = useReviewState();
 
   useEffect(() => {
     void loadGallery(false);
@@ -77,6 +85,41 @@ export function App() {
     });
     return () => { cancelled = true; };
   }, [route.path, datasets]);
+
+  useEffect(() => {
+    if (isLoading || reviewState.historyImportedAt) return;
+    const sources = reviewSourceReferencesFromAttempts(attempts, datasets);
+    let cancelled = false;
+    void Promise.allSettled(sources.map((source) => fetchDataset(source.slug))).then((results) => {
+      if (cancelled) return;
+      const loaded = results.flatMap((result) => result.status === 'fulfilled' ? [result.value] : []);
+      importReviewHistory(attempts, loaded);
+    });
+    return () => { cancelled = true; };
+  }, [isLoading, reviewState.historyImportedAt]);
+
+  const reviewSourceKey = Object.values(reviewState.records).map((record) => `${record.datasetId}:${record.datasetSlug}`).sort().join('|');
+  useEffect(() => {
+    if (route.name !== 'mistake-review' && route.name !== 'mistake-review-play' && route.name !== 'mistake-review-result') return;
+    const sources = [...new Map(Object.values(getReviewState().records).map((record) => [record.datasetId, record.datasetSlug])).entries()];
+    if (!sources.length) {
+      setReviewDatasets([]);
+      setReviewDatasetsLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setReviewDatasetsLoading(true);
+    void Promise.allSettled(sources.map(([, slug]) => fetchDataset(slug))).then((results) => {
+      if (cancelled) return;
+      const loaded = results.flatMap((result) => result.status === 'fulfilled' ? [result.value] : []);
+      setReviewDatasets(loaded);
+      const pool = buildReviewPool(Object.values(getReviewState().records), loaded);
+      setReviewAvailability(new Set(pool.map((entry) => entry.record.key)));
+    }).finally(() => {
+      if (!cancelled) setReviewDatasetsLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [route.path, reviewSourceKey]);
 
   function navigate(path: string) {
     window.history.pushState({}, '', path);
@@ -134,7 +177,7 @@ export function App() {
     notify('success', `"${dataset.title}" is live in the public gallery.`);
   }
 
-  const showSiteChrome = route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && route.name !== 'study-drill-play';
+  const showSiteChrome = route.name !== 'quiz-exam' && route.name !== 'quiz-practice' && route.name !== 'study-drill-play' && route.name !== 'mistake-review-play';
 
   return (
     <main className={`app-shell view-${routeClass(route)}`}>
@@ -198,6 +241,12 @@ export function App() {
 
       {route.name === 'study-profile' && <AcademyProfilePage datasets={datasets} attempts={attempts} navigate={navigate} themesRequireUnlock={publicConfig.themesRequireUnlock} />}
 
+      {route.name === 'mistake-review' && <MistakeReviewPage datasets={reviewDatasets} isLoading={reviewDatasetsLoading} navigate={navigate} />}
+
+      {route.name === 'mistake-review-play' && <MistakeReviewPlayPage datasets={reviewDatasets} isLoading={reviewDatasetsLoading} navigate={navigate} onAttempt={handleAttempt} />}
+
+      {route.name === 'mistake-review-result' && <MistakeReviewResultPage datasets={reviewDatasets} attempt={attempts.find((attempt) => attempt.id === route.attemptId)} isLoading={reviewDatasetsLoading} navigate={navigate} />}
+
       {route.name === 'study-hub' && <StudyHubPage examCode={route.examCode} datasets={datasets} attempts={attempts} navigate={navigate} />}
 
       {route.name === 'study-academy' && <AcademyPage examCode={route.examCode} datasets={studyDatasets} allDatasetSummaries={datasets} attempts={attempts} isLoading={studyDatasetsLoading || isLoading} navigate={navigate} onToast={notify} />}
@@ -233,4 +282,17 @@ export function App() {
       {showSiteChrome && <ChangelogExperience />}
     </main>
   );
+}
+
+function reviewSourceReferencesFromAttempts(attempts: AttemptRecord[], datasets: DatasetSummary[]): Array<{ id: string; slug: string }> {
+  const summaries = new Map(datasets.map((dataset) => [dataset.id, dataset]));
+  const sources = new Map<string, string>();
+  for (const attempt of attempts) {
+    for (const answer of attempt.answers) {
+      const id = answer.sourceDatasetId ?? attempt.datasetId;
+      const slug = answer.sourceDatasetSlug ?? summaries.get(id)?.slug ?? (id === attempt.datasetId ? attempt.slug : '');
+      if (slug) sources.set(id, slug);
+    }
+  }
+  return [...sources].map(([id, slug]) => ({ id, slug }));
 }

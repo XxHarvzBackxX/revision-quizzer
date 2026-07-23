@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpenText, CheckCircle2, Flame, Gamepad2, RefreshCcw, Shield, Sparkles, Star, Target, UserRound } from 'lucide-react';
+import { ArrowRight, BookOpenText, BrainCircuit, CheckCircle2, Flame, Gamepad2, RefreshCcw, Shield, Sparkles, Star, Target, UserRound } from 'lucide-react';
 import { useEffect } from 'react';
 import type { DatasetSummary } from '../../shared/quiz';
 import { revisionCourses } from '../revision/registry';
@@ -8,6 +8,7 @@ import { academyTitleLabel, buildAcademyCampaign } from '../study/academy';
 import { calculateCertificationMastery, certificationReadiness, selectStudyRecommendation } from '../study/mastery';
 import { ensureAcademyQuests, getActiveAcademyQuests, studyStreak, studyTotals, useStudyState } from '../study/storage';
 import type { Navigate } from '../types';
+import { isReviewDue, useReviewState } from '../review/storage';
 
 export function StudyIndexPage({ datasets, attempts, navigate }: {
   datasets: DatasetSummary[];
@@ -16,10 +17,13 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
 }) {
   const study = useStudyState();
   const revision = useRevisionState();
+  const review = useReviewState();
   const streak = studyStreak(study);
   const totals = studyTotals(study);
   const activeQuests = revisionCourses.flatMap((course) => getActiveAcademyQuests(study, course.examCode));
   const playerTitle = academyTitleLabel(study.academy.inventory.equippedTitle);
+  const dueMistakes = Object.values(review.records).filter((record) => isReviewDue(record)).length;
+  const recoveredMistakes = Object.values(review.records).filter((record) => record.correctStreak >= 2).length;
 
   useEffect(() => {
     for (const course of revisionCourses) {
@@ -56,6 +60,11 @@ export function StudyIndexPage({ datasets, attempts, navigate }: {
       </header>
 
       <div className="study-index-content">
+        <section className="study-mistake-banner">
+          <span className="study-mistake-icon"><BrainCircuit size={25} /></span>
+          <div><span className="section-kicker">Mistake review</span><h2>{dueMistakes ? `${dueMistakes} question${dueMistakes === 1 ? '' : 's'} ready to revisit` : 'Your recovery queue is clear'}</h2><p>Two spaced correct answers recover a mistake. {recoveredMistakes} recovered so far.</p></div>
+          <button className={dueMistakes ? 'primary-button' : 'secondary-button'} onClick={() => navigate('/study/mistakes')}>Open notebook <ArrowRight size={17} /></button>
+        </section>
         <header><div><span className="section-kicker">Certification hubs</span><h2>Where are you heading?</h2></div><p>Progress stays privately in this browser.</p></header>
         <div className="study-course-grid">
           {revisionCourses.map((course) => {

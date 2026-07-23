@@ -7,6 +7,7 @@ import { getAppConfig } from '../_config.js';
 import { getCuratedSummaries, isSupersededCuratedDataset } from '../_curated.js';
 import {
   getDatasetsCollection,
+  assignStableQuestionIds,
   isPublicDataset,
   toDatasetSummary,
   toPublicDataset
@@ -60,7 +61,8 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
   }
 
   const document = getDatasetsCollection().doc();
-  const slug = createSlug(result.value.title, document.id);
+  const stableDataset = assignStableQuestionIds(result.value, document.id);
+  const slug = createSlug(stableDataset.title, document.id);
   const status = user.admin || !config.moderationEnabled ? 'approved' : 'pending';
   const account = await accountRef(user.uid).get();
   const accountData = account.data() ?? {};
@@ -69,10 +71,10 @@ async function createDataset(request: VercelRequest, response: VercelResponse) {
     : undefined;
 
   const dataset = {
-    ...result.value,
+    ...stableDataset,
     slug,
     status,
-    itemCount: result.value.items.length,
+    itemCount: stableDataset.items.length,
     createdAt: Timestamp.now(),
     creatorUid: user.uid,
     attributionEnabled: Boolean(creator),

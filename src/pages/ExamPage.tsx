@@ -17,6 +17,7 @@ import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker
 import { recordAcademyChallenge, recordExamActivity, useStudyState } from '../study/storage';
 import type { StudyDrillConfig } from '../study/types';
 import type { StudyConfidence } from '../storage';
+import { recordAttemptForReview } from '../review/storage';
 
 export function ExamPage({
   dataset,
@@ -101,6 +102,7 @@ export function ExamPage({
       } : {})
     } : attempt;
     recordExamActivity(completed.answers, { examCode: studyExamCode ?? dataset.examCode });
+    recordAttemptForReview(dataset, completed);
     if (studyConfig?.challengeId) recordAcademyChallenge(completed, studyConfig);
     clearActiveExamSession(dataset.id);
     onAttempt(completed);

@@ -32,6 +32,12 @@ describe('quiz routes', () => {
     expect(parseRoute('/study/ai-901/drill/results/run-1')).toMatchObject({ name: 'study-drill-result', attemptId: 'run-1' });
   });
 
+  it('parses mistake notebook, player, and result routes before dynamic study hubs', () => {
+    expect(parseRoute('/study/mistakes')).toMatchObject({ name: 'mistake-review' });
+    expect(parseRoute('/study/mistakes/play')).toMatchObject({ name: 'mistake-review-play' });
+    expect(parseRoute('/study/mistakes/results/attempt-1')).toMatchObject({ name: 'mistake-review-result', attemptId: 'attempt-1' });
+  });
+
   it('parses account and transparency routes', () => {
     expect(parseRoute('/login')).toEqual({ name: 'login', path: '/login' });
     expect(parseRoute('/register')).toEqual({ name: 'register', path: '/register' });

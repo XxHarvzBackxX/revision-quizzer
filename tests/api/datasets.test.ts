@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isPublicDataset, toDatasetSummary, toPublicDataset } from '../../api/_datasets';
+import { assignStableQuestionIds, isPublicDataset, toDatasetSummary, toPublicDataset } from '../../api/_datasets';
 
 const createdAt = new Date('2026-07-20T12:34:56.000Z');
 const storedDataset = {
@@ -39,5 +39,12 @@ describe('dataset persistence mapping', () => {
     expect(isPublicDataset({ status: 'approved' })).toBe(true);
     expect(isPublicDataset({})).toBe(true);
     expect(isPublicDataset({ status: 'pending' })).toBe(false);
+  });
+
+  it('assigns stable question ids and preserves them across edits', () => {
+    const created = assignStableQuestionIds({ title: 'Set', items: storedDataset.items as never[] }, 'dataset-123456789');
+    expect(created.items[0].id).toBe('community-dataset-1234-q001');
+    const updated = assignStableQuestionIds({ title: 'Set', items: [{ ...storedDataset.items[0], prompt: 'Updated' }] as never[] }, 'dataset-123456789', created.items);
+    expect(updated.items[0].id).toBe(created.items[0].id);
   });
 });

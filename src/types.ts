@@ -24,6 +24,9 @@ export type AppRoute =
   | { name: 'wiki-page'; path: string; examCode: string; pageSlug: string }
   | { name: 'study-index'; path: '/study' }
   | { name: 'study-profile'; path: '/study/profile' }
+  | { name: 'mistake-review'; path: '/study/mistakes' }
+  | { name: 'mistake-review-play'; path: '/study/mistakes/play' }
+  | { name: 'mistake-review-result'; path: string; attemptId: string }
   | { name: 'study-academy'; path: string; examCode: string }
   | { name: 'study-hub'; path: string; examCode: string }
   | { name: 'study-drill-setup'; path: string; examCode: string }
