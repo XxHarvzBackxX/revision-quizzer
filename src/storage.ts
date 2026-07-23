@@ -16,6 +16,7 @@ export type AttemptAnswer = {
   sourceDatasetId?: string;
   sourceDatasetSlug?: string;
   sourceQuestionId?: string;
+  sourceExamCode?: string;
 };
 
 export type DomainResult = {

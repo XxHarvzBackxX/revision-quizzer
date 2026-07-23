@@ -22,13 +22,14 @@ export function calculateCertificationMastery({
   const datasetCodes = new Map(datasets.map((dataset) => [dataset.id, dataset.examCode?.toUpperCase()]));
   const matching = attempts.filter((attempt) => (
     (attempt.examCode ?? datasetCodes.get(attempt.datasetId))?.toUpperCase() === examCode.toUpperCase()
+    || attempt.answers.some((answer) => answer.sourceExamCode?.toUpperCase() === examCode.toUpperCase())
   ));
 
   return course.pages.map((page) => {
     const domain = course.domains.find((item) => item.id === page.domainId);
     const objectivesInDomain = course.pages.filter((item) => item.domainId === page.domainId).length;
     const evidence = matching.flatMap((attempt) => (Array.isArray(attempt.answers) ? attempt.answers : [])
-      .filter((answer) => answer.objectiveId === page.objectiveId)
+      .filter((answer) => answer.objectiveId === page.objectiveId && (!answer.sourceExamCode || answer.sourceExamCode.toUpperCase() === examCode.toUpperCase()))
       .map((answer) => ({ answer, attempt })))
       .sort((left, right) => right.attempt.completedAt.localeCompare(left.attempt.completedAt))
       .slice(0, MAX_EVIDENCE_PER_OBJECTIVE);

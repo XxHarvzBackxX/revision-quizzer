@@ -19,7 +19,7 @@ export function Topbar({ route, navigate, themesRequireUnlock, themeAvailability
           <button className={route.name === 'gallery' ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/gallery')}>
             <Library size={17} /> Exam library
           </button>
-          <button className={route.name.startsWith('study') ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/study')}>
+          <button className={route.name.startsWith('study') || route.name.startsWith('mistake-review') ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/study')}>
             <Gamepad2 size={17} /> Study & Academy
           </button>
           <button className={route.name.startsWith('wiki') ? 'nav-button active' : 'nav-button'} onClick={() => navigate('/wiki')}>

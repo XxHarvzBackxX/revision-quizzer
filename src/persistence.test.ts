@@ -35,6 +35,13 @@ describe('account persistence boundary', () => {
     expect(getAccountDomainSnapshot('quiz')).toEqual({ 'quiz-arcade:attempts:v2': [{ id: 'one' }] });
   });
 
+  it('syncs mistake review independently from quiz and study payloads', () => {
+    configureAccountPersistence('reviewer');
+    writeAppStorage('quiz-arcade:review:v1', JSON.stringify({ version: 1, records: { q1: { key: 'q1' } } }));
+    expect(getAccountDomainSnapshot('review')).toEqual({ 'quiz-arcade:review:v1': { version: 1, records: { q1: { key: 'q1' } } } });
+    expect(getAccountDomainSnapshot('study')).toEqual({});
+  });
+
   it('detects frozen pre-account browser data without activating it', () => {
     localStorage.setItem('quiz-arcade:revision:v1', JSON.stringify({ version: 1, highlights: [] }));
     configureGuestPersistence();

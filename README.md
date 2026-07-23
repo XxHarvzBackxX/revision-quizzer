@@ -2,6 +2,8 @@
 
 Quiz Arcade is an unofficial certification-preparation app. It includes curated 50-question papers for AI-901 and AZ-900, a timed serious mode, guided practice with explanations, a detailed RevisionWiki, private account progress, and a secondary community quiz library.
 
+Every wrong answer can now enter a private mistake notebook spanning built-in and community quiz sets. Due questions return on a short recovery schedule, confident mistakes are prioritised, and two correct reviews on spaced dates mark the knowledge recovered. Existing retained attempts seed the notebook automatically, and signed-in review schedules and reflection notes sync across devices.
+
 Each built-in certification also has a smart study hub. It combines objective-level results, answer confidence, and RevisionWiki progress into a next-best action, certification-wide targeted drills, bookmarks, personal question notes, score trends, XP levels, and meaningful daily streaks.
 
 Arcade Academy turns that evidence into an open certification campaign for both AI-901 and AZ-900. Learners earn study, practice, and mastery stars; complete daily and weekly quests; face exam-style domain and final bosses; collect titles and map tokens; and earn capped rerolls and streak shields. No lessons or challenges are locked. Signed-in progress syncs privately through the account API; guests can explore without persistent progress.
@@ -18,13 +20,13 @@ The top-bar appearance picker provides light, light-contrast, dark, dark-contras
 
 This is a directional roadmap rather than a delivery commitment. **Now** covers work actively shipping, **Next** contains the intended follow-on bets, and **Later** holds exploratory ideas. Priorities may move as learner feedback, certification blueprints, and technical discoveries change.
 
-_Last reviewed: 22 July 2026._
+_Last reviewed: 23 July 2026._
 
 | Horizon | Initiative | Outcome | State |
 | --- | --- | --- | --- |
-| Now | Secure hosted accounts | Add verified email/Google sign-in, private profiles, reliable cross-device preferences, server sessions, self-service data controls, audited account moderation, and transparent legal pages. | Ready for review — `feature/secure-accounts` |
-| Now | Progress migration and portability | Let existing players claim or export frozen browser-local attempts, Study and Academy progress, RevisionWiki data, and preferences. | Ready for review with accounts |
-| Next | Another certification campaign | Add a complete Microsoft Fundamentals track spanning mock papers, RevisionWiki, smart study, and Arcade Academy. | Candidate |
+| Now | Mistake review and recovery | Turn wrong answers into a private, scheduled recovery queue with a searchable cross-quiz notebook. | Ready for review — `feature/mistake-review-system` |
+| Next | Daily study coach | Bring recommendations, due reviews, active sessions, goals, and campaign progress into one clearer daily starting point. | Candidate |
+| Later | Another certification campaign | Add a complete Microsoft Fundamentals track spanning mock papers, RevisionWiki, smart study, and Arcade Academy. | Candidate |
 | Later | Broader certification catalogue | Make adding and maintaining blueprint-aligned certification content more repeatable. | Exploratory |
 | Later | Public player profiles | Explore opt-in public profile pages and discovery; v0.5 keeps profiles private except optional approved-set attribution. | Exploratory |
 | Later | Community library improvements | Strengthen discovery, quality signals, and moderation beyond signed-in creator ownership. | Exploratory |

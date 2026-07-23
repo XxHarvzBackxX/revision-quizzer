@@ -23,6 +23,13 @@ describe('responsive and theme style contracts', () => {
     expect(css).toContain('.confidence-picker');
   });
 
+  it('provides a responsive mistake notebook and review queue', () => {
+    expect(css).toContain('.mistake-review-hero');
+    expect(css).toContain('.mistake-record-list');
+    expect(css).toContain('.study-mistake-banner');
+    expect(css).toMatch(/@media \(max-width:600px\)[\s\S]*\.mistake-review-hero/);
+  });
+
   it('defines every selectable site theme and contrast overrides', () => {
     for (const theme of selectableThemes) {
       expect(css).toContain(`:root[data-theme="${theme}"]`);

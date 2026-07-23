@@ -134,7 +134,7 @@ export function ResultPage({ dataset, attempt, navigate, studyExamCode, mistakeR
             const item = resolveAttemptItem(dataset, answer);
             if (!item) return null;
             const isOpen = expanded.includes(answer.questionIndex);
-            const revisionPath = revisionPathForObjective(dataset.examCode, item.objectiveId);
+            const revisionPath = revisionPathForObjective(item.sourceExamCode ?? dataset.examCode, item.objectiveId);
             return (
               <article className="review-item" key={item.id ?? answer.questionIndex}>
                 <button className="review-item-heading" onClick={() => setExpanded((current) => current.includes(answer.questionIndex) ? current.filter((index) => index !== answer.questionIndex) : [...current, answer.questionIndex])}>

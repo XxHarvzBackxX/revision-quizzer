@@ -215,6 +215,13 @@ export function beginReviewSession(questionKeys: string[], now = new Date()): Re
   return saveReviewState({ ...state, activeSession: session });
 }
 
+export function completeReviewSession(): ReviewState {
+  const state = getReviewState();
+  if (!state.activeSession) return state;
+  const { activeSession: _activeSession, ...rest } = state;
+  return saveReviewState(rest);
+}
+
 export function reviewStatus(record: ReviewRecord, now = new Date()): ReviewStatus {
   if (!record.available) return 'unavailable';
   if (record.correctStreak >= 2) return 'recovered';

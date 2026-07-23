@@ -76,7 +76,8 @@ export function buildAttempt({
       confidence: session.confidence?.[String(questionIndex)],
       sourceDatasetId: item?.sourceDatasetId,
       sourceDatasetSlug: item?.sourceDatasetSlug,
-      sourceQuestionId: item?.sourceQuestionId
+      sourceQuestionId: item?.sourceQuestionId,
+      sourceExamCode: item?.sourceExamCode
     };
   });
   const score = answers.filter((answer) => answer.correct).length;

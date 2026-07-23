@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { PublicDataset } from '../../shared/quiz';
 import { getStudyState } from '../study/storage';
+import { getReviewState } from '../review/storage';
 import { QuizPlayPage } from './QuizPlayPage';
 
 const dataset: PublicDataset = {
@@ -35,6 +36,14 @@ describe('QuizPlayPage study tools', () => {
     await userEvent.type(screen.getByPlaceholderText(/Why was this tricky/), 'Remember the product boundary.');
     await userEvent.click(screen.getByRole('button', { name: 'Save note' }));
     expect(getStudyState().bookmarks['builtin-ai901-paper-1/q1'].note).toBe('Remember the product boundary.');
+  });
+
+  it('adds an incorrect answer to the global mistake notebook', async () => {
+    render(<QuizPlayPage dataset={dataset} navigate={vi.fn()} onAttempt={vi.fn()} />);
+    await userEvent.click(screen.getByRole('button', { name: /Sure/ }));
+    await userEvent.click(screen.getByRole('button', { name: /Another service/ }));
+    await userEvent.click(screen.getByRole('button', { name: 'Check answer' }));
+    expect(getReviewState().records['builtin-ai901-paper-1/q1']).toMatchObject({ examCode: 'AI-901', wrongCount: 1, lastConfidence: 'sure', correctStreak: 0 });
   });
 
   it('renders and scores an inline dropdown', async () => {

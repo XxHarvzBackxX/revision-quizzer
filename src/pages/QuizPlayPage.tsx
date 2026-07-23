@@ -10,7 +10,7 @@ import { revisionPathForObjective } from '../revision/registry';
 import { QuestionStudyTools } from '../study/components/QuestionStudyTools';
 import { StudyConfidencePicker } from '../study/components/StudyConfidencePicker';
 import { getStudyState, localDateKey, questionIdentity, recordDrillCompleted, recordQuestionActivity, studyTotals } from '../study/storage';
-import { recordReviewResponse } from '../review/storage';
+import { completeReviewSession, recordReviewResponse } from '../review/storage';
 
 export function QuizPlayPage({
   dataset,
@@ -67,7 +67,7 @@ export function QuizPlayPage({
       const identity = questionIdentity(dataset, current.item, current.originalIndex);
       const updated = recordQuestionActivity({
         correct,
-        examCode: studyExamCode ?? dataset.examCode,
+        examCode: current.item.sourceExamCode ?? studyExamCode ?? dataset.examCode,
         objectiveId: current.item.objectiveId,
         bookmarked: Boolean(before.bookmarks[identity.key])
       });
@@ -109,6 +109,7 @@ export function QuizPlayPage({
     clearActiveExamSession(dataset.id);
     const completed = mistakeReview ? { ...attempt, reviewSession: true } : studyExamCode ? { ...attempt, studyDrill: true, examCode: studyExamCode } : attempt;
     if (studyExamCode) recordDrillCompleted(studyExamCode);
+    if (mistakeReview) completeReviewSession();
     onAttempt(completed);
     navigate(mistakeReview ? `/study/mistakes/results/${attempt.id}` : studyExamCode ? `/study/${studyExamCode.toLowerCase()}/drill/results/${attempt.id}` : `/quiz/${dataset.slug}/results/${attempt.id}`);
   }
@@ -116,7 +117,7 @@ export function QuizPlayPage({
   if (!current) return null;
   const correct = revealed && isResponseCorrect(current.item, selected);
   const similarity = current.item.type === 'free-write' ? answerSimilarity(typed, current.item.answer) : 0;
-  const revisionPath = revisionPathForObjective(dataset.examCode, current.item.objectiveId);
+  const revisionPath = revisionPathForObjective(current.item.sourceExamCode ?? dataset.examCode, current.item.objectiveId);
 
   return (
     <section className={`practice-shell effect-${effect}`}>

@@ -35,4 +35,14 @@ describe('certification mastery', () => {
     const mastery = calculateCertificationMastery({ examCode: 'AI-901', attempts: [attempt('1', true)], datasets: [dataset], course, now: new Date('2026-07-15T12:00:00.000Z') });
     expect(certificationReadiness(mastery)).toBeLessThan(20);
   });
+
+  it('credits certification questions answered inside a mixed mistake review', () => {
+    const reviewAttempt = attempt('review', true);
+    reviewAttempt.datasetId = 'mistakes-1';
+    reviewAttempt.examCode = undefined;
+    reviewAttempt.reviewSession = true;
+    reviewAttempt.answers[0].sourceExamCode = 'AI-901';
+    const mastery = calculateCertificationMastery({ examCode: 'AI-901', attempts: [reviewAttempt], datasets: [], course, now: new Date('2026-07-15T12:00:00.000Z') });
+    expect(mastery.find((item) => item.objectiveId === 'responsible-ai')).toMatchObject({ evidence: 1, score: 100 });
+  });
 });

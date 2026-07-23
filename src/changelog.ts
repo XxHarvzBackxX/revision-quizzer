@@ -26,6 +26,42 @@ export const CHANGELOG_STORAGE_KEY = 'quiz-arcade:changelog:v1';
 
 export const changelogEntries: ChangelogEntry[] = [
   {
+    version: '0.6.0',
+    deployment: 10,
+    releasedAt: '2026-07-23',
+    title: 'Mistakes that come back at the right time',
+    summary: 'Wrong answers now become a private recovery queue with spaced checks, a searchable notebook, and clear progress from misconception to recovered knowledge.',
+    sections: [
+      {
+        title: 'A focused recovery queue',
+        items: [
+          'Incorrect answers from built-in exams, targeted drills, and community quiz sets now enter one mistake review queue automatically.',
+          'Questions return the next day, then again three days after a correct review; two spaced correct answers mark the mistake recovered.',
+          'Confident mistakes and overdue questions rise to the front, while a new wrong answer reopens anything that had previously been recovered.',
+          'Correct answers in ordinary mocks and practice can advance recovery when a question is due, without forcing every review through a separate mode.'
+        ]
+      },
+      {
+        title: 'Your mistake notebook',
+        items: [
+          'Added a global notebook with due, scheduled, recovered, and unavailable views across every quiz source.',
+          'Search and source filters make it easier to isolate a certification, community set, objective, or specific question.',
+          'Each record shows repeated misses, confidence, recovery checks, and its next due date, with space for a short personal reflection note.',
+          'Questions whose source was removed or materially changed remain visible for context but stay out of playable review sessions.'
+        ]
+      },
+      {
+        title: 'Connected to the learning journey',
+        items: [
+          'Existing retained attempts are added to the notebook automatically, so the recovery queue starts from learning history instead of an empty page.',
+          'Mistake review is available from Study & Academy, certification hubs, and result pages, with a dedicated completion summary after every session.',
+          'Review answers continue to advance mastery, daily goals, XP, and relevant Academy quests without being counted twice.',
+          'Signed-in mistake schedules and reflection notes follow the account across devices; guest review activity remains temporary.'
+        ]
+      }
+    ]
+  },
+  {
     version: '0.5.0',
     deployment: 9,
     releasedAt: '2026-07-22',

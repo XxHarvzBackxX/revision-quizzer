@@ -12,8 +12,11 @@ export function buildReviewPool(records: ReviewRecord[], datasets: PublicDataset
   return records.flatMap((record) => {
     const dataset = byId.get(record.datasetId);
     if (!dataset) return [];
-    const item = dataset.items.find((candidate) => candidate.id === record.questionId)
-      ?? (dataset.items[record.questionIndex]?.prompt.slice(0, 240) === record.prompt ? dataset.items[record.questionIndex] : undefined);
+    if (record.contentRevision && dataset.contentRevision && record.contentRevision !== dataset.contentRevision) return [];
+    const byStableId = dataset.items.find((candidate) => candidate.id === record.questionId);
+    const item = byStableId?.prompt.slice(0, 240) === record.prompt
+      ? byStableId
+      : dataset.items[record.questionIndex]?.prompt.slice(0, 240) === record.prompt ? dataset.items[record.questionIndex] : undefined;
     return item ? [{ record, dataset, item }] : [];
   });
 }
@@ -35,11 +38,11 @@ export function createReviewDataset(session: ReviewSession, pool: ReviewPoolItem
       ...item,
       sourceDatasetId: record.datasetId,
       sourceDatasetSlug: record.datasetSlug,
-      sourceQuestionId: record.questionId
+      sourceQuestionId: record.questionId,
+      sourceExamCode: record.examCode
     })),
     itemCount: selected.length,
     createdAt: session.createdAt,
     status: 'approved'
   };
 }
-

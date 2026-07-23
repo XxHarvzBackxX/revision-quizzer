@@ -20,8 +20,8 @@ describe('versioned changelog state', () => {
     expect(packageLock.packages['']?.version).toBe(APP_VERSION);
     expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
     expect(changelogEntries[0]).toBe(currentChangelog);
-    expect(currentChangelog).toMatchObject({ version: '0.5.0', deployment: 9, title: 'Private accounts and secure progress sync' });
-    expect(changelogEntries.map((entry) => entry.deployment)).toEqual([9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    expect(currentChangelog).toMatchObject({ version: '0.6.0', deployment: 10, title: 'Mistakes that come back at the right time' });
+    expect(changelogEntries.map((entry) => entry.deployment)).toEqual([10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
     expect(changelogEntries.filter((entry) => !entry.version).map((entry) => entry.deployment)).toEqual([4, 3, 2, 1]);
   });
 

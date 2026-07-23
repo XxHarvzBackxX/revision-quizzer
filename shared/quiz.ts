@@ -20,6 +20,7 @@ export type BaseQuizItem = {
   sourceDatasetId?: string;
   sourceDatasetSlug?: string;
   sourceQuestionId?: string;
+  sourceExamCode?: string;
 };
 
 export type FlashcardItem = BaseQuizItem & {

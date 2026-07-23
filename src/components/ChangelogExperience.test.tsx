@@ -33,6 +33,7 @@ describe('changelog experience', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Changelog History' }));
 
     expect(screen.getByRole('dialog', { name: 'Changelog History' })).toBeInTheDocument();
+    expect(screen.getByText('Mistakes that come back at the right time')).toBeInTheDocument();
     expect(screen.getByText('Private accounts and secure progress sync')).toBeInTheDocument();
     expect(screen.getByText('Player shortcuts from every page')).toBeInTheDocument();
     expect(screen.getByText('Theme-safe surfaces across Quiz Arcade')).toBeInTheDocument();
@@ -41,7 +42,7 @@ describe('changelog experience', () => {
     expect(screen.getByText('Quiz Arcade identity and safer releases')).toBeInTheDocument();
     expect(screen.getByText('Study plans get a proper front door')).toBeInTheDocument();
     expect(screen.getByText('Smart study loop and accessible themes')).toBeInTheDocument();
-    expect(screen.getByText('9 releases recorded')).toBeInTheDocument();
+    expect(screen.getByText('10 releases recorded')).toBeInTheDocument();
     expect(screen.getAllByText('Previously unversioned')).toHaveLength(4);
   });
 

@@ -18,7 +18,7 @@ export function QuestionStudyTools({ dataset, item, questionIndex }: {
 
   const input = {
     ...identity,
-    examCode: dataset.examCode?.toUpperCase() ?? 'COMMUNITY',
+    examCode: item.sourceExamCode?.toUpperCase() ?? dataset.examCode?.toUpperCase() ?? 'COMMUNITY',
     prompt: item.prompt
   };
 
