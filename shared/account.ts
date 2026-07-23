@@ -71,7 +71,7 @@ export type AccountOnboarding = {
   acknowledgesPrivacy: true;
 };
 
-export const ACCOUNT_DOMAINS = ['quiz', 'study', 'revision', 'preferences'] as const;
+export const ACCOUNT_DOMAINS = ['quiz', 'study', 'revision', 'preferences', 'review'] as const;
 export type AccountDomain = typeof ACCOUNT_DOMAINS[number];
 
 export type AccountDomainState = {

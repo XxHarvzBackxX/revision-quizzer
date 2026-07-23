@@ -27,7 +27,7 @@ const SESSION_PROFILE_KEY = 'quiz-arcade:active-account:v1';
 export function AccountProvider({ children }: { children: React.ReactNode }) {
   const [account, setAccount] = useState<AccountProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const revisions = useRef<Record<AccountDomain, number>>({ quiz: 0, study: 0, revision: 0, preferences: 0 });
+  const revisions = useRef<Record<AccountDomain, number>>({ quiz: 0, study: 0, revision: 0, preferences: 0, review: 0 });
   const timers = useRef<Partial<Record<AccountDomain, number>>>({});
   const syncOperations = useRef<Partial<Record<AccountDomain, Promise<void>>>>({});
 

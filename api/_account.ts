@@ -131,6 +131,7 @@ export function validateDomainPayload(domain: unknown, data: unknown): { domain:
   if (Buffer.byteLength(serialized, 'utf8') > MAX_DOMAIN_BYTES || !isSafeJson(data, 0)) return null;
   if (domain === 'quiz' && arrayLength(data.attempts) > 80) return null;
   if (domain === 'quiz' && arrayLength(data.activeExams) > 8) return null;
+  if (domain === 'review' && recordLength(data['quiz-arcade:review:v1'], 'records') > 300) return null;
   return { domain, data };
 }
 
@@ -212,6 +213,10 @@ function isSafeJson(value: unknown, depth: number): boolean {
 
 function arrayLength(value: unknown): number {
   return Array.isArray(value) ? value.length : 0;
+}
+
+function recordLength(value: unknown, key: string): number {
+  return isRecord(value) && isRecord(value[key]) ? Object.keys(value[key]).length : 0;
 }
 
 function toDate(value: unknown): Date | null {

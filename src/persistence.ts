@@ -6,7 +6,8 @@ const DOMAIN_KEYS: Record<AccountDomain, readonly string[]> = {
   quiz: ['quiz-arcade:attempts:v2', 'quiz-arcade:active-exams:v1', 'quiz-arcade:scores'],
   study: ['quiz-arcade:study:v2', 'quiz-arcade:study:v1'],
   revision: ['quiz-arcade:revision:v1'],
-  preferences: ['quiz-arcade:theme:v1', 'quiz-arcade:changelog:v1']
+  preferences: ['quiz-arcade:theme:v1', 'quiz-arcade:changelog:v1'],
+  review: ['quiz-arcade:review:v1']
 };
 
 let accountUid: string | null = null;

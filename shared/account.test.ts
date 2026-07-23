@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ACCOUNT_AVATARS, isAccountAvatar, normalizeHandle } from './account';
+import { ACCOUNT_AVATARS, ACCOUNT_DOMAINS, isAccountAvatar, normalizeHandle } from './account';
 
 describe('account contracts', () => {
   it('normalizes only safe case-insensitive handles', () => {
@@ -12,5 +12,9 @@ describe('account contracts', () => {
   it('accepts only controlled preset avatars', () => {
     expect(ACCOUNT_AVATARS.every(isAccountAvatar)).toBe(true);
     expect(isAccountAvatar('https://example.com/photo.png')).toBe(false);
+  });
+
+  it('syncs mistake review as a dedicated account domain', () => {
+    expect(ACCOUNT_DOMAINS).toContain('review');
   });
 });

@@ -22,6 +22,8 @@ describe('account API security contracts', () => {
 
   it('rejects oversized, unsafe, and over-limit progress domains', () => {
     expect(validateDomainPayload('quiz', { attempts: Array.from({ length: 81 }, (_, id) => ({ id })) })).toBeNull();
+    expect(validateDomainPayload('review', { 'quiz-arcade:review:v1': { records: Object.fromEntries(Array.from({ length: 301 }, (_, id) => [`q${id}`, {}])) } })).toBeNull();
+    expect(validateDomainPayload('review', { 'quiz-arcade:review:v1': { version: 1, records: {} } })).toMatchObject({ domain: 'review' });
     expect(validateDomainPayload('unknown', {})).toBeNull();
     expect(validateDomainPayload('preferences', { theme: 'light' })).toEqual({ domain: 'preferences', data: { theme: 'light' } });
   });
