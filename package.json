@@ -19,7 +19,7 @@
     "admin:grant": "node scripts/set-admin-claim.mjs"
   },
   "dependencies": {
-    "@vercel/node": "^5.0.0",
+    "@vercel/node": "^5.10.2",
     "@vitejs/plugin-react": "^5.0.0",
     "firebase": "^12.16.0",
     "firebase-admin": "13.10.0",
